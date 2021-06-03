@@ -36,10 +36,9 @@ module.exports = {
    */
 
   deploySwitch: {
-    Council: false,
-    Info: true,
-    User: false,
-    SignReward: false,
+    ESDToken: true,
+    Easydeal: true,
+    SignReward: true,
     Multicall: false
   },
 

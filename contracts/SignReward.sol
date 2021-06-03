@@ -1,41 +1,39 @@
 // SPDX-License-Identifier: MIT
 
-pragma solidity ^0.8.0;
+pragma solidity >=0.7.0;
 
-import "./lib/Context.sol";
-import "./lib/SafeMath.sol";
-import "./lib/Ownable.sol";
+import {SafeMath} from "./lib/SafeMath.sol";
+import {Ownable} from "./lib/Ownable.sol";
 
-import "./interfaces/IBEP20.sol";
+import {IBEP20} from "./itf/IBEP20.sol";
 
-contract SignReward is Context, Ownable {
+contract SignReward is Ownable {
 
-    using SafeMath for uint;
+    using SafeMath for uint256;
 
     struct SignRecord {
-        uint32 lastSignedTimestamp;
+        uint256 lastSignedTimestamp;
         uint32 continuousNumber;
     }
 
     uint32 public signInterval = 1 days;
-    uint public signRewardAmount = 10 * 10 ** 18;
+    uint256 public signRewardAmount = 10 * 10 ** 18;
 
     mapping(address => SignRecord) public signRecords;
 
-    address public userContractAddress;
-    address public tokenContractAddress;
+    address public easydealAddress;
+    address public esdTokenAddress;
 
-    constructor(address _userContractAddress, address _tokenContractAddress) {
-        userContractAddress = _userContractAddress;
-        tokenContractAddress = _tokenContractAddress;
+    constructor(address _easydealAddress, address _esdTokenAddress) {
+        easydealAddress = _easydealAddress;
+        esdTokenAddress = _esdTokenAddress;
     }
 
     function sign() external returns (bool) {
-        require(_msgSender() == userContractAddress, "FORBIDDEN");
+        require(msg.sender == easydealAddress, "FORBIDDEN");
 
-        SignRecord storage record = signRecords[_msgSender()];
-
-        require(_blockTimestamp() > record.lastSignedTimestamp + signInterval, "ALREADY SIGNED");
+        SignRecord storage record = signRecords[msg.sender];
+        require(block.timestamp > record.lastSignedTimestamp + signInterval, "ALREADY SIGNED");
 
         uint32 continuousNumber = record.continuousNumber;
        
@@ -47,16 +45,16 @@ contract SignReward is Context, Ownable {
         uint rewardAmount = signRewardAmount.mul(100 + additionalPercent).div(100);
 
         // Reward token
-        IBEP20 token = IBEP20(tokenContractAddress);
-        token.transfer(_msgSender(), rewardAmount);
+        IBEP20 token = IBEP20(esdTokenAddress);
+        token.transfer(msg.sender, rewardAmount);
 
         // Interrupt continuation
-        if (_blockTimestamp() > record.lastSignedTimestamp + 2*signInterval) {
+        if (block.timestamp > record.lastSignedTimestamp + 2*signInterval) {
             continuousNumber = 0;
         }
 
-        signRecords[_msgSender()] = SignRecord({
-            lastSignedTimestamp: _blockTimestamp(),
+        signRecords[msg.sender] = SignRecord({
+            lastSignedTimestamp: block.timestamp,
             continuousNumber: continuousNumber + 1
         });
 
@@ -67,7 +65,7 @@ contract SignReward is Context, Ownable {
         signInterval = interval;
     }
 
-    function updateSignRewardAmount(uint amount) public onlyOwner {
+    function updateSignRewardAmount(uint256 amount) public onlyOwner {
         signRewardAmount = amount;
     }
 

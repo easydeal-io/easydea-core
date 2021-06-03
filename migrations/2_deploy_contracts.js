@@ -1,44 +1,31 @@
 const { deploySwitch } = require('../truffle-config.js');
 
-const tokenAddress = '0xf471d89a56c94B5a87498E15861c08d846E937f5';
-
-const Council = artifacts.require('EasydealCouncil');
-const Info = artifacts.require('EasydealInfo');
-const User = artifacts.require('EasydealUser');
+const ESDToken = artifacts.require('ESDToken');
+const Easydeal = artifacts.require('Easydeal');
 
 const SignReward = artifacts.require('SignReward');
 const Multicall = artifacts.require('Multicall');
 
 module.exports = async function(deployer, network, accounts) {
 
-  if (deploySwitch.Council) {
+  if (deploySwitch.ESDToken) {
     console.log('====================================================');
     console.log('network type: ' + network);
     console.log('Deploy time: ' + new Date().toLocaleString());
-    console.log('Deploy type: Council');
+    console.log('Deploy type: ESDToken');
 
-    await deployer.deploy(Council, tokenAddress);
-    console.log('Council Address: ', Council.address);
+    await deployer.deploy(ESDToken);
+    console.log('ESDToken Address: ', ESDToken.address);
   }
 
-  if (deploySwitch.Info) {
+  if (deploySwitch.Easydeal) {
     console.log('====================================================');
     console.log('network type: ' + network);
     console.log('Deploy time: ' + new Date().toLocaleString());
-    console.log('Deploy type: Info');
+    console.log('Deploy type: Easydeal');
 
-    await deployer.deploy(Info, Council.address);
-    console.log('Info Address: ', Info.address);
-  }
-
-  if (deploySwitch.User) {
-    console.log('====================================================');
-    console.log('network type: ' + network);
-    console.log('Deploy time: ' + new Date().toLocaleString());
-    console.log('Deploy type: User');
-
-    await deployer.deploy(User, Council.address);
-    console.log('User Address: ', User.address);
+    await deployer.deploy(Easydeal, ESDToken.address);
+    console.log('Easydeal Address: ', Easydeal.address);
   }
 
   if (deploySwitch.SignReward) {
@@ -47,7 +34,7 @@ module.exports = async function(deployer, network, accounts) {
     console.log('Deploy time: ' + new Date().toLocaleString());
     console.log('Deploy type: SignReward');
 
-    await deployer.deploy(SignReward, User.address, tokenAddress);
+    await deployer.deploy(SignReward, Easydeal.address, ESDToken.address);
     console.log('SignReward Address:', SignReward.address);
   }
 
