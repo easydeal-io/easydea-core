@@ -6,6 +6,7 @@ import {SafeMath} from "./lib/SafeMath.sol";
 import {Ownable} from "./lib/Ownable.sol";
 
 import {IBEP20} from "./itf/IBEP20.sol";
+import {IEasydeal} from "./itf/IEasydeal.sol";
 
 contract SignReward is Ownable {
 
@@ -16,8 +17,8 @@ contract SignReward is Ownable {
         uint32 continuousNumber;
     }
 
-    uint32 public signInterval = 1 days;
-    uint256 public signRewardAmount = 10 * 10 ** 18;
+    uint32 public signInterval = 15 seconds;
+    uint256 public signRewardBaseAmount = 1 * 10 ** 17;
 
     mapping(address => SignRecord) public signRecords;
 
@@ -32,17 +33,15 @@ contract SignReward is Ownable {
     function sign() external returns (bool) {
         require(msg.sender == easydealAddress, "FORBIDDEN");
 
+        uint256 lockedWeight = IEasydeal(easydealAddress).computeLockedWeight(tx.origin);
+
         SignRecord storage record = signRecords[msg.sender];
         require(block.timestamp > record.lastSignedTimestamp + signInterval, "ALREADY SIGNED");
 
         uint32 continuousNumber = record.continuousNumber;
-       
-        uint32 additionalPercent = continuousNumber / 10;
-        if (additionalPercent > 100) {
-            additionalPercent = 100;
-        }
-
-        uint rewardAmount = signRewardAmount.mul(100 + additionalPercent).div(100);
+        uint32 additionalTimes = continuousNumber / 30 + 1;
+    
+        uint256 rewardAmount = signRewardBaseAmount.mul(additionalTimes).mul(lockedWeight);
 
         // Reward token
         IBEP20 token = IBEP20(esdTokenAddress);
@@ -62,11 +61,13 @@ contract SignReward is Ownable {
     }
 
     function updateSignInterval(uint32 interval) public onlyOwner {
+        require(msg.sender == easydealAddress, "FORBIDDEN");
         signInterval = interval;
     }
 
-    function updateSignRewardAmount(uint256 amount) public onlyOwner {
-        signRewardAmount = amount;
+    function updateSignRewardBaseAmount(uint256 amount) public onlyOwner {
+        require(msg.sender == easydealAddress, "FORBIDDEN");
+        signRewardBaseAmount = amount;
     }
 
 }

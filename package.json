@@ -1,7 +1,8 @@
 {
   "dependencies": {
     "@ethersproject/abi": "^5.1.2",
-    "@truffle/hdwallet-provider": "1.2.2"
+    "@truffle/hdwallet-provider": "1.2.2",
+    "truffle-contract-size": "^2.0.1"
   },
   "devDependencies": {
     "truffle-plugin-verify": "^0.5.7"

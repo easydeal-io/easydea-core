@@ -8,6 +8,7 @@ import {IBEP20} from "./itf/IBEP20.sol";
 
 contract ESDStorage {
     using SafeMath for uint256;
+    IBEP20 ESDToken;
 
     // ============ Structs ============
 
@@ -15,6 +16,7 @@ contract ESDStorage {
         string nickName;
         string socialLink;
         string bio;
+        uint256 lockedBeginTimestamp;
         uint256 lockedTokenAmount;
         bool isMerchant;
         bool isCouncilMember;
@@ -64,6 +66,7 @@ contract ESDStorage {
 
     struct Proposal {
         uint32 id;
+        address targetContract;
         address proposer;
         string title;
         string description;
@@ -72,21 +75,29 @@ contract ESDStorage {
         uint256 ayesAttachedTokenAmount;
         uint256 naysAttachedTokenAmount;
         uint256 timestamp;
-        uint256 expireTimestamp;
-        // 1 referenda 2 fail 3 council member second 4 passed
+        uint256 votingDeadlineTimestamp;
+        uint32 councilMembersAtThatTime;
+        // 1 referendum 2 defeated 3 second 4 executed
         uint8 status; 
+    }
+
+    struct CallProxy {
+        bool viaProposal;
+        uint256 timestamp;
     }
 
     // ============ States ============
 
     uint32 immutable MAX_PAGE_SIZE = 100;
+    uint256 public immutable genesisBlockTimestamp;
+    uint256 public totalLockedTokenAmount;
 
     address public esdTokenAddress;
 
-    address[] public registerQueue;
+    address[] registerQueue;
     uint32 public registerQueueSize = 1000;
     mapping(address => User) public users;
-    mapping(address => uint32[]) public followedSpaceIds;
+    mapping(address => uint32[]) followedSpaceIds;
 
     uint32 public spaceCount;
     mapping(uint32 => Space) public spaces;
@@ -98,18 +109,27 @@ contract ESDStorage {
     mapping(uint32 => Deal) public deals;
 
     // council config
+    address[] councilMemberAddresses;
     uint32 public proposalCount = 0;
+    uint32 public maximumCouncilMembers = 13;
     uint256 public proposalTipsMinAmount = 100 * 10 ** 18;
     uint256 public proposalVotingDuration = 10 seconds;
+    uint256 public merchantMinimumLockAmount = 1000 * 10 ** 18;
+    uint256 public councilMemberMinimumLockAmount = 10000 * 10 ** 18;
+
+    mapping(address => mapping(bytes4 => CallProxy)) public callProxies;
 
     uint8 public votingAttachedTokenFactor = 10;
     mapping(uint32 => Proposal) public proposals;
     mapping(address => bool) public haveReferendum;
 
-    address[] public councilMembers;
     mapping(uint32 => address[]) proposalAyes;
     mapping(uint32 => address[]) proposalNays;
-    mapping(uint32 => address[]) public proposalSeconds;
+    mapping(uint32 => address[]) proposalSeconds;
+
+    constructor() {
+        genesisBlockTimestamp = block.timestamp;
+    }
 
     // ============ Helper functions ============
 
@@ -128,6 +148,47 @@ contract ESDStorage {
             registerQueue = queue;
             registerQueue.pop();
         }
+    }
+
+    function getFollowedSpaceIds(address _address) public view returns(uint32[] memory) {
+        return followedSpaceIds[_address];
+    }
+
+    function getProposalAyes(uint32 pid) public view returns(address[] memory) {
+        return proposalAyes[pid];
+    }
+
+    function getProposalNays(uint32 pid) public view returns(address[] memory) {
+        return proposalNays[pid];
+    }
+
+    function getProposalSeconds(uint32 pid) public view returns(address[] memory) {
+        return proposalSeconds[pid];
+    }
+
+    function getCouncilMemberAddresses() public view returns(address[] memory) {
+        return councilMemberAddresses;
+    }
+
+    function getRegisterQueue() public view returns(address[] memory) {
+        return registerQueue;
+    }
+
+    function computeLockedWeights(address _address) public view returns (uint32) {
+        User memory user = users[_address];
+        if (user.status != 1) {
+            return 0;
+        }
+        if (totalLockedTokenAmount == 0 || user.lockedTokenAmount == 0) {
+            return 0;
+        }
+        uint256 lockedTokenWeights = user.lockedTokenAmount.mul(100).div(totalLockedTokenAmount);
+        uint256 lockedTimeWeights = (
+            block.timestamp - user.lockedBeginTimestamp
+        ).mul(100).div(
+            block.timestamp - genesisBlockTimestamp
+        );
+        return uint32(lockedTokenWeights.mul(lockedTimeWeights));
     }
     
     function getInfoIdsBySpaceIds(
@@ -148,10 +209,10 @@ contract ESDStorage {
             (desc ? i > 0 : i < infoCount); 
             (desc ? i-- : i++)
         ) {
-            Info memory info = infos[i+1];
+            Info memory info = infos[desc ? i : i+1];
             for (uint32 j = 0; j < spaceIds.length; j++) {
                 if (info.spaceId == spaceIds[j]) {
-                    ids[idx] = i+1;
+                    ids[idx] = desc ? i : i+1;
                     idx++;
                 }
             }
