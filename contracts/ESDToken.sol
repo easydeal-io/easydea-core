@@ -18,7 +18,7 @@ contract ESDToken is IBEP20, Ownable {
     uint8 private _decimals;
 
     constructor() {
-        _name = "Easy Deal Token";
+        _name = "Easydeal Token";
         _symbol = "ESD";
         _decimals = 18;
         _totalSupply = 100000000 * (10 ** uint256(_decimals)); // 100 Million

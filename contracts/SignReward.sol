@@ -15,10 +15,11 @@ contract SignReward is Ownable {
     struct SignRecord {
         uint256 lastSignedTimestamp;
         uint32 continuousNumber;
+        uint256 totalRewards;
     }
 
-    uint32 public signInterval = 15 seconds;
-    uint256 public signRewardBaseAmount = 1 * 10 ** 17;
+    uint256 public signInterval = 1 hours;
+    uint256 public signRewardBaseAmount = 1 * 10 ** 18;
 
     mapping(address => SignRecord) public signRecords;
 
@@ -30,18 +31,17 @@ contract SignReward is Ownable {
         esdTokenAddress = _esdTokenAddress;
     }
 
-    function sign() external returns (bool) {
-        require(msg.sender == easydealAddress, "FORBIDDEN");
-
-        uint256 lockedWeight = IEasydeal(easydealAddress).computeLockedWeight(tx.origin);
-
+    function sign() public returns (bool) {
+        IEasydeal easydeal = IEasydeal(easydealAddress);
+        require(easydeal.isValidUser(msg.sender), "FORBIDDEN");
+        
+        uint32 lockedWeight = easydeal.computeLockedWeights(msg.sender);
         SignRecord storage record = signRecords[msg.sender];
-        require(block.timestamp > record.lastSignedTimestamp + signInterval, "ALREADY SIGNED");
+        require(block.timestamp > record.lastSignedTimestamp.add(signInterval), "ALREADY SIGNED");
 
         uint32 continuousNumber = record.continuousNumber;
         uint32 additionalTimes = continuousNumber / 30 + 1;
-    
-        uint256 rewardAmount = signRewardBaseAmount.mul(additionalTimes).mul(lockedWeight);
+        uint256 rewardAmount = signRewardBaseAmount.mul(additionalTimes).mul(lockedWeight+1);
 
         // Reward token
         IBEP20 token = IBEP20(esdTokenAddress);
@@ -49,24 +49,23 @@ contract SignReward is Ownable {
 
         // Interrupt continuation
         if (block.timestamp > record.lastSignedTimestamp + 2*signInterval) {
-            continuousNumber = 0;
+            continuousNumber = 1;
+        } else {
+            continuousNumber += 1;
         }
 
-        signRecords[msg.sender] = SignRecord({
-            lastSignedTimestamp: block.timestamp,
-            continuousNumber: continuousNumber + 1
-        });
-
+        record.continuousNumber = continuousNumber;
+        record.lastSignedTimestamp = block.timestamp;
+        record.totalRewards += rewardAmount;
+       
         return true;
     }
 
     function updateSignInterval(uint32 interval) public onlyOwner {
-        require(msg.sender == easydealAddress, "FORBIDDEN");
         signInterval = interval;
     }
 
     function updateSignRewardBaseAmount(uint256 amount) public onlyOwner {
-        require(msg.sender == easydealAddress, "FORBIDDEN");
         signRewardBaseAmount = amount;
     }
 

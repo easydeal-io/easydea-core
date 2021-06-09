@@ -66,7 +66,6 @@ contract ESDStorage {
 
     struct Proposal {
         uint32 id;
-        address targetContract;
         address proposer;
         string title;
         string description;
@@ -79,11 +78,6 @@ contract ESDStorage {
         uint32 councilMembersAtThatTime;
         // 1 referendum 2 defeated 3 second 4 executed
         uint8 status; 
-    }
-
-    struct CallProxy {
-        bool viaProposal;
-        uint256 timestamp;
     }
 
     // ============ States ============
@@ -116,8 +110,6 @@ contract ESDStorage {
     uint256 public proposalVotingDuration = 10 seconds;
     uint256 public merchantMinimumLockAmount = 1000 * 10 ** 18;
     uint256 public councilMemberMinimumLockAmount = 10000 * 10 ** 18;
-
-    mapping(address => mapping(bytes4 => CallProxy)) public callProxies;
 
     uint8 public votingAttachedTokenFactor = 10;
     mapping(uint32 => Proposal) public proposals;
@@ -172,6 +164,10 @@ contract ESDStorage {
 
     function getRegisterQueue() public view returns(address[] memory) {
         return registerQueue;
+    }
+
+    function isValidUser(address addr) public view returns (bool) {
+        return users[addr].status == 1;
     }
 
     function computeLockedWeights(address _address) public view returns (uint32) {

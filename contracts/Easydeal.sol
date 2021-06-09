@@ -263,25 +263,10 @@ contract Easydeal is ESDStorage {
     }
 
     /**
-        Call other contract
-     */
-    function call(
-        address targetContract, 
-        bytes calldata callData
-    ) public onlyRegistered {
-        bytes4 selector = getSelector(callData);
-        CallProxy memory proxy = callProxies[targetContract][selector];
-        require(proxy.timestamp > 0 && !proxy.viaProposal, "Easydeal: FORBIDDEN");
-        (bool success, ) = targetContract.call(callData);
-        require(success, "function call failed");
-    }
-
-    /**
         Submit a proposal
      */
     function submitProposal(
         uint tipsAmount, 
-        address targetContract,
         string memory title,
         string memory description,
         bytes calldata callData
@@ -289,11 +274,6 @@ contract Easydeal is ESDStorage {
         
         require(!haveReferendum[msg.sender], "you have a referendum");
         require(tipsAmount >= proposalTipsMinAmount, "tips amount is not enough");
-        if (targetContract != address(this)) {
-            bytes4 selector = getSelector(callData);
-            CallProxy memory proxy = callProxies[targetContract][selector];
-            require(proxy.timestamp > 0 && proxy.viaProposal, "Easydeal: FORBIDDEN");
-        }
 
         uint tokenBalance = ESDToken.balanceOf(msg.sender);
         require(tokenBalance >= tipsAmount, "insufficient token balance");
@@ -302,7 +282,6 @@ contract Easydeal is ESDStorage {
         proposalCount++;
         proposals[proposalCount] = Proposal({
             id: proposalCount,
-            targetContract: targetContract,
             proposer: msg.sender,
             tipsAmount: tipsAmount,
             ayesAttachedTokenAmount: 0,
@@ -404,7 +383,7 @@ contract Easydeal is ESDStorage {
         uint32 halfOfMembers = uint32(councilMemberAddresses.length)/2;
         if (_seconds.length > halfOfMembers) {
             // execute
-            (bool success, ) = proposal.targetContract.call(proposal.callData);
+            (bool success, ) = address(this).call(proposal.callData);
             require(success, "execute failed");
              proposal.status = 4;
         }
@@ -452,22 +431,6 @@ contract Easydeal is ESDStorage {
         require(councilMemberAddresses.length < maximumCouncilMembers, "council members limit");
         user.isCouncilMember = true;
         councilMemberAddresses.push(addr);
-    }
-
-    function registerCallProxy(address targetAddress, bytes4 selector, bool viaProposal) external {
-        require(msg.sender == address(this), "Easydeal: FORBIDDEN");
-        callProxies[targetAddress][selector] = CallProxy({
-            viaProposal: viaProposal,
-            timestamp: block.timestamp
-        });
-    }
-
-    // ============ Private functions ============
-
-    function getSelector(bytes memory _data) private pure returns(bytes4 sig) {
-        assembly {
-            sig := mload(add(_data, 32))
-        }
     }
 
 }
