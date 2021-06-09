@@ -89,7 +89,7 @@ contract ESDStorage {
     address public esdTokenAddress;
 
     address[] registerQueue;
-    uint32 public registerQueueSize = 1000;
+    uint32 public registerQueueSize = 100;
     mapping(address => User) public users;
     mapping(address => uint32[]) followedSpaceIds;
 
@@ -107,7 +107,7 @@ contract ESDStorage {
     uint32 public proposalCount = 0;
     uint32 public maximumCouncilMembers = 13;
     uint256 public proposalTipsMinAmount = 100 * 10 ** 18;
-    uint256 public proposalVotingDuration = 10 seconds;
+    uint256 public proposalVotingDuration = 1 hours;
     uint256 public merchantMinimumLockAmount = 1000 * 10 ** 18;
     uint256 public councilMemberMinimumLockAmount = 10000 * 10 ** 18;
 

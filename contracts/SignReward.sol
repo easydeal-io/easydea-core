@@ -18,7 +18,7 @@ contract SignReward is Ownable {
         uint256 totalRewards;
     }
 
-    uint256 public signInterval = 1 hours;
+    uint256 public signInterval = 10 minutes;
     uint256 public signRewardBaseAmount = 1 * 10 ** 18;
 
     mapping(address => SignRecord) public signRecords;

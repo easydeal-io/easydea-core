@@ -429,6 +429,9 @@ contract Easydeal is ESDStorage {
         require(user.status == 1, "user status incorrect");
         require(user.lockedTokenAmount >= councilMemberMinimumLockAmount, "amount isn't enough");
         require(councilMemberAddresses.length < maximumCouncilMembers, "council members limit");
+        for (uint i = 0; i < councilMemberAddresses.length; i++) {
+            require(councilMemberAddresses[i] != addr, "already a council member");
+        }
         user.isCouncilMember = true;
         councilMemberAddresses.push(addr);
     }
