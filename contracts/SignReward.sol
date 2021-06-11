@@ -2,15 +2,16 @@
 
 pragma solidity >=0.7.0;
 
+import {SafeBEP20} from "./lib/SafeBEP20.sol";
 import {SafeMath} from "./lib/SafeMath.sol";
-import {Ownable} from "./lib/Ownable.sol";
-
+import {Context} from "./lib/Context.sol";
 import {IBEP20} from "./itf/IBEP20.sol";
-import {IEasydeal} from "./itf/IEasydeal.sol";
 
-contract SignReward is Ownable {
-
+contract SignReward is Context {
+    using SafeBEP20 for IBEP20;
     using SafeMath for uint256;
+
+    IBEP20 ESDToken;
 
     struct SignRecord {
         uint256 lastSignedTimestamp;
@@ -22,20 +23,16 @@ contract SignReward is Ownable {
     uint256 public signRewardBaseAmount = 1 * 10 ** 18;
 
     mapping(address => SignRecord) public signRecords;
-
     address public easydealAddress;
-    address public esdTokenAddress;
 
-    constructor(address _easydealAddress, address _esdTokenAddress) {
-        easydealAddress = _easydealAddress;
-        esdTokenAddress = _esdTokenAddress;
+    constructor (address _tokenAddress) {
+        ESDToken = IBEP20(_tokenAddress);
     }
 
     function sign() public returns (bool) {
-        IEasydeal easydeal = IEasydeal(easydealAddress);
-        require(easydeal.isValidUser(msg.sender), "FORBIDDEN");
+        require(ESDContext.isValidUser(msg.sender), "FORBIDDEN");
         
-        uint32 lockedWeight = easydeal.computeLockedWeights(msg.sender);
+        uint32 lockedWeight = ESDContext.computeLockedWeights(msg.sender);
         SignRecord storage record = signRecords[msg.sender];
         require(block.timestamp > record.lastSignedTimestamp.add(signInterval), "ALREADY SIGNED");
 
@@ -44,8 +41,7 @@ contract SignReward is Ownable {
         uint256 rewardAmount = signRewardBaseAmount.mul(additionalTimes).mul(lockedWeight+1);
 
         // Reward token
-        IBEP20 token = IBEP20(esdTokenAddress);
-        token.transfer(msg.sender, rewardAmount);
+        ESDToken.safeTransfer(msg.sender, rewardAmount);
 
         // Interrupt continuation
         if (block.timestamp > record.lastSignedTimestamp + 2*signInterval) {
@@ -61,11 +57,15 @@ contract SignReward is Ownable {
         return true;
     }
 
-    function updateSignInterval(uint32 interval) public onlyOwner {
+    // ============ Proposal execute functions ============
+    
+    function updateSignInterval(uint32 interval) external {
+        require(ESDContext.isViaUserContract(msg.sender), "FORBIDDEN");
         signInterval = interval;
     }
 
-    function updateSignRewardBaseAmount(uint256 amount) public onlyOwner {
+    function updateSignRewardBaseAmount(uint256 amount) external {
+        require(ESDContext.isViaUserContract(msg.sender), "FORBIDDEN");
         signRewardBaseAmount = amount;
     }
 

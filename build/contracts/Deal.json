@@ -1,0 +1,2993 @@
+{
+  "contractName": "Deal",
+  "abi": [],
+  "metadata": "{\"compiler\":{\"version\":\"0.8.4+commit.c7e474f2\"},\"language\":\"Solidity\",\"output\":{\"abi\":[],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"/Users/chenzhanglong/Work/truffle/easydeal-core/contracts/lib/Deal.sol\":\"Deal\"},\"evmVersion\":\"byzantium\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":true,\"runs\":1},\"remappings\":[]},\"sources\":{\"/Users/chenzhanglong/Work/truffle/easydeal-core/contracts/lib/Deal.sol\":{\"keccak256\":\"0x752c89b8bc17fb9210875362dea69c8892348f81524378021710a6c73a168609\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://3dfb94405b6d4b1f07dded987e5e329da5ea740e1d6a365219a70b813bb92b96\",\"dweb:/ipfs/QmTr5thSQD4bLiy3MAP2NFuuHPR9Sw5xT8A2N7z7df6pu4\"]}},\"version\":1}",
+  "bytecode": "0x60566050600b82828239805160001a6073146043577f4e487b7100000000000000000000000000000000000000000000000000000000600052600060045260246000fd5b30600052607381538281f3fe73000000000000000000000000000000000000000030146080604052600080fdfea26469706673582212206c473755e20790f4b99e4d0747efc649d8facc6d152708462afbd708f5458cb364736f6c63430008040033",
+  "deployedBytecode": "0x73000000000000000000000000000000000000000030146080604052600080fdfea26469706673582212206c473755e20790f4b99e4d0747efc649d8facc6d152708462afbd708f5458cb364736f6c63430008040033",
+  "immutableReferences": {},
+  "generatedSources": [],
+  "deployedGeneratedSources": [],
+  "sourceMap": "59:1080:12:-:0;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;",
+  "deployedSourceMap": "59:1080:12:-:0;;;;;;;;",
+  "source": "// SPDX-License-Identifier: MIT\n\npragma solidity >=0.7.0;\n\nlibrary Deal {\n    struct Data {\n        uint32 id;\n        uint32 infoId;\n        uint256 qty;\n        address maker;\n        uint256 timestamp;\n        uint8 status; // 0 canceled, 1 normal, 2 transferred 3 confirmed\n    }\n\n    function make(\n        mapping(uint32 => Deal.Data) storage self,\n        uint32 id,\n        uint32 infoId,\n        uint256 qty,\n        address maker\n    ) internal {\n        Deal.Data storage deal = self[id];\n        deal.id = id;\n        deal.infoId = infoId;\n        deal.qty = qty;\n        deal.maker = maker;\n        deal.timestamp = block.timestamp;\n        deal.status = 1;\n    }\n\n    function get(\n        mapping(uint32 => Deal.Data) storage self,\n        uint32 id\n    ) internal view returns (Deal.Data storage deal) {\n        deal = self[id];\n    }\n\n    function confirm(\n        mapping(uint32 => Deal.Data) storage self,\n        uint32 id\n    ) internal {\n       self[id].status = 3;\n    }\n\n    function cancel(\n        mapping(uint32 => Deal.Data) storage self,\n        uint32 id\n    ) internal {\n        self[id].status = 0;\n    }\n\n}",
+  "sourcePath": "/Users/chenzhanglong/Work/truffle/easydeal-core/contracts/lib/Deal.sol",
+  "ast": {
+    "absolutePath": "/Users/chenzhanglong/Work/truffle/easydeal-core/contracts/lib/Deal.sol",
+    "exportedSymbols": {
+      "Deal": [
+        4017
+      ]
+    },
+    "id": 4018,
+    "license": "MIT",
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 3884,
+        "literals": [
+          "solidity",
+          ">=",
+          "0.7",
+          ".0"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "33:24:12"
+      },
+      {
+        "abstract": false,
+        "baseContracts": [],
+        "contractDependencies": [],
+        "contractKind": "library",
+        "fullyImplemented": true,
+        "id": 4017,
+        "linearizedBaseContracts": [
+          4017
+        ],
+        "name": "Deal",
+        "nameLocation": "67:4:12",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "canonicalName": "Deal.Data",
+            "id": 3897,
+            "members": [
+              {
+                "constant": false,
+                "id": 3886,
+                "mutability": "mutable",
+                "name": "id",
+                "nameLocation": "107:2:12",
+                "nodeType": "VariableDeclaration",
+                "scope": 3897,
+                "src": "100:9:12",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_uint32",
+                  "typeString": "uint32"
+                },
+                "typeName": {
+                  "id": 3885,
+                  "name": "uint32",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "100:6:12",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint32",
+                    "typeString": "uint32"
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 3888,
+                "mutability": "mutable",
+                "name": "infoId",
+                "nameLocation": "126:6:12",
+                "nodeType": "VariableDeclaration",
+                "scope": 3897,
+                "src": "119:13:12",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_uint32",
+                  "typeString": "uint32"
+                },
+                "typeName": {
+                  "id": 3887,
+                  "name": "uint32",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "119:6:12",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint32",
+                    "typeString": "uint32"
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 3890,
+                "mutability": "mutable",
+                "name": "qty",
+                "nameLocation": "150:3:12",
+                "nodeType": "VariableDeclaration",
+                "scope": 3897,
+                "src": "142:11:12",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_uint256",
+                  "typeString": "uint256"
+                },
+                "typeName": {
+                  "id": 3889,
+                  "name": "uint256",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "142:7:12",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 3892,
+                "mutability": "mutable",
+                "name": "maker",
+                "nameLocation": "171:5:12",
+                "nodeType": "VariableDeclaration",
+                "scope": 3897,
+                "src": "163:13:12",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_address",
+                  "typeString": "address"
+                },
+                "typeName": {
+                  "id": 3891,
+                  "name": "address",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "163:7:12",
+                  "stateMutability": "nonpayable",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 3894,
+                "mutability": "mutable",
+                "name": "timestamp",
+                "nameLocation": "194:9:12",
+                "nodeType": "VariableDeclaration",
+                "scope": 3897,
+                "src": "186:17:12",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_uint256",
+                  "typeString": "uint256"
+                },
+                "typeName": {
+                  "id": 3893,
+                  "name": "uint256",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "186:7:12",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 3896,
+                "mutability": "mutable",
+                "name": "status",
+                "nameLocation": "219:6:12",
+                "nodeType": "VariableDeclaration",
+                "scope": 3897,
+                "src": "213:12:12",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_uint8",
+                  "typeString": "uint8"
+                },
+                "typeName": {
+                  "id": 3895,
+                  "name": "uint8",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "213:5:12",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint8",
+                    "typeString": "uint8"
+                  }
+                },
+                "visibility": "internal"
+              }
+            ],
+            "name": "Data",
+            "nameLocation": "85:4:12",
+            "nodeType": "StructDefinition",
+            "scope": 4017,
+            "src": "78:205:12",
+            "visibility": "public"
+          },
+          {
+            "body": {
+              "id": 3959,
+              "nodeType": "Block",
+              "src": "455:221:12",
+              "statements": [
+                {
+                  "assignments": [
+                    3917
+                  ],
+                  "declarations": [
+                    {
+                      "constant": false,
+                      "id": 3917,
+                      "mutability": "mutable",
+                      "name": "deal",
+                      "nameLocation": "483:4:12",
+                      "nodeType": "VariableDeclaration",
+                      "scope": 3959,
+                      "src": "465:22:12",
+                      "stateVariable": false,
+                      "storageLocation": "storage",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_struct$_Data_$3897_storage_ptr",
+                        "typeString": "struct Deal.Data"
+                      },
+                      "typeName": {
+                        "id": 3916,
+                        "nodeType": "UserDefinedTypeName",
+                        "pathNode": {
+                          "id": 3915,
+                          "name": "Deal.Data",
+                          "nodeType": "IdentifierPath",
+                          "referencedDeclaration": 3897,
+                          "src": "465:9:12"
+                        },
+                        "referencedDeclaration": 3897,
+                        "src": "465:9:12",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_struct$_Data_$3897_storage_ptr",
+                          "typeString": "struct Deal.Data"
+                        }
+                      },
+                      "visibility": "internal"
+                    }
+                  ],
+                  "id": 3921,
+                  "initialValue": {
+                    "baseExpression": {
+                      "id": 3918,
+                      "name": "self",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 3902,
+                      "src": "490:4:12",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_mapping$_t_uint32_$_t_struct$_Data_$3897_storage_$",
+                        "typeString": "mapping(uint32 => struct Deal.Data storage ref)"
+                      }
+                    },
+                    "id": 3920,
+                    "indexExpression": {
+                      "id": 3919,
+                      "name": "id",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 3904,
+                      "src": "495:2:12",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_uint32",
+                        "typeString": "uint32"
+                      }
+                    },
+                    "isConstant": false,
+                    "isLValue": true,
+                    "isPure": false,
+                    "lValueRequested": false,
+                    "nodeType": "IndexAccess",
+                    "src": "490:8:12",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_struct$_Data_$3897_storage",
+                      "typeString": "struct Deal.Data storage ref"
+                    }
+                  },
+                  "nodeType": "VariableDeclarationStatement",
+                  "src": "465:33:12"
+                },
+                {
+                  "expression": {
+                    "id": 3926,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "lValueRequested": false,
+                    "leftHandSide": {
+                      "expression": {
+                        "id": 3922,
+                        "name": "deal",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 3917,
+                        "src": "508:4:12",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_struct$_Data_$3897_storage_ptr",
+                          "typeString": "struct Deal.Data storage pointer"
+                        }
+                      },
+                      "id": 3924,
+                      "isConstant": false,
+                      "isLValue": true,
+                      "isPure": false,
+                      "lValueRequested": true,
+                      "memberName": "id",
+                      "nodeType": "MemberAccess",
+                      "referencedDeclaration": 3886,
+                      "src": "508:7:12",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_uint32",
+                        "typeString": "uint32"
+                      }
+                    },
+                    "nodeType": "Assignment",
+                    "operator": "=",
+                    "rightHandSide": {
+                      "id": 3925,
+                      "name": "id",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 3904,
+                      "src": "518:2:12",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_uint32",
+                        "typeString": "uint32"
+                      }
+                    },
+                    "src": "508:12:12",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint32",
+                      "typeString": "uint32"
+                    }
+                  },
+                  "id": 3927,
+                  "nodeType": "ExpressionStatement",
+                  "src": "508:12:12"
+                },
+                {
+                  "expression": {
+                    "id": 3932,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "lValueRequested": false,
+                    "leftHandSide": {
+                      "expression": {
+                        "id": 3928,
+                        "name": "deal",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 3917,
+                        "src": "530:4:12",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_struct$_Data_$3897_storage_ptr",
+                          "typeString": "struct Deal.Data storage pointer"
+                        }
+                      },
+                      "id": 3930,
+                      "isConstant": false,
+                      "isLValue": true,
+                      "isPure": false,
+                      "lValueRequested": true,
+                      "memberName": "infoId",
+                      "nodeType": "MemberAccess",
+                      "referencedDeclaration": 3888,
+                      "src": "530:11:12",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_uint32",
+                        "typeString": "uint32"
+                      }
+                    },
+                    "nodeType": "Assignment",
+                    "operator": "=",
+                    "rightHandSide": {
+                      "id": 3931,
+                      "name": "infoId",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 3906,
+                      "src": "544:6:12",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_uint32",
+                        "typeString": "uint32"
+                      }
+                    },
+                    "src": "530:20:12",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint32",
+                      "typeString": "uint32"
+                    }
+                  },
+                  "id": 3933,
+                  "nodeType": "ExpressionStatement",
+                  "src": "530:20:12"
+                },
+                {
+                  "expression": {
+                    "id": 3938,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "lValueRequested": false,
+                    "leftHandSide": {
+                      "expression": {
+                        "id": 3934,
+                        "name": "deal",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 3917,
+                        "src": "560:4:12",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_struct$_Data_$3897_storage_ptr",
+                          "typeString": "struct Deal.Data storage pointer"
+                        }
+                      },
+                      "id": 3936,
+                      "isConstant": false,
+                      "isLValue": true,
+                      "isPure": false,
+                      "lValueRequested": true,
+                      "memberName": "qty",
+                      "nodeType": "MemberAccess",
+                      "referencedDeclaration": 3890,
+                      "src": "560:8:12",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_uint256",
+                        "typeString": "uint256"
+                      }
+                    },
+                    "nodeType": "Assignment",
+                    "operator": "=",
+                    "rightHandSide": {
+                      "id": 3937,
+                      "name": "qty",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 3908,
+                      "src": "571:3:12",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_uint256",
+                        "typeString": "uint256"
+                      }
+                    },
+                    "src": "560:14:12",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "id": 3939,
+                  "nodeType": "ExpressionStatement",
+                  "src": "560:14:12"
+                },
+                {
+                  "expression": {
+                    "id": 3944,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "lValueRequested": false,
+                    "leftHandSide": {
+                      "expression": {
+                        "id": 3940,
+                        "name": "deal",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 3917,
+                        "src": "584:4:12",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_struct$_Data_$3897_storage_ptr",
+                          "typeString": "struct Deal.Data storage pointer"
+                        }
+                      },
+                      "id": 3942,
+                      "isConstant": false,
+                      "isLValue": true,
+                      "isPure": false,
+                      "lValueRequested": true,
+                      "memberName": "maker",
+                      "nodeType": "MemberAccess",
+                      "referencedDeclaration": 3892,
+                      "src": "584:10:12",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_address",
+                        "typeString": "address"
+                      }
+                    },
+                    "nodeType": "Assignment",
+                    "operator": "=",
+                    "rightHandSide": {
+                      "id": 3943,
+                      "name": "maker",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 3910,
+                      "src": "597:5:12",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_address",
+                        "typeString": "address"
+                      }
+                    },
+                    "src": "584:18:12",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "id": 3945,
+                  "nodeType": "ExpressionStatement",
+                  "src": "584:18:12"
+                },
+                {
+                  "expression": {
+                    "id": 3951,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "lValueRequested": false,
+                    "leftHandSide": {
+                      "expression": {
+                        "id": 3946,
+                        "name": "deal",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 3917,
+                        "src": "612:4:12",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_struct$_Data_$3897_storage_ptr",
+                          "typeString": "struct Deal.Data storage pointer"
+                        }
+                      },
+                      "id": 3948,
+                      "isConstant": false,
+                      "isLValue": true,
+                      "isPure": false,
+                      "lValueRequested": true,
+                      "memberName": "timestamp",
+                      "nodeType": "MemberAccess",
+                      "referencedDeclaration": 3894,
+                      "src": "612:14:12",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_uint256",
+                        "typeString": "uint256"
+                      }
+                    },
+                    "nodeType": "Assignment",
+                    "operator": "=",
+                    "rightHandSide": {
+                      "expression": {
+                        "id": 3949,
+                        "name": "block",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 4294967292,
+                        "src": "629:5:12",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_magic_block",
+                          "typeString": "block"
+                        }
+                      },
+                      "id": 3950,
+                      "isConstant": false,
+                      "isLValue": false,
+                      "isPure": false,
+                      "lValueRequested": false,
+                      "memberName": "timestamp",
+                      "nodeType": "MemberAccess",
+                      "src": "629:15:12",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_uint256",
+                        "typeString": "uint256"
+                      }
+                    },
+                    "src": "612:32:12",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "id": 3952,
+                  "nodeType": "ExpressionStatement",
+                  "src": "612:32:12"
+                },
+                {
+                  "expression": {
+                    "id": 3957,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "lValueRequested": false,
+                    "leftHandSide": {
+                      "expression": {
+                        "id": 3953,
+                        "name": "deal",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 3917,
+                        "src": "654:4:12",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_struct$_Data_$3897_storage_ptr",
+                          "typeString": "struct Deal.Data storage pointer"
+                        }
+                      },
+                      "id": 3955,
+                      "isConstant": false,
+                      "isLValue": true,
+                      "isPure": false,
+                      "lValueRequested": true,
+                      "memberName": "status",
+                      "nodeType": "MemberAccess",
+                      "referencedDeclaration": 3896,
+                      "src": "654:11:12",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_uint8",
+                        "typeString": "uint8"
+                      }
+                    },
+                    "nodeType": "Assignment",
+                    "operator": "=",
+                    "rightHandSide": {
+                      "hexValue": "31",
+                      "id": 3956,
+                      "isConstant": false,
+                      "isLValue": false,
+                      "isPure": true,
+                      "kind": "number",
+                      "lValueRequested": false,
+                      "nodeType": "Literal",
+                      "src": "668:1:12",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_rational_1_by_1",
+                        "typeString": "int_const 1"
+                      },
+                      "value": "1"
+                    },
+                    "src": "654:15:12",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint8",
+                      "typeString": "uint8"
+                    }
+                  },
+                  "id": 3958,
+                  "nodeType": "ExpressionStatement",
+                  "src": "654:15:12"
+                }
+              ]
+            },
+            "id": 3960,
+            "implemented": true,
+            "kind": "function",
+            "modifiers": [],
+            "name": "make",
+            "nameLocation": "298:4:12",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 3911,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 3902,
+                  "mutability": "mutable",
+                  "name": "self",
+                  "nameLocation": "349:4:12",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 3960,
+                  "src": "312:41:12",
+                  "stateVariable": false,
+                  "storageLocation": "storage",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_mapping$_t_uint32_$_t_struct$_Data_$3897_storage_$",
+                    "typeString": "mapping(uint32 => struct Deal.Data)"
+                  },
+                  "typeName": {
+                    "id": 3901,
+                    "keyType": {
+                      "id": 3898,
+                      "name": "uint32",
+                      "nodeType": "ElementaryTypeName",
+                      "src": "320:6:12",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_uint32",
+                        "typeString": "uint32"
+                      }
+                    },
+                    "nodeType": "Mapping",
+                    "src": "312:28:12",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_mapping$_t_uint32_$_t_struct$_Data_$3897_storage_$",
+                      "typeString": "mapping(uint32 => struct Deal.Data)"
+                    },
+                    "valueType": {
+                      "id": 3900,
+                      "nodeType": "UserDefinedTypeName",
+                      "pathNode": {
+                        "id": 3899,
+                        "name": "Deal.Data",
+                        "nodeType": "IdentifierPath",
+                        "referencedDeclaration": 3897,
+                        "src": "330:9:12"
+                      },
+                      "referencedDeclaration": 3897,
+                      "src": "330:9:12",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_struct$_Data_$3897_storage_ptr",
+                        "typeString": "struct Deal.Data"
+                      }
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 3904,
+                  "mutability": "mutable",
+                  "name": "id",
+                  "nameLocation": "370:2:12",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 3960,
+                  "src": "363:9:12",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint32",
+                    "typeString": "uint32"
+                  },
+                  "typeName": {
+                    "id": 3903,
+                    "name": "uint32",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "363:6:12",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint32",
+                      "typeString": "uint32"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 3906,
+                  "mutability": "mutable",
+                  "name": "infoId",
+                  "nameLocation": "389:6:12",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 3960,
+                  "src": "382:13:12",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint32",
+                    "typeString": "uint32"
+                  },
+                  "typeName": {
+                    "id": 3905,
+                    "name": "uint32",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "382:6:12",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint32",
+                      "typeString": "uint32"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 3908,
+                  "mutability": "mutable",
+                  "name": "qty",
+                  "nameLocation": "413:3:12",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 3960,
+                  "src": "405:11:12",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 3907,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "405:7:12",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 3910,
+                  "mutability": "mutable",
+                  "name": "maker",
+                  "nameLocation": "434:5:12",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 3960,
+                  "src": "426:13:12",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 3909,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "426:7:12",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "302:143:12"
+            },
+            "returnParameters": {
+              "id": 3912,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "455:0:12"
+            },
+            "scope": 4017,
+            "src": "289:387:12",
+            "stateMutability": "nonpayable",
+            "virtual": false,
+            "visibility": "internal"
+          },
+          {
+            "body": {
+              "id": 3979,
+              "nodeType": "Block",
+              "src": "818:32:12",
+              "statements": [
+                {
+                  "expression": {
+                    "id": 3977,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "lValueRequested": false,
+                    "leftHandSide": {
+                      "id": 3973,
+                      "name": "deal",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 3971,
+                      "src": "828:4:12",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_struct$_Data_$3897_storage_ptr",
+                        "typeString": "struct Deal.Data storage pointer"
+                      }
+                    },
+                    "nodeType": "Assignment",
+                    "operator": "=",
+                    "rightHandSide": {
+                      "baseExpression": {
+                        "id": 3974,
+                        "name": "self",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 3965,
+                        "src": "835:4:12",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_mapping$_t_uint32_$_t_struct$_Data_$3897_storage_$",
+                          "typeString": "mapping(uint32 => struct Deal.Data storage ref)"
+                        }
+                      },
+                      "id": 3976,
+                      "indexExpression": {
+                        "id": 3975,
+                        "name": "id",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 3967,
+                        "src": "840:2:12",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_uint32",
+                          "typeString": "uint32"
+                        }
+                      },
+                      "isConstant": false,
+                      "isLValue": true,
+                      "isPure": false,
+                      "lValueRequested": false,
+                      "nodeType": "IndexAccess",
+                      "src": "835:8:12",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_struct$_Data_$3897_storage",
+                        "typeString": "struct Deal.Data storage ref"
+                      }
+                    },
+                    "src": "828:15:12",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_struct$_Data_$3897_storage_ptr",
+                      "typeString": "struct Deal.Data storage pointer"
+                    }
+                  },
+                  "id": 3978,
+                  "nodeType": "ExpressionStatement",
+                  "src": "828:15:12"
+                }
+              ]
+            },
+            "id": 3980,
+            "implemented": true,
+            "kind": "function",
+            "modifiers": [],
+            "name": "get",
+            "nameLocation": "691:3:12",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 3968,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 3965,
+                  "mutability": "mutable",
+                  "name": "self",
+                  "nameLocation": "741:4:12",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 3980,
+                  "src": "704:41:12",
+                  "stateVariable": false,
+                  "storageLocation": "storage",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_mapping$_t_uint32_$_t_struct$_Data_$3897_storage_$",
+                    "typeString": "mapping(uint32 => struct Deal.Data)"
+                  },
+                  "typeName": {
+                    "id": 3964,
+                    "keyType": {
+                      "id": 3961,
+                      "name": "uint32",
+                      "nodeType": "ElementaryTypeName",
+                      "src": "712:6:12",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_uint32",
+                        "typeString": "uint32"
+                      }
+                    },
+                    "nodeType": "Mapping",
+                    "src": "704:28:12",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_mapping$_t_uint32_$_t_struct$_Data_$3897_storage_$",
+                      "typeString": "mapping(uint32 => struct Deal.Data)"
+                    },
+                    "valueType": {
+                      "id": 3963,
+                      "nodeType": "UserDefinedTypeName",
+                      "pathNode": {
+                        "id": 3962,
+                        "name": "Deal.Data",
+                        "nodeType": "IdentifierPath",
+                        "referencedDeclaration": 3897,
+                        "src": "722:9:12"
+                      },
+                      "referencedDeclaration": 3897,
+                      "src": "722:9:12",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_struct$_Data_$3897_storage_ptr",
+                        "typeString": "struct Deal.Data"
+                      }
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 3967,
+                  "mutability": "mutable",
+                  "name": "id",
+                  "nameLocation": "762:2:12",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 3980,
+                  "src": "755:9:12",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint32",
+                    "typeString": "uint32"
+                  },
+                  "typeName": {
+                    "id": 3966,
+                    "name": "uint32",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "755:6:12",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint32",
+                      "typeString": "uint32"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "694:76:12"
+            },
+            "returnParameters": {
+              "id": 3972,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 3971,
+                  "mutability": "mutable",
+                  "name": "deal",
+                  "nameLocation": "812:4:12",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 3980,
+                  "src": "794:22:12",
+                  "stateVariable": false,
+                  "storageLocation": "storage",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_struct$_Data_$3897_storage_ptr",
+                    "typeString": "struct Deal.Data"
+                  },
+                  "typeName": {
+                    "id": 3970,
+                    "nodeType": "UserDefinedTypeName",
+                    "pathNode": {
+                      "id": 3969,
+                      "name": "Deal.Data",
+                      "nodeType": "IdentifierPath",
+                      "referencedDeclaration": 3897,
+                      "src": "794:9:12"
+                    },
+                    "referencedDeclaration": 3897,
+                    "src": "794:9:12",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_struct$_Data_$3897_storage_ptr",
+                      "typeString": "struct Deal.Data"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "793:24:12"
+            },
+            "scope": 4017,
+            "src": "682:168:12",
+            "stateMutability": "view",
+            "virtual": false,
+            "visibility": "internal"
+          },
+          {
+            "body": {
+              "id": 3997,
+              "nodeType": "Block",
+              "src": "958:35:12",
+              "statements": [
+                {
+                  "expression": {
+                    "id": 3995,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "lValueRequested": false,
+                    "leftHandSide": {
+                      "expression": {
+                        "baseExpression": {
+                          "id": 3990,
+                          "name": "self",
+                          "nodeType": "Identifier",
+                          "overloadedDeclarations": [],
+                          "referencedDeclaration": 3985,
+                          "src": "967:4:12",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_mapping$_t_uint32_$_t_struct$_Data_$3897_storage_$",
+                            "typeString": "mapping(uint32 => struct Deal.Data storage ref)"
+                          }
+                        },
+                        "id": 3992,
+                        "indexExpression": {
+                          "id": 3991,
+                          "name": "id",
+                          "nodeType": "Identifier",
+                          "overloadedDeclarations": [],
+                          "referencedDeclaration": 3987,
+                          "src": "972:2:12",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_uint32",
+                            "typeString": "uint32"
+                          }
+                        },
+                        "isConstant": false,
+                        "isLValue": true,
+                        "isPure": false,
+                        "lValueRequested": false,
+                        "nodeType": "IndexAccess",
+                        "src": "967:8:12",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_struct$_Data_$3897_storage",
+                          "typeString": "struct Deal.Data storage ref"
+                        }
+                      },
+                      "id": 3993,
+                      "isConstant": false,
+                      "isLValue": true,
+                      "isPure": false,
+                      "lValueRequested": true,
+                      "memberName": "status",
+                      "nodeType": "MemberAccess",
+                      "referencedDeclaration": 3896,
+                      "src": "967:15:12",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_uint8",
+                        "typeString": "uint8"
+                      }
+                    },
+                    "nodeType": "Assignment",
+                    "operator": "=",
+                    "rightHandSide": {
+                      "hexValue": "33",
+                      "id": 3994,
+                      "isConstant": false,
+                      "isLValue": false,
+                      "isPure": true,
+                      "kind": "number",
+                      "lValueRequested": false,
+                      "nodeType": "Literal",
+                      "src": "985:1:12",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_rational_3_by_1",
+                        "typeString": "int_const 3"
+                      },
+                      "value": "3"
+                    },
+                    "src": "967:19:12",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint8",
+                      "typeString": "uint8"
+                    }
+                  },
+                  "id": 3996,
+                  "nodeType": "ExpressionStatement",
+                  "src": "967:19:12"
+                }
+              ]
+            },
+            "id": 3998,
+            "implemented": true,
+            "kind": "function",
+            "modifiers": [],
+            "name": "confirm",
+            "nameLocation": "865:7:12",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 3988,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 3985,
+                  "mutability": "mutable",
+                  "name": "self",
+                  "nameLocation": "919:4:12",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 3998,
+                  "src": "882:41:12",
+                  "stateVariable": false,
+                  "storageLocation": "storage",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_mapping$_t_uint32_$_t_struct$_Data_$3897_storage_$",
+                    "typeString": "mapping(uint32 => struct Deal.Data)"
+                  },
+                  "typeName": {
+                    "id": 3984,
+                    "keyType": {
+                      "id": 3981,
+                      "name": "uint32",
+                      "nodeType": "ElementaryTypeName",
+                      "src": "890:6:12",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_uint32",
+                        "typeString": "uint32"
+                      }
+                    },
+                    "nodeType": "Mapping",
+                    "src": "882:28:12",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_mapping$_t_uint32_$_t_struct$_Data_$3897_storage_$",
+                      "typeString": "mapping(uint32 => struct Deal.Data)"
+                    },
+                    "valueType": {
+                      "id": 3983,
+                      "nodeType": "UserDefinedTypeName",
+                      "pathNode": {
+                        "id": 3982,
+                        "name": "Deal.Data",
+                        "nodeType": "IdentifierPath",
+                        "referencedDeclaration": 3897,
+                        "src": "900:9:12"
+                      },
+                      "referencedDeclaration": 3897,
+                      "src": "900:9:12",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_struct$_Data_$3897_storage_ptr",
+                        "typeString": "struct Deal.Data"
+                      }
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 3987,
+                  "mutability": "mutable",
+                  "name": "id",
+                  "nameLocation": "940:2:12",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 3998,
+                  "src": "933:9:12",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint32",
+                    "typeString": "uint32"
+                  },
+                  "typeName": {
+                    "id": 3986,
+                    "name": "uint32",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "933:6:12",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint32",
+                      "typeString": "uint32"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "872:76:12"
+            },
+            "returnParameters": {
+              "id": 3989,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "958:0:12"
+            },
+            "scope": 4017,
+            "src": "856:137:12",
+            "stateMutability": "nonpayable",
+            "virtual": false,
+            "visibility": "internal"
+          },
+          {
+            "body": {
+              "id": 4015,
+              "nodeType": "Block",
+              "src": "1100:36:12",
+              "statements": [
+                {
+                  "expression": {
+                    "id": 4013,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "lValueRequested": false,
+                    "leftHandSide": {
+                      "expression": {
+                        "baseExpression": {
+                          "id": 4008,
+                          "name": "self",
+                          "nodeType": "Identifier",
+                          "overloadedDeclarations": [],
+                          "referencedDeclaration": 4003,
+                          "src": "1110:4:12",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_mapping$_t_uint32_$_t_struct$_Data_$3897_storage_$",
+                            "typeString": "mapping(uint32 => struct Deal.Data storage ref)"
+                          }
+                        },
+                        "id": 4010,
+                        "indexExpression": {
+                          "id": 4009,
+                          "name": "id",
+                          "nodeType": "Identifier",
+                          "overloadedDeclarations": [],
+                          "referencedDeclaration": 4005,
+                          "src": "1115:2:12",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_uint32",
+                            "typeString": "uint32"
+                          }
+                        },
+                        "isConstant": false,
+                        "isLValue": true,
+                        "isPure": false,
+                        "lValueRequested": false,
+                        "nodeType": "IndexAccess",
+                        "src": "1110:8:12",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_struct$_Data_$3897_storage",
+                          "typeString": "struct Deal.Data storage ref"
+                        }
+                      },
+                      "id": 4011,
+                      "isConstant": false,
+                      "isLValue": true,
+                      "isPure": false,
+                      "lValueRequested": true,
+                      "memberName": "status",
+                      "nodeType": "MemberAccess",
+                      "referencedDeclaration": 3896,
+                      "src": "1110:15:12",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_uint8",
+                        "typeString": "uint8"
+                      }
+                    },
+                    "nodeType": "Assignment",
+                    "operator": "=",
+                    "rightHandSide": {
+                      "hexValue": "30",
+                      "id": 4012,
+                      "isConstant": false,
+                      "isLValue": false,
+                      "isPure": true,
+                      "kind": "number",
+                      "lValueRequested": false,
+                      "nodeType": "Literal",
+                      "src": "1128:1:12",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_rational_0_by_1",
+                        "typeString": "int_const 0"
+                      },
+                      "value": "0"
+                    },
+                    "src": "1110:19:12",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint8",
+                      "typeString": "uint8"
+                    }
+                  },
+                  "id": 4014,
+                  "nodeType": "ExpressionStatement",
+                  "src": "1110:19:12"
+                }
+              ]
+            },
+            "id": 4016,
+            "implemented": true,
+            "kind": "function",
+            "modifiers": [],
+            "name": "cancel",
+            "nameLocation": "1008:6:12",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 4006,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 4003,
+                  "mutability": "mutable",
+                  "name": "self",
+                  "nameLocation": "1061:4:12",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 4016,
+                  "src": "1024:41:12",
+                  "stateVariable": false,
+                  "storageLocation": "storage",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_mapping$_t_uint32_$_t_struct$_Data_$3897_storage_$",
+                    "typeString": "mapping(uint32 => struct Deal.Data)"
+                  },
+                  "typeName": {
+                    "id": 4002,
+                    "keyType": {
+                      "id": 3999,
+                      "name": "uint32",
+                      "nodeType": "ElementaryTypeName",
+                      "src": "1032:6:12",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_uint32",
+                        "typeString": "uint32"
+                      }
+                    },
+                    "nodeType": "Mapping",
+                    "src": "1024:28:12",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_mapping$_t_uint32_$_t_struct$_Data_$3897_storage_$",
+                      "typeString": "mapping(uint32 => struct Deal.Data)"
+                    },
+                    "valueType": {
+                      "id": 4001,
+                      "nodeType": "UserDefinedTypeName",
+                      "pathNode": {
+                        "id": 4000,
+                        "name": "Deal.Data",
+                        "nodeType": "IdentifierPath",
+                        "referencedDeclaration": 3897,
+                        "src": "1042:9:12"
+                      },
+                      "referencedDeclaration": 3897,
+                      "src": "1042:9:12",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_struct$_Data_$3897_storage_ptr",
+                        "typeString": "struct Deal.Data"
+                      }
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 4005,
+                  "mutability": "mutable",
+                  "name": "id",
+                  "nameLocation": "1082:2:12",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 4016,
+                  "src": "1075:9:12",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint32",
+                    "typeString": "uint32"
+                  },
+                  "typeName": {
+                    "id": 4004,
+                    "name": "uint32",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1075:6:12",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint32",
+                      "typeString": "uint32"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "1014:76:12"
+            },
+            "returnParameters": {
+              "id": 4007,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "1100:0:12"
+            },
+            "scope": 4017,
+            "src": "999:137:12",
+            "stateMutability": "nonpayable",
+            "virtual": false,
+            "visibility": "internal"
+          }
+        ],
+        "scope": 4018,
+        "src": "59:1080:12",
+        "usedErrors": []
+      }
+    ],
+    "src": "33:1106:12"
+  },
+  "legacyAST": {
+    "absolutePath": "/Users/chenzhanglong/Work/truffle/easydeal-core/contracts/lib/Deal.sol",
+    "exportedSymbols": {
+      "Deal": [
+        4017
+      ]
+    },
+    "id": 4018,
+    "license": "MIT",
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 3884,
+        "literals": [
+          "solidity",
+          ">=",
+          "0.7",
+          ".0"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "33:24:12"
+      },
+      {
+        "abstract": false,
+        "baseContracts": [],
+        "contractDependencies": [],
+        "contractKind": "library",
+        "fullyImplemented": true,
+        "id": 4017,
+        "linearizedBaseContracts": [
+          4017
+        ],
+        "name": "Deal",
+        "nameLocation": "67:4:12",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "canonicalName": "Deal.Data",
+            "id": 3897,
+            "members": [
+              {
+                "constant": false,
+                "id": 3886,
+                "mutability": "mutable",
+                "name": "id",
+                "nameLocation": "107:2:12",
+                "nodeType": "VariableDeclaration",
+                "scope": 3897,
+                "src": "100:9:12",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_uint32",
+                  "typeString": "uint32"
+                },
+                "typeName": {
+                  "id": 3885,
+                  "name": "uint32",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "100:6:12",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint32",
+                    "typeString": "uint32"
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 3888,
+                "mutability": "mutable",
+                "name": "infoId",
+                "nameLocation": "126:6:12",
+                "nodeType": "VariableDeclaration",
+                "scope": 3897,
+                "src": "119:13:12",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_uint32",
+                  "typeString": "uint32"
+                },
+                "typeName": {
+                  "id": 3887,
+                  "name": "uint32",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "119:6:12",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint32",
+                    "typeString": "uint32"
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 3890,
+                "mutability": "mutable",
+                "name": "qty",
+                "nameLocation": "150:3:12",
+                "nodeType": "VariableDeclaration",
+                "scope": 3897,
+                "src": "142:11:12",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_uint256",
+                  "typeString": "uint256"
+                },
+                "typeName": {
+                  "id": 3889,
+                  "name": "uint256",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "142:7:12",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 3892,
+                "mutability": "mutable",
+                "name": "maker",
+                "nameLocation": "171:5:12",
+                "nodeType": "VariableDeclaration",
+                "scope": 3897,
+                "src": "163:13:12",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_address",
+                  "typeString": "address"
+                },
+                "typeName": {
+                  "id": 3891,
+                  "name": "address",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "163:7:12",
+                  "stateMutability": "nonpayable",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 3894,
+                "mutability": "mutable",
+                "name": "timestamp",
+                "nameLocation": "194:9:12",
+                "nodeType": "VariableDeclaration",
+                "scope": 3897,
+                "src": "186:17:12",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_uint256",
+                  "typeString": "uint256"
+                },
+                "typeName": {
+                  "id": 3893,
+                  "name": "uint256",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "186:7:12",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 3896,
+                "mutability": "mutable",
+                "name": "status",
+                "nameLocation": "219:6:12",
+                "nodeType": "VariableDeclaration",
+                "scope": 3897,
+                "src": "213:12:12",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_uint8",
+                  "typeString": "uint8"
+                },
+                "typeName": {
+                  "id": 3895,
+                  "name": "uint8",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "213:5:12",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint8",
+                    "typeString": "uint8"
+                  }
+                },
+                "visibility": "internal"
+              }
+            ],
+            "name": "Data",
+            "nameLocation": "85:4:12",
+            "nodeType": "StructDefinition",
+            "scope": 4017,
+            "src": "78:205:12",
+            "visibility": "public"
+          },
+          {
+            "body": {
+              "id": 3959,
+              "nodeType": "Block",
+              "src": "455:221:12",
+              "statements": [
+                {
+                  "assignments": [
+                    3917
+                  ],
+                  "declarations": [
+                    {
+                      "constant": false,
+                      "id": 3917,
+                      "mutability": "mutable",
+                      "name": "deal",
+                      "nameLocation": "483:4:12",
+                      "nodeType": "VariableDeclaration",
+                      "scope": 3959,
+                      "src": "465:22:12",
+                      "stateVariable": false,
+                      "storageLocation": "storage",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_struct$_Data_$3897_storage_ptr",
+                        "typeString": "struct Deal.Data"
+                      },
+                      "typeName": {
+                        "id": 3916,
+                        "nodeType": "UserDefinedTypeName",
+                        "pathNode": {
+                          "id": 3915,
+                          "name": "Deal.Data",
+                          "nodeType": "IdentifierPath",
+                          "referencedDeclaration": 3897,
+                          "src": "465:9:12"
+                        },
+                        "referencedDeclaration": 3897,
+                        "src": "465:9:12",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_struct$_Data_$3897_storage_ptr",
+                          "typeString": "struct Deal.Data"
+                        }
+                      },
+                      "visibility": "internal"
+                    }
+                  ],
+                  "id": 3921,
+                  "initialValue": {
+                    "baseExpression": {
+                      "id": 3918,
+                      "name": "self",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 3902,
+                      "src": "490:4:12",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_mapping$_t_uint32_$_t_struct$_Data_$3897_storage_$",
+                        "typeString": "mapping(uint32 => struct Deal.Data storage ref)"
+                      }
+                    },
+                    "id": 3920,
+                    "indexExpression": {
+                      "id": 3919,
+                      "name": "id",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 3904,
+                      "src": "495:2:12",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_uint32",
+                        "typeString": "uint32"
+                      }
+                    },
+                    "isConstant": false,
+                    "isLValue": true,
+                    "isPure": false,
+                    "lValueRequested": false,
+                    "nodeType": "IndexAccess",
+                    "src": "490:8:12",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_struct$_Data_$3897_storage",
+                      "typeString": "struct Deal.Data storage ref"
+                    }
+                  },
+                  "nodeType": "VariableDeclarationStatement",
+                  "src": "465:33:12"
+                },
+                {
+                  "expression": {
+                    "id": 3926,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "lValueRequested": false,
+                    "leftHandSide": {
+                      "expression": {
+                        "id": 3922,
+                        "name": "deal",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 3917,
+                        "src": "508:4:12",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_struct$_Data_$3897_storage_ptr",
+                          "typeString": "struct Deal.Data storage pointer"
+                        }
+                      },
+                      "id": 3924,
+                      "isConstant": false,
+                      "isLValue": true,
+                      "isPure": false,
+                      "lValueRequested": true,
+                      "memberName": "id",
+                      "nodeType": "MemberAccess",
+                      "referencedDeclaration": 3886,
+                      "src": "508:7:12",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_uint32",
+                        "typeString": "uint32"
+                      }
+                    },
+                    "nodeType": "Assignment",
+                    "operator": "=",
+                    "rightHandSide": {
+                      "id": 3925,
+                      "name": "id",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 3904,
+                      "src": "518:2:12",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_uint32",
+                        "typeString": "uint32"
+                      }
+                    },
+                    "src": "508:12:12",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint32",
+                      "typeString": "uint32"
+                    }
+                  },
+                  "id": 3927,
+                  "nodeType": "ExpressionStatement",
+                  "src": "508:12:12"
+                },
+                {
+                  "expression": {
+                    "id": 3932,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "lValueRequested": false,
+                    "leftHandSide": {
+                      "expression": {
+                        "id": 3928,
+                        "name": "deal",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 3917,
+                        "src": "530:4:12",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_struct$_Data_$3897_storage_ptr",
+                          "typeString": "struct Deal.Data storage pointer"
+                        }
+                      },
+                      "id": 3930,
+                      "isConstant": false,
+                      "isLValue": true,
+                      "isPure": false,
+                      "lValueRequested": true,
+                      "memberName": "infoId",
+                      "nodeType": "MemberAccess",
+                      "referencedDeclaration": 3888,
+                      "src": "530:11:12",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_uint32",
+                        "typeString": "uint32"
+                      }
+                    },
+                    "nodeType": "Assignment",
+                    "operator": "=",
+                    "rightHandSide": {
+                      "id": 3931,
+                      "name": "infoId",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 3906,
+                      "src": "544:6:12",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_uint32",
+                        "typeString": "uint32"
+                      }
+                    },
+                    "src": "530:20:12",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint32",
+                      "typeString": "uint32"
+                    }
+                  },
+                  "id": 3933,
+                  "nodeType": "ExpressionStatement",
+                  "src": "530:20:12"
+                },
+                {
+                  "expression": {
+                    "id": 3938,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "lValueRequested": false,
+                    "leftHandSide": {
+                      "expression": {
+                        "id": 3934,
+                        "name": "deal",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 3917,
+                        "src": "560:4:12",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_struct$_Data_$3897_storage_ptr",
+                          "typeString": "struct Deal.Data storage pointer"
+                        }
+                      },
+                      "id": 3936,
+                      "isConstant": false,
+                      "isLValue": true,
+                      "isPure": false,
+                      "lValueRequested": true,
+                      "memberName": "qty",
+                      "nodeType": "MemberAccess",
+                      "referencedDeclaration": 3890,
+                      "src": "560:8:12",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_uint256",
+                        "typeString": "uint256"
+                      }
+                    },
+                    "nodeType": "Assignment",
+                    "operator": "=",
+                    "rightHandSide": {
+                      "id": 3937,
+                      "name": "qty",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 3908,
+                      "src": "571:3:12",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_uint256",
+                        "typeString": "uint256"
+                      }
+                    },
+                    "src": "560:14:12",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "id": 3939,
+                  "nodeType": "ExpressionStatement",
+                  "src": "560:14:12"
+                },
+                {
+                  "expression": {
+                    "id": 3944,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "lValueRequested": false,
+                    "leftHandSide": {
+                      "expression": {
+                        "id": 3940,
+                        "name": "deal",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 3917,
+                        "src": "584:4:12",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_struct$_Data_$3897_storage_ptr",
+                          "typeString": "struct Deal.Data storage pointer"
+                        }
+                      },
+                      "id": 3942,
+                      "isConstant": false,
+                      "isLValue": true,
+                      "isPure": false,
+                      "lValueRequested": true,
+                      "memberName": "maker",
+                      "nodeType": "MemberAccess",
+                      "referencedDeclaration": 3892,
+                      "src": "584:10:12",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_address",
+                        "typeString": "address"
+                      }
+                    },
+                    "nodeType": "Assignment",
+                    "operator": "=",
+                    "rightHandSide": {
+                      "id": 3943,
+                      "name": "maker",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 3910,
+                      "src": "597:5:12",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_address",
+                        "typeString": "address"
+                      }
+                    },
+                    "src": "584:18:12",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "id": 3945,
+                  "nodeType": "ExpressionStatement",
+                  "src": "584:18:12"
+                },
+                {
+                  "expression": {
+                    "id": 3951,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "lValueRequested": false,
+                    "leftHandSide": {
+                      "expression": {
+                        "id": 3946,
+                        "name": "deal",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 3917,
+                        "src": "612:4:12",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_struct$_Data_$3897_storage_ptr",
+                          "typeString": "struct Deal.Data storage pointer"
+                        }
+                      },
+                      "id": 3948,
+                      "isConstant": false,
+                      "isLValue": true,
+                      "isPure": false,
+                      "lValueRequested": true,
+                      "memberName": "timestamp",
+                      "nodeType": "MemberAccess",
+                      "referencedDeclaration": 3894,
+                      "src": "612:14:12",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_uint256",
+                        "typeString": "uint256"
+                      }
+                    },
+                    "nodeType": "Assignment",
+                    "operator": "=",
+                    "rightHandSide": {
+                      "expression": {
+                        "id": 3949,
+                        "name": "block",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 4294967292,
+                        "src": "629:5:12",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_magic_block",
+                          "typeString": "block"
+                        }
+                      },
+                      "id": 3950,
+                      "isConstant": false,
+                      "isLValue": false,
+                      "isPure": false,
+                      "lValueRequested": false,
+                      "memberName": "timestamp",
+                      "nodeType": "MemberAccess",
+                      "src": "629:15:12",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_uint256",
+                        "typeString": "uint256"
+                      }
+                    },
+                    "src": "612:32:12",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "id": 3952,
+                  "nodeType": "ExpressionStatement",
+                  "src": "612:32:12"
+                },
+                {
+                  "expression": {
+                    "id": 3957,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "lValueRequested": false,
+                    "leftHandSide": {
+                      "expression": {
+                        "id": 3953,
+                        "name": "deal",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 3917,
+                        "src": "654:4:12",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_struct$_Data_$3897_storage_ptr",
+                          "typeString": "struct Deal.Data storage pointer"
+                        }
+                      },
+                      "id": 3955,
+                      "isConstant": false,
+                      "isLValue": true,
+                      "isPure": false,
+                      "lValueRequested": true,
+                      "memberName": "status",
+                      "nodeType": "MemberAccess",
+                      "referencedDeclaration": 3896,
+                      "src": "654:11:12",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_uint8",
+                        "typeString": "uint8"
+                      }
+                    },
+                    "nodeType": "Assignment",
+                    "operator": "=",
+                    "rightHandSide": {
+                      "hexValue": "31",
+                      "id": 3956,
+                      "isConstant": false,
+                      "isLValue": false,
+                      "isPure": true,
+                      "kind": "number",
+                      "lValueRequested": false,
+                      "nodeType": "Literal",
+                      "src": "668:1:12",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_rational_1_by_1",
+                        "typeString": "int_const 1"
+                      },
+                      "value": "1"
+                    },
+                    "src": "654:15:12",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint8",
+                      "typeString": "uint8"
+                    }
+                  },
+                  "id": 3958,
+                  "nodeType": "ExpressionStatement",
+                  "src": "654:15:12"
+                }
+              ]
+            },
+            "id": 3960,
+            "implemented": true,
+            "kind": "function",
+            "modifiers": [],
+            "name": "make",
+            "nameLocation": "298:4:12",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 3911,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 3902,
+                  "mutability": "mutable",
+                  "name": "self",
+                  "nameLocation": "349:4:12",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 3960,
+                  "src": "312:41:12",
+                  "stateVariable": false,
+                  "storageLocation": "storage",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_mapping$_t_uint32_$_t_struct$_Data_$3897_storage_$",
+                    "typeString": "mapping(uint32 => struct Deal.Data)"
+                  },
+                  "typeName": {
+                    "id": 3901,
+                    "keyType": {
+                      "id": 3898,
+                      "name": "uint32",
+                      "nodeType": "ElementaryTypeName",
+                      "src": "320:6:12",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_uint32",
+                        "typeString": "uint32"
+                      }
+                    },
+                    "nodeType": "Mapping",
+                    "src": "312:28:12",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_mapping$_t_uint32_$_t_struct$_Data_$3897_storage_$",
+                      "typeString": "mapping(uint32 => struct Deal.Data)"
+                    },
+                    "valueType": {
+                      "id": 3900,
+                      "nodeType": "UserDefinedTypeName",
+                      "pathNode": {
+                        "id": 3899,
+                        "name": "Deal.Data",
+                        "nodeType": "IdentifierPath",
+                        "referencedDeclaration": 3897,
+                        "src": "330:9:12"
+                      },
+                      "referencedDeclaration": 3897,
+                      "src": "330:9:12",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_struct$_Data_$3897_storage_ptr",
+                        "typeString": "struct Deal.Data"
+                      }
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 3904,
+                  "mutability": "mutable",
+                  "name": "id",
+                  "nameLocation": "370:2:12",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 3960,
+                  "src": "363:9:12",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint32",
+                    "typeString": "uint32"
+                  },
+                  "typeName": {
+                    "id": 3903,
+                    "name": "uint32",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "363:6:12",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint32",
+                      "typeString": "uint32"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 3906,
+                  "mutability": "mutable",
+                  "name": "infoId",
+                  "nameLocation": "389:6:12",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 3960,
+                  "src": "382:13:12",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint32",
+                    "typeString": "uint32"
+                  },
+                  "typeName": {
+                    "id": 3905,
+                    "name": "uint32",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "382:6:12",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint32",
+                      "typeString": "uint32"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 3908,
+                  "mutability": "mutable",
+                  "name": "qty",
+                  "nameLocation": "413:3:12",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 3960,
+                  "src": "405:11:12",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 3907,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "405:7:12",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 3910,
+                  "mutability": "mutable",
+                  "name": "maker",
+                  "nameLocation": "434:5:12",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 3960,
+                  "src": "426:13:12",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 3909,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "426:7:12",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "302:143:12"
+            },
+            "returnParameters": {
+              "id": 3912,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "455:0:12"
+            },
+            "scope": 4017,
+            "src": "289:387:12",
+            "stateMutability": "nonpayable",
+            "virtual": false,
+            "visibility": "internal"
+          },
+          {
+            "body": {
+              "id": 3979,
+              "nodeType": "Block",
+              "src": "818:32:12",
+              "statements": [
+                {
+                  "expression": {
+                    "id": 3977,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "lValueRequested": false,
+                    "leftHandSide": {
+                      "id": 3973,
+                      "name": "deal",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 3971,
+                      "src": "828:4:12",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_struct$_Data_$3897_storage_ptr",
+                        "typeString": "struct Deal.Data storage pointer"
+                      }
+                    },
+                    "nodeType": "Assignment",
+                    "operator": "=",
+                    "rightHandSide": {
+                      "baseExpression": {
+                        "id": 3974,
+                        "name": "self",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 3965,
+                        "src": "835:4:12",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_mapping$_t_uint32_$_t_struct$_Data_$3897_storage_$",
+                          "typeString": "mapping(uint32 => struct Deal.Data storage ref)"
+                        }
+                      },
+                      "id": 3976,
+                      "indexExpression": {
+                        "id": 3975,
+                        "name": "id",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 3967,
+                        "src": "840:2:12",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_uint32",
+                          "typeString": "uint32"
+                        }
+                      },
+                      "isConstant": false,
+                      "isLValue": true,
+                      "isPure": false,
+                      "lValueRequested": false,
+                      "nodeType": "IndexAccess",
+                      "src": "835:8:12",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_struct$_Data_$3897_storage",
+                        "typeString": "struct Deal.Data storage ref"
+                      }
+                    },
+                    "src": "828:15:12",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_struct$_Data_$3897_storage_ptr",
+                      "typeString": "struct Deal.Data storage pointer"
+                    }
+                  },
+                  "id": 3978,
+                  "nodeType": "ExpressionStatement",
+                  "src": "828:15:12"
+                }
+              ]
+            },
+            "id": 3980,
+            "implemented": true,
+            "kind": "function",
+            "modifiers": [],
+            "name": "get",
+            "nameLocation": "691:3:12",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 3968,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 3965,
+                  "mutability": "mutable",
+                  "name": "self",
+                  "nameLocation": "741:4:12",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 3980,
+                  "src": "704:41:12",
+                  "stateVariable": false,
+                  "storageLocation": "storage",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_mapping$_t_uint32_$_t_struct$_Data_$3897_storage_$",
+                    "typeString": "mapping(uint32 => struct Deal.Data)"
+                  },
+                  "typeName": {
+                    "id": 3964,
+                    "keyType": {
+                      "id": 3961,
+                      "name": "uint32",
+                      "nodeType": "ElementaryTypeName",
+                      "src": "712:6:12",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_uint32",
+                        "typeString": "uint32"
+                      }
+                    },
+                    "nodeType": "Mapping",
+                    "src": "704:28:12",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_mapping$_t_uint32_$_t_struct$_Data_$3897_storage_$",
+                      "typeString": "mapping(uint32 => struct Deal.Data)"
+                    },
+                    "valueType": {
+                      "id": 3963,
+                      "nodeType": "UserDefinedTypeName",
+                      "pathNode": {
+                        "id": 3962,
+                        "name": "Deal.Data",
+                        "nodeType": "IdentifierPath",
+                        "referencedDeclaration": 3897,
+                        "src": "722:9:12"
+                      },
+                      "referencedDeclaration": 3897,
+                      "src": "722:9:12",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_struct$_Data_$3897_storage_ptr",
+                        "typeString": "struct Deal.Data"
+                      }
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 3967,
+                  "mutability": "mutable",
+                  "name": "id",
+                  "nameLocation": "762:2:12",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 3980,
+                  "src": "755:9:12",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint32",
+                    "typeString": "uint32"
+                  },
+                  "typeName": {
+                    "id": 3966,
+                    "name": "uint32",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "755:6:12",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint32",
+                      "typeString": "uint32"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "694:76:12"
+            },
+            "returnParameters": {
+              "id": 3972,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 3971,
+                  "mutability": "mutable",
+                  "name": "deal",
+                  "nameLocation": "812:4:12",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 3980,
+                  "src": "794:22:12",
+                  "stateVariable": false,
+                  "storageLocation": "storage",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_struct$_Data_$3897_storage_ptr",
+                    "typeString": "struct Deal.Data"
+                  },
+                  "typeName": {
+                    "id": 3970,
+                    "nodeType": "UserDefinedTypeName",
+                    "pathNode": {
+                      "id": 3969,
+                      "name": "Deal.Data",
+                      "nodeType": "IdentifierPath",
+                      "referencedDeclaration": 3897,
+                      "src": "794:9:12"
+                    },
+                    "referencedDeclaration": 3897,
+                    "src": "794:9:12",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_struct$_Data_$3897_storage_ptr",
+                      "typeString": "struct Deal.Data"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "793:24:12"
+            },
+            "scope": 4017,
+            "src": "682:168:12",
+            "stateMutability": "view",
+            "virtual": false,
+            "visibility": "internal"
+          },
+          {
+            "body": {
+              "id": 3997,
+              "nodeType": "Block",
+              "src": "958:35:12",
+              "statements": [
+                {
+                  "expression": {
+                    "id": 3995,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "lValueRequested": false,
+                    "leftHandSide": {
+                      "expression": {
+                        "baseExpression": {
+                          "id": 3990,
+                          "name": "self",
+                          "nodeType": "Identifier",
+                          "overloadedDeclarations": [],
+                          "referencedDeclaration": 3985,
+                          "src": "967:4:12",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_mapping$_t_uint32_$_t_struct$_Data_$3897_storage_$",
+                            "typeString": "mapping(uint32 => struct Deal.Data storage ref)"
+                          }
+                        },
+                        "id": 3992,
+                        "indexExpression": {
+                          "id": 3991,
+                          "name": "id",
+                          "nodeType": "Identifier",
+                          "overloadedDeclarations": [],
+                          "referencedDeclaration": 3987,
+                          "src": "972:2:12",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_uint32",
+                            "typeString": "uint32"
+                          }
+                        },
+                        "isConstant": false,
+                        "isLValue": true,
+                        "isPure": false,
+                        "lValueRequested": false,
+                        "nodeType": "IndexAccess",
+                        "src": "967:8:12",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_struct$_Data_$3897_storage",
+                          "typeString": "struct Deal.Data storage ref"
+                        }
+                      },
+                      "id": 3993,
+                      "isConstant": false,
+                      "isLValue": true,
+                      "isPure": false,
+                      "lValueRequested": true,
+                      "memberName": "status",
+                      "nodeType": "MemberAccess",
+                      "referencedDeclaration": 3896,
+                      "src": "967:15:12",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_uint8",
+                        "typeString": "uint8"
+                      }
+                    },
+                    "nodeType": "Assignment",
+                    "operator": "=",
+                    "rightHandSide": {
+                      "hexValue": "33",
+                      "id": 3994,
+                      "isConstant": false,
+                      "isLValue": false,
+                      "isPure": true,
+                      "kind": "number",
+                      "lValueRequested": false,
+                      "nodeType": "Literal",
+                      "src": "985:1:12",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_rational_3_by_1",
+                        "typeString": "int_const 3"
+                      },
+                      "value": "3"
+                    },
+                    "src": "967:19:12",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint8",
+                      "typeString": "uint8"
+                    }
+                  },
+                  "id": 3996,
+                  "nodeType": "ExpressionStatement",
+                  "src": "967:19:12"
+                }
+              ]
+            },
+            "id": 3998,
+            "implemented": true,
+            "kind": "function",
+            "modifiers": [],
+            "name": "confirm",
+            "nameLocation": "865:7:12",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 3988,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 3985,
+                  "mutability": "mutable",
+                  "name": "self",
+                  "nameLocation": "919:4:12",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 3998,
+                  "src": "882:41:12",
+                  "stateVariable": false,
+                  "storageLocation": "storage",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_mapping$_t_uint32_$_t_struct$_Data_$3897_storage_$",
+                    "typeString": "mapping(uint32 => struct Deal.Data)"
+                  },
+                  "typeName": {
+                    "id": 3984,
+                    "keyType": {
+                      "id": 3981,
+                      "name": "uint32",
+                      "nodeType": "ElementaryTypeName",
+                      "src": "890:6:12",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_uint32",
+                        "typeString": "uint32"
+                      }
+                    },
+                    "nodeType": "Mapping",
+                    "src": "882:28:12",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_mapping$_t_uint32_$_t_struct$_Data_$3897_storage_$",
+                      "typeString": "mapping(uint32 => struct Deal.Data)"
+                    },
+                    "valueType": {
+                      "id": 3983,
+                      "nodeType": "UserDefinedTypeName",
+                      "pathNode": {
+                        "id": 3982,
+                        "name": "Deal.Data",
+                        "nodeType": "IdentifierPath",
+                        "referencedDeclaration": 3897,
+                        "src": "900:9:12"
+                      },
+                      "referencedDeclaration": 3897,
+                      "src": "900:9:12",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_struct$_Data_$3897_storage_ptr",
+                        "typeString": "struct Deal.Data"
+                      }
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 3987,
+                  "mutability": "mutable",
+                  "name": "id",
+                  "nameLocation": "940:2:12",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 3998,
+                  "src": "933:9:12",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint32",
+                    "typeString": "uint32"
+                  },
+                  "typeName": {
+                    "id": 3986,
+                    "name": "uint32",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "933:6:12",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint32",
+                      "typeString": "uint32"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "872:76:12"
+            },
+            "returnParameters": {
+              "id": 3989,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "958:0:12"
+            },
+            "scope": 4017,
+            "src": "856:137:12",
+            "stateMutability": "nonpayable",
+            "virtual": false,
+            "visibility": "internal"
+          },
+          {
+            "body": {
+              "id": 4015,
+              "nodeType": "Block",
+              "src": "1100:36:12",
+              "statements": [
+                {
+                  "expression": {
+                    "id": 4013,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "lValueRequested": false,
+                    "leftHandSide": {
+                      "expression": {
+                        "baseExpression": {
+                          "id": 4008,
+                          "name": "self",
+                          "nodeType": "Identifier",
+                          "overloadedDeclarations": [],
+                          "referencedDeclaration": 4003,
+                          "src": "1110:4:12",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_mapping$_t_uint32_$_t_struct$_Data_$3897_storage_$",
+                            "typeString": "mapping(uint32 => struct Deal.Data storage ref)"
+                          }
+                        },
+                        "id": 4010,
+                        "indexExpression": {
+                          "id": 4009,
+                          "name": "id",
+                          "nodeType": "Identifier",
+                          "overloadedDeclarations": [],
+                          "referencedDeclaration": 4005,
+                          "src": "1115:2:12",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_uint32",
+                            "typeString": "uint32"
+                          }
+                        },
+                        "isConstant": false,
+                        "isLValue": true,
+                        "isPure": false,
+                        "lValueRequested": false,
+                        "nodeType": "IndexAccess",
+                        "src": "1110:8:12",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_struct$_Data_$3897_storage",
+                          "typeString": "struct Deal.Data storage ref"
+                        }
+                      },
+                      "id": 4011,
+                      "isConstant": false,
+                      "isLValue": true,
+                      "isPure": false,
+                      "lValueRequested": true,
+                      "memberName": "status",
+                      "nodeType": "MemberAccess",
+                      "referencedDeclaration": 3896,
+                      "src": "1110:15:12",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_uint8",
+                        "typeString": "uint8"
+                      }
+                    },
+                    "nodeType": "Assignment",
+                    "operator": "=",
+                    "rightHandSide": {
+                      "hexValue": "30",
+                      "id": 4012,
+                      "isConstant": false,
+                      "isLValue": false,
+                      "isPure": true,
+                      "kind": "number",
+                      "lValueRequested": false,
+                      "nodeType": "Literal",
+                      "src": "1128:1:12",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_rational_0_by_1",
+                        "typeString": "int_const 0"
+                      },
+                      "value": "0"
+                    },
+                    "src": "1110:19:12",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint8",
+                      "typeString": "uint8"
+                    }
+                  },
+                  "id": 4014,
+                  "nodeType": "ExpressionStatement",
+                  "src": "1110:19:12"
+                }
+              ]
+            },
+            "id": 4016,
+            "implemented": true,
+            "kind": "function",
+            "modifiers": [],
+            "name": "cancel",
+            "nameLocation": "1008:6:12",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 4006,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 4003,
+                  "mutability": "mutable",
+                  "name": "self",
+                  "nameLocation": "1061:4:12",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 4016,
+                  "src": "1024:41:12",
+                  "stateVariable": false,
+                  "storageLocation": "storage",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_mapping$_t_uint32_$_t_struct$_Data_$3897_storage_$",
+                    "typeString": "mapping(uint32 => struct Deal.Data)"
+                  },
+                  "typeName": {
+                    "id": 4002,
+                    "keyType": {
+                      "id": 3999,
+                      "name": "uint32",
+                      "nodeType": "ElementaryTypeName",
+                      "src": "1032:6:12",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_uint32",
+                        "typeString": "uint32"
+                      }
+                    },
+                    "nodeType": "Mapping",
+                    "src": "1024:28:12",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_mapping$_t_uint32_$_t_struct$_Data_$3897_storage_$",
+                      "typeString": "mapping(uint32 => struct Deal.Data)"
+                    },
+                    "valueType": {
+                      "id": 4001,
+                      "nodeType": "UserDefinedTypeName",
+                      "pathNode": {
+                        "id": 4000,
+                        "name": "Deal.Data",
+                        "nodeType": "IdentifierPath",
+                        "referencedDeclaration": 3897,
+                        "src": "1042:9:12"
+                      },
+                      "referencedDeclaration": 3897,
+                      "src": "1042:9:12",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_struct$_Data_$3897_storage_ptr",
+                        "typeString": "struct Deal.Data"
+                      }
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 4005,
+                  "mutability": "mutable",
+                  "name": "id",
+                  "nameLocation": "1082:2:12",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 4016,
+                  "src": "1075:9:12",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint32",
+                    "typeString": "uint32"
+                  },
+                  "typeName": {
+                    "id": 4004,
+                    "name": "uint32",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1075:6:12",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint32",
+                      "typeString": "uint32"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "1014:76:12"
+            },
+            "returnParameters": {
+              "id": 4007,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "1100:0:12"
+            },
+            "scope": 4017,
+            "src": "999:137:12",
+            "stateMutability": "nonpayable",
+            "virtual": false,
+            "visibility": "internal"
+          }
+        ],
+        "scope": 4018,
+        "src": "59:1080:12",
+        "usedErrors": []
+      }
+    ],
+    "src": "33:1106:12"
+  },
+  "compiler": {
+    "name": "solc",
+    "version": "0.8.4+commit.c7e474f2.Emscripten.clang"
+  },
+  "networks": {},
+  "schemaVersion": "3.3.4",
+  "updatedAt": "2021-06-11T07:49:57.531Z",
+  "devdoc": {
+    "kind": "dev",
+    "methods": {},
+    "version": 1
+  },
+  "userdoc": {
+    "kind": "user",
+    "methods": {},
+    "version": 1
+  }
+}
