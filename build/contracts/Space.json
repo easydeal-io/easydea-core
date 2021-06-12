@@ -1,29 +1,29 @@
 {
   "contractName": "Space",
   "abi": [],
-  "metadata": "{\"compiler\":{\"version\":\"0.8.4+commit.c7e474f2\"},\"language\":\"Solidity\",\"output\":{\"abi\":[],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"/Users/chenzhanglong/Work/truffle/easydeal-core/contracts/lib/Space.sol\":\"Space\"},\"evmVersion\":\"byzantium\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":true,\"runs\":1},\"remappings\":[]},\"sources\":{\"/Users/chenzhanglong/Work/truffle/easydeal-core/contracts/lib/Space.sol\":{\"keccak256\":\"0x60e365ef72fda7953ae09d1270488ee64c6a5a31e45e910d4c9fd9a1c0b2b781\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://c8f3f9910bbf842d4b8222dda9cdfe2cd2ff82834d854790bbfdc5125510ed27\",\"dweb:/ipfs/QmPNnNd2dQfKhJyxPMZmopDBeHzB1Kj8bbyk6fwtneqBUH\"]}},\"version\":1}",
-  "bytecode": "0x60566050600b82828239805160001a6073146043577f4e487b7100000000000000000000000000000000000000000000000000000000600052600060045260246000fd5b30600052607381538281f3fe73000000000000000000000000000000000000000030146080604052600080fdfea2646970667358221220404cf497b4fbf253468a77794eaff47020841e1041805b2ff3e90b05da164a4f64736f6c63430008040033",
-  "deployedBytecode": "0x73000000000000000000000000000000000000000030146080604052600080fdfea2646970667358221220404cf497b4fbf253468a77794eaff47020841e1041805b2ff3e90b05da164a4f64736f6c63430008040033",
+  "metadata": "{\"compiler\":{\"version\":\"0.8.4+commit.c7e474f2\"},\"language\":\"Solidity\",\"output\":{\"abi\":[],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"/Users/chenzhanglong/Work/truffle/easydeal-core/contracts/class/Space.sol\":\"Space\"},\"evmVersion\":\"byzantium\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":true,\"runs\":1},\"remappings\":[]},\"sources\":{\"/Users/chenzhanglong/Work/truffle/easydeal-core/contracts/class/Space.sol\":{\"keccak256\":\"0x60e365ef72fda7953ae09d1270488ee64c6a5a31e45e910d4c9fd9a1c0b2b781\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://c8f3f9910bbf842d4b8222dda9cdfe2cd2ff82834d854790bbfdc5125510ed27\",\"dweb:/ipfs/QmPNnNd2dQfKhJyxPMZmopDBeHzB1Kj8bbyk6fwtneqBUH\"]}},\"version\":1}",
+  "bytecode": "0x60566050600b82828239805160001a6073146043577f4e487b7100000000000000000000000000000000000000000000000000000000600052600060045260246000fd5b30600052607381538281f3fe73000000000000000000000000000000000000000030146080604052600080fdfea2646970667358221220089c0b90dfc33febc1979ed1c841464293f88900a4b99daabb28e626b1f86de764736f6c63430008040033",
+  "deployedBytecode": "0x73000000000000000000000000000000000000000030146080604052600080fdfea2646970667358221220089c0b90dfc33febc1979ed1c841464293f88900a4b99daabb28e626b1f86de764736f6c63430008040033",
   "immutableReferences": {},
   "generatedSources": [],
   "deployedGeneratedSources": [],
-  "sourceMap": "59:1303:18:-:0;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;",
-  "deployedSourceMap": "59:1303:18:-:0;;;;;;;;",
+  "sourceMap": "59:1303:10:-:0;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;",
+  "deployedSourceMap": "59:1303:10:-:0;;;;;;;;",
   "source": "// SPDX-License-Identifier: MIT\n\npragma solidity >=0.7.0;\n\nlibrary Space {\n    struct Data {\n        uint32 id;\n        string name;\n        string description;\n        address creator;\n        // deal fee rate for space creator\n        uint32 feeRate;\n        uint32 follows;\n        uint32 infos;\n        uint32 deals;\n        uint256 timestamp;\n        uint8 status; //  0 hide, 1 normal\n    }\n\n    function add(\n        mapping(uint32 => Space.Data) storage self,\n        uint32 id,\n        string memory name,\n        string memory description,\n        address creator,\n        uint32 feeRate\n    ) internal {\n        Space.Data storage space = self[id];\n        space.id = id;\n        space.name = name;\n        space.description = description;\n        space.creator = creator;\n        space.feeRate = feeRate;\n        space.follows = 0;\n        space.infos = 0;\n        space.deals = 0;\n        space.timestamp = block.timestamp;\n        space.status = 1;\n    }\n\n    function get(\n        mapping(uint32 => Space.Data) storage self,\n        uint32 id\n    ) internal view returns (Space.Data storage space) {\n        space = self[id];\n    }\n\n    function hide(\n        mapping(uint32 => Space.Data) storage self,\n        uint32 id\n    ) internal {\n        require(tx.origin == self[id].creator, \"Easydeal: FORBIDDEN\");\n        self[id].status = 0;\n    }\n\n}",
-  "sourcePath": "/Users/chenzhanglong/Work/truffle/easydeal-core/contracts/lib/Space.sol",
+  "sourcePath": "/Users/chenzhanglong/Work/truffle/easydeal-core/contracts/class/Space.sol",
   "ast": {
-    "absolutePath": "/Users/chenzhanglong/Work/truffle/easydeal-core/contracts/lib/Space.sol",
+    "absolutePath": "/Users/chenzhanglong/Work/truffle/easydeal-core/contracts/class/Space.sol",
     "exportedSymbols": {
       "Space": [
-        5561
+        4460
       ]
     },
-    "id": 5562,
+    "id": 4461,
     "license": "MIT",
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 5401,
+        "id": 4300,
         "literals": [
           "solidity",
           ">=",
@@ -31,7 +31,7 @@
           ".0"
         ],
         "nodeType": "PragmaDirective",
-        "src": "33:24:18"
+        "src": "33:24:10"
       },
       {
         "abstract": false,
@@ -39,27 +39,27 @@
         "contractDependencies": [],
         "contractKind": "library",
         "fullyImplemented": true,
-        "id": 5561,
+        "id": 4460,
         "linearizedBaseContracts": [
-          5561
+          4460
         ],
         "name": "Space",
-        "nameLocation": "67:5:18",
+        "nameLocation": "67:5:10",
         "nodeType": "ContractDefinition",
         "nodes": [
           {
             "canonicalName": "Space.Data",
-            "id": 5422,
+            "id": 4321,
             "members": [
               {
                 "constant": false,
-                "id": 5403,
+                "id": 4302,
                 "mutability": "mutable",
                 "name": "id",
-                "nameLocation": "108:2:18",
+                "nameLocation": "108:2:10",
                 "nodeType": "VariableDeclaration",
-                "scope": 5422,
-                "src": "101:9:18",
+                "scope": 4321,
+                "src": "101:9:10",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
@@ -67,10 +67,10 @@
                   "typeString": "uint32"
                 },
                 "typeName": {
-                  "id": 5402,
+                  "id": 4301,
                   "name": "uint32",
                   "nodeType": "ElementaryTypeName",
-                  "src": "101:6:18",
+                  "src": "101:6:10",
                   "typeDescriptions": {
                     "typeIdentifier": "t_uint32",
                     "typeString": "uint32"
@@ -80,13 +80,13 @@
               },
               {
                 "constant": false,
-                "id": 5405,
+                "id": 4304,
                 "mutability": "mutable",
                 "name": "name",
-                "nameLocation": "127:4:18",
+                "nameLocation": "127:4:10",
                 "nodeType": "VariableDeclaration",
-                "scope": 5422,
-                "src": "120:11:18",
+                "scope": 4321,
+                "src": "120:11:10",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
@@ -94,10 +94,10 @@
                   "typeString": "string"
                 },
                 "typeName": {
-                  "id": 5404,
+                  "id": 4303,
                   "name": "string",
                   "nodeType": "ElementaryTypeName",
-                  "src": "120:6:18",
+                  "src": "120:6:10",
                   "typeDescriptions": {
                     "typeIdentifier": "t_string_storage_ptr",
                     "typeString": "string"
@@ -107,13 +107,13 @@
               },
               {
                 "constant": false,
-                "id": 5407,
+                "id": 4306,
                 "mutability": "mutable",
                 "name": "description",
-                "nameLocation": "148:11:18",
+                "nameLocation": "148:11:10",
                 "nodeType": "VariableDeclaration",
-                "scope": 5422,
-                "src": "141:18:18",
+                "scope": 4321,
+                "src": "141:18:10",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
@@ -121,10 +121,10 @@
                   "typeString": "string"
                 },
                 "typeName": {
-                  "id": 5406,
+                  "id": 4305,
                   "name": "string",
                   "nodeType": "ElementaryTypeName",
-                  "src": "141:6:18",
+                  "src": "141:6:10",
                   "typeDescriptions": {
                     "typeIdentifier": "t_string_storage_ptr",
                     "typeString": "string"
@@ -134,13 +134,13 @@
               },
               {
                 "constant": false,
-                "id": 5409,
+                "id": 4308,
                 "mutability": "mutable",
                 "name": "creator",
-                "nameLocation": "177:7:18",
+                "nameLocation": "177:7:10",
                 "nodeType": "VariableDeclaration",
-                "scope": 5422,
-                "src": "169:15:18",
+                "scope": 4321,
+                "src": "169:15:10",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
@@ -148,10 +148,10 @@
                   "typeString": "address"
                 },
                 "typeName": {
-                  "id": 5408,
+                  "id": 4307,
                   "name": "address",
                   "nodeType": "ElementaryTypeName",
-                  "src": "169:7:18",
+                  "src": "169:7:10",
                   "stateMutability": "nonpayable",
                   "typeDescriptions": {
                     "typeIdentifier": "t_address",
@@ -162,13 +162,13 @@
               },
               {
                 "constant": false,
-                "id": 5411,
+                "id": 4310,
                 "mutability": "mutable",
                 "name": "feeRate",
-                "nameLocation": "244:7:18",
+                "nameLocation": "244:7:10",
                 "nodeType": "VariableDeclaration",
-                "scope": 5422,
-                "src": "237:14:18",
+                "scope": 4321,
+                "src": "237:14:10",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
@@ -176,10 +176,10 @@
                   "typeString": "uint32"
                 },
                 "typeName": {
-                  "id": 5410,
+                  "id": 4309,
                   "name": "uint32",
                   "nodeType": "ElementaryTypeName",
-                  "src": "237:6:18",
+                  "src": "237:6:10",
                   "typeDescriptions": {
                     "typeIdentifier": "t_uint32",
                     "typeString": "uint32"
@@ -189,13 +189,13 @@
               },
               {
                 "constant": false,
-                "id": 5413,
+                "id": 4312,
                 "mutability": "mutable",
                 "name": "follows",
-                "nameLocation": "268:7:18",
+                "nameLocation": "268:7:10",
                 "nodeType": "VariableDeclaration",
-                "scope": 5422,
-                "src": "261:14:18",
+                "scope": 4321,
+                "src": "261:14:10",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
@@ -203,10 +203,10 @@
                   "typeString": "uint32"
                 },
                 "typeName": {
-                  "id": 5412,
+                  "id": 4311,
                   "name": "uint32",
                   "nodeType": "ElementaryTypeName",
-                  "src": "261:6:18",
+                  "src": "261:6:10",
                   "typeDescriptions": {
                     "typeIdentifier": "t_uint32",
                     "typeString": "uint32"
@@ -216,13 +216,13 @@
               },
               {
                 "constant": false,
-                "id": 5415,
+                "id": 4314,
                 "mutability": "mutable",
                 "name": "infos",
-                "nameLocation": "292:5:18",
+                "nameLocation": "292:5:10",
                 "nodeType": "VariableDeclaration",
-                "scope": 5422,
-                "src": "285:12:18",
+                "scope": 4321,
+                "src": "285:12:10",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
@@ -230,10 +230,10 @@
                   "typeString": "uint32"
                 },
                 "typeName": {
-                  "id": 5414,
+                  "id": 4313,
                   "name": "uint32",
                   "nodeType": "ElementaryTypeName",
-                  "src": "285:6:18",
+                  "src": "285:6:10",
                   "typeDescriptions": {
                     "typeIdentifier": "t_uint32",
                     "typeString": "uint32"
@@ -243,13 +243,13 @@
               },
               {
                 "constant": false,
-                "id": 5417,
+                "id": 4316,
                 "mutability": "mutable",
                 "name": "deals",
-                "nameLocation": "314:5:18",
+                "nameLocation": "314:5:10",
                 "nodeType": "VariableDeclaration",
-                "scope": 5422,
-                "src": "307:12:18",
+                "scope": 4321,
+                "src": "307:12:10",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
@@ -257,10 +257,10 @@
                   "typeString": "uint32"
                 },
                 "typeName": {
-                  "id": 5416,
+                  "id": 4315,
                   "name": "uint32",
                   "nodeType": "ElementaryTypeName",
-                  "src": "307:6:18",
+                  "src": "307:6:10",
                   "typeDescriptions": {
                     "typeIdentifier": "t_uint32",
                     "typeString": "uint32"
@@ -270,13 +270,13 @@
               },
               {
                 "constant": false,
-                "id": 5419,
+                "id": 4318,
                 "mutability": "mutable",
                 "name": "timestamp",
-                "nameLocation": "337:9:18",
+                "nameLocation": "337:9:10",
                 "nodeType": "VariableDeclaration",
-                "scope": 5422,
-                "src": "329:17:18",
+                "scope": 4321,
+                "src": "329:17:10",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
@@ -284,10 +284,10 @@
                   "typeString": "uint256"
                 },
                 "typeName": {
-                  "id": 5418,
+                  "id": 4317,
                   "name": "uint256",
                   "nodeType": "ElementaryTypeName",
-                  "src": "329:7:18",
+                  "src": "329:7:10",
                   "typeDescriptions": {
                     "typeIdentifier": "t_uint256",
                     "typeString": "uint256"
@@ -297,13 +297,13 @@
               },
               {
                 "constant": false,
-                "id": 5421,
+                "id": 4320,
                 "mutability": "mutable",
                 "name": "status",
-                "nameLocation": "362:6:18",
+                "nameLocation": "362:6:10",
                 "nodeType": "VariableDeclaration",
-                "scope": 5422,
-                "src": "356:12:18",
+                "scope": 4321,
+                "src": "356:12:10",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
@@ -311,10 +311,10 @@
                   "typeString": "uint8"
                 },
                 "typeName": {
-                  "id": 5420,
+                  "id": 4319,
                   "name": "uint8",
                   "nodeType": "ElementaryTypeName",
-                  "src": "356:5:18",
+                  "src": "356:5:10",
                   "typeDescriptions": {
                     "typeIdentifier": "t_uint8",
                     "typeString": "uint8"
@@ -324,80 +324,80 @@
               }
             ],
             "name": "Data",
-            "nameLocation": "86:4:18",
+            "nameLocation": "86:4:10",
             "nodeType": "StructDefinition",
-            "scope": 5561,
-            "src": "79:317:18",
+            "scope": 4460,
+            "src": "79:317:10",
             "visibility": "public"
           },
           {
             "body": {
-              "id": 5510,
+              "id": 4409,
               "nodeType": "Block",
-              "src": "613:355:18",
+              "src": "613:355:10",
               "statements": [
                 {
                   "assignments": [
-                    5444
+                    4343
                   ],
                   "declarations": [
                     {
                       "constant": false,
-                      "id": 5444,
+                      "id": 4343,
                       "mutability": "mutable",
                       "name": "space",
-                      "nameLocation": "642:5:18",
+                      "nameLocation": "642:5:10",
                       "nodeType": "VariableDeclaration",
-                      "scope": 5510,
-                      "src": "623:24:18",
+                      "scope": 4409,
+                      "src": "623:24:10",
                       "stateVariable": false,
                       "storageLocation": "storage",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_struct$_Data_$5422_storage_ptr",
+                        "typeIdentifier": "t_struct$_Data_$4321_storage_ptr",
                         "typeString": "struct Space.Data"
                       },
                       "typeName": {
-                        "id": 5443,
+                        "id": 4342,
                         "nodeType": "UserDefinedTypeName",
                         "pathNode": {
-                          "id": 5442,
+                          "id": 4341,
                           "name": "Space.Data",
                           "nodeType": "IdentifierPath",
-                          "referencedDeclaration": 5422,
-                          "src": "623:10:18"
+                          "referencedDeclaration": 4321,
+                          "src": "623:10:10"
                         },
-                        "referencedDeclaration": 5422,
-                        "src": "623:10:18",
+                        "referencedDeclaration": 4321,
+                        "src": "623:10:10",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_struct$_Data_$5422_storage_ptr",
+                          "typeIdentifier": "t_struct$_Data_$4321_storage_ptr",
                           "typeString": "struct Space.Data"
                         }
                       },
                       "visibility": "internal"
                     }
                   ],
-                  "id": 5448,
+                  "id": 4347,
                   "initialValue": {
                     "baseExpression": {
-                      "id": 5445,
+                      "id": 4344,
                       "name": "self",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 5427,
-                      "src": "650:4:18",
+                      "referencedDeclaration": 4326,
+                      "src": "650:4:10",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_mapping$_t_uint32_$_t_struct$_Data_$5422_storage_$",
+                        "typeIdentifier": "t_mapping$_t_uint32_$_t_struct$_Data_$4321_storage_$",
                         "typeString": "mapping(uint32 => struct Space.Data storage ref)"
                       }
                     },
-                    "id": 5447,
+                    "id": 4346,
                     "indexExpression": {
-                      "id": 5446,
+                      "id": 4345,
                       "name": "id",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 5429,
-                      "src": "655:2:18",
+                      "referencedDeclaration": 4328,
+                      "src": "655:2:10",
                       "typeDescriptions": {
                         "typeIdentifier": "t_uint32",
                         "typeString": "uint32"
@@ -408,44 +408,44 @@
                     "isPure": false,
                     "lValueRequested": false,
                     "nodeType": "IndexAccess",
-                    "src": "650:8:18",
+                    "src": "650:8:10",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_struct$_Data_$5422_storage",
+                      "typeIdentifier": "t_struct$_Data_$4321_storage",
                       "typeString": "struct Space.Data storage ref"
                     }
                   },
                   "nodeType": "VariableDeclarationStatement",
-                  "src": "623:35:18"
+                  "src": "623:35:10"
                 },
                 {
                   "expression": {
-                    "id": 5453,
+                    "id": 4352,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
                     "lValueRequested": false,
                     "leftHandSide": {
                       "expression": {
-                        "id": 5449,
+                        "id": 4348,
                         "name": "space",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 5444,
-                        "src": "668:5:18",
+                        "referencedDeclaration": 4343,
+                        "src": "668:5:10",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_struct$_Data_$5422_storage_ptr",
+                          "typeIdentifier": "t_struct$_Data_$4321_storage_ptr",
                           "typeString": "struct Space.Data storage pointer"
                         }
                       },
-                      "id": 5451,
+                      "id": 4350,
                       "isConstant": false,
                       "isLValue": true,
                       "isPure": false,
                       "lValueRequested": true,
                       "memberName": "id",
                       "nodeType": "MemberAccess",
-                      "referencedDeclaration": 5403,
-                      "src": "668:8:18",
+                      "referencedDeclaration": 4302,
+                      "src": "668:8:10",
                       "typeDescriptions": {
                         "typeIdentifier": "t_uint32",
                         "typeString": "uint32"
@@ -454,56 +454,56 @@
                     "nodeType": "Assignment",
                     "operator": "=",
                     "rightHandSide": {
-                      "id": 5452,
+                      "id": 4351,
                       "name": "id",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 5429,
-                      "src": "679:2:18",
+                      "referencedDeclaration": 4328,
+                      "src": "679:2:10",
                       "typeDescriptions": {
                         "typeIdentifier": "t_uint32",
                         "typeString": "uint32"
                       }
                     },
-                    "src": "668:13:18",
+                    "src": "668:13:10",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint32",
                       "typeString": "uint32"
                     }
                   },
-                  "id": 5454,
+                  "id": 4353,
                   "nodeType": "ExpressionStatement",
-                  "src": "668:13:18"
+                  "src": "668:13:10"
                 },
                 {
                   "expression": {
-                    "id": 5459,
+                    "id": 4358,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
                     "lValueRequested": false,
                     "leftHandSide": {
                       "expression": {
-                        "id": 5455,
+                        "id": 4354,
                         "name": "space",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 5444,
-                        "src": "691:5:18",
+                        "referencedDeclaration": 4343,
+                        "src": "691:5:10",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_struct$_Data_$5422_storage_ptr",
+                          "typeIdentifier": "t_struct$_Data_$4321_storage_ptr",
                           "typeString": "struct Space.Data storage pointer"
                         }
                       },
-                      "id": 5457,
+                      "id": 4356,
                       "isConstant": false,
                       "isLValue": true,
                       "isPure": false,
                       "lValueRequested": true,
                       "memberName": "name",
                       "nodeType": "MemberAccess",
-                      "referencedDeclaration": 5405,
-                      "src": "691:10:18",
+                      "referencedDeclaration": 4304,
+                      "src": "691:10:10",
                       "typeDescriptions": {
                         "typeIdentifier": "t_string_storage",
                         "typeString": "string storage ref"
@@ -512,56 +512,56 @@
                     "nodeType": "Assignment",
                     "operator": "=",
                     "rightHandSide": {
-                      "id": 5458,
+                      "id": 4357,
                       "name": "name",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 5431,
-                      "src": "704:4:18",
+                      "referencedDeclaration": 4330,
+                      "src": "704:4:10",
                       "typeDescriptions": {
                         "typeIdentifier": "t_string_memory_ptr",
                         "typeString": "string memory"
                       }
                     },
-                    "src": "691:17:18",
+                    "src": "691:17:10",
                     "typeDescriptions": {
                       "typeIdentifier": "t_string_storage",
                       "typeString": "string storage ref"
                     }
                   },
-                  "id": 5460,
+                  "id": 4359,
                   "nodeType": "ExpressionStatement",
-                  "src": "691:17:18"
+                  "src": "691:17:10"
                 },
                 {
                   "expression": {
-                    "id": 5465,
+                    "id": 4364,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
                     "lValueRequested": false,
                     "leftHandSide": {
                       "expression": {
-                        "id": 5461,
+                        "id": 4360,
                         "name": "space",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 5444,
-                        "src": "718:5:18",
+                        "referencedDeclaration": 4343,
+                        "src": "718:5:10",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_struct$_Data_$5422_storage_ptr",
+                          "typeIdentifier": "t_struct$_Data_$4321_storage_ptr",
                           "typeString": "struct Space.Data storage pointer"
                         }
                       },
-                      "id": 5463,
+                      "id": 4362,
                       "isConstant": false,
                       "isLValue": true,
                       "isPure": false,
                       "lValueRequested": true,
                       "memberName": "description",
                       "nodeType": "MemberAccess",
-                      "referencedDeclaration": 5407,
-                      "src": "718:17:18",
+                      "referencedDeclaration": 4306,
+                      "src": "718:17:10",
                       "typeDescriptions": {
                         "typeIdentifier": "t_string_storage",
                         "typeString": "string storage ref"
@@ -570,56 +570,56 @@
                     "nodeType": "Assignment",
                     "operator": "=",
                     "rightHandSide": {
-                      "id": 5464,
+                      "id": 4363,
                       "name": "description",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 5433,
-                      "src": "738:11:18",
+                      "referencedDeclaration": 4332,
+                      "src": "738:11:10",
                       "typeDescriptions": {
                         "typeIdentifier": "t_string_memory_ptr",
                         "typeString": "string memory"
                       }
                     },
-                    "src": "718:31:18",
+                    "src": "718:31:10",
                     "typeDescriptions": {
                       "typeIdentifier": "t_string_storage",
                       "typeString": "string storage ref"
                     }
                   },
-                  "id": 5466,
+                  "id": 4365,
                   "nodeType": "ExpressionStatement",
-                  "src": "718:31:18"
+                  "src": "718:31:10"
                 },
                 {
                   "expression": {
-                    "id": 5471,
+                    "id": 4370,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
                     "lValueRequested": false,
                     "leftHandSide": {
                       "expression": {
-                        "id": 5467,
+                        "id": 4366,
                         "name": "space",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 5444,
-                        "src": "759:5:18",
+                        "referencedDeclaration": 4343,
+                        "src": "759:5:10",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_struct$_Data_$5422_storage_ptr",
+                          "typeIdentifier": "t_struct$_Data_$4321_storage_ptr",
                           "typeString": "struct Space.Data storage pointer"
                         }
                       },
-                      "id": 5469,
+                      "id": 4368,
                       "isConstant": false,
                       "isLValue": true,
                       "isPure": false,
                       "lValueRequested": true,
                       "memberName": "creator",
                       "nodeType": "MemberAccess",
-                      "referencedDeclaration": 5409,
-                      "src": "759:13:18",
+                      "referencedDeclaration": 4308,
+                      "src": "759:13:10",
                       "typeDescriptions": {
                         "typeIdentifier": "t_address",
                         "typeString": "address"
@@ -628,56 +628,56 @@
                     "nodeType": "Assignment",
                     "operator": "=",
                     "rightHandSide": {
-                      "id": 5470,
+                      "id": 4369,
                       "name": "creator",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 5435,
-                      "src": "775:7:18",
+                      "referencedDeclaration": 4334,
+                      "src": "775:7:10",
                       "typeDescriptions": {
                         "typeIdentifier": "t_address",
                         "typeString": "address"
                       }
                     },
-                    "src": "759:23:18",
+                    "src": "759:23:10",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
                       "typeString": "address"
                     }
                   },
-                  "id": 5472,
+                  "id": 4371,
                   "nodeType": "ExpressionStatement",
-                  "src": "759:23:18"
+                  "src": "759:23:10"
                 },
                 {
                   "expression": {
-                    "id": 5477,
+                    "id": 4376,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
                     "lValueRequested": false,
                     "leftHandSide": {
                       "expression": {
-                        "id": 5473,
+                        "id": 4372,
                         "name": "space",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 5444,
-                        "src": "792:5:18",
+                        "referencedDeclaration": 4343,
+                        "src": "792:5:10",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_struct$_Data_$5422_storage_ptr",
+                          "typeIdentifier": "t_struct$_Data_$4321_storage_ptr",
                           "typeString": "struct Space.Data storage pointer"
                         }
                       },
-                      "id": 5475,
+                      "id": 4374,
                       "isConstant": false,
                       "isLValue": true,
                       "isPure": false,
                       "lValueRequested": true,
                       "memberName": "feeRate",
                       "nodeType": "MemberAccess",
-                      "referencedDeclaration": 5411,
-                      "src": "792:13:18",
+                      "referencedDeclaration": 4310,
+                      "src": "792:13:10",
                       "typeDescriptions": {
                         "typeIdentifier": "t_uint32",
                         "typeString": "uint32"
@@ -686,56 +686,56 @@
                     "nodeType": "Assignment",
                     "operator": "=",
                     "rightHandSide": {
-                      "id": 5476,
+                      "id": 4375,
                       "name": "feeRate",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 5437,
-                      "src": "808:7:18",
+                      "referencedDeclaration": 4336,
+                      "src": "808:7:10",
                       "typeDescriptions": {
                         "typeIdentifier": "t_uint32",
                         "typeString": "uint32"
                       }
                     },
-                    "src": "792:23:18",
+                    "src": "792:23:10",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint32",
                       "typeString": "uint32"
                     }
                   },
-                  "id": 5478,
+                  "id": 4377,
                   "nodeType": "ExpressionStatement",
-                  "src": "792:23:18"
+                  "src": "792:23:10"
                 },
                 {
                   "expression": {
-                    "id": 5483,
+                    "id": 4382,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
                     "lValueRequested": false,
                     "leftHandSide": {
                       "expression": {
-                        "id": 5479,
+                        "id": 4378,
                         "name": "space",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 5444,
-                        "src": "825:5:18",
+                        "referencedDeclaration": 4343,
+                        "src": "825:5:10",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_struct$_Data_$5422_storage_ptr",
+                          "typeIdentifier": "t_struct$_Data_$4321_storage_ptr",
                           "typeString": "struct Space.Data storage pointer"
                         }
                       },
-                      "id": 5481,
+                      "id": 4380,
                       "isConstant": false,
                       "isLValue": true,
                       "isPure": false,
                       "lValueRequested": true,
                       "memberName": "follows",
                       "nodeType": "MemberAccess",
-                      "referencedDeclaration": 5413,
-                      "src": "825:13:18",
+                      "referencedDeclaration": 4312,
+                      "src": "825:13:10",
                       "typeDescriptions": {
                         "typeIdentifier": "t_uint32",
                         "typeString": "uint32"
@@ -745,59 +745,59 @@
                     "operator": "=",
                     "rightHandSide": {
                       "hexValue": "30",
-                      "id": 5482,
+                      "id": 4381,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": true,
                       "kind": "number",
                       "lValueRequested": false,
                       "nodeType": "Literal",
-                      "src": "841:1:18",
+                      "src": "841:1:10",
                       "typeDescriptions": {
                         "typeIdentifier": "t_rational_0_by_1",
                         "typeString": "int_const 0"
                       },
                       "value": "0"
                     },
-                    "src": "825:17:18",
+                    "src": "825:17:10",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint32",
                       "typeString": "uint32"
                     }
                   },
-                  "id": 5484,
+                  "id": 4383,
                   "nodeType": "ExpressionStatement",
-                  "src": "825:17:18"
+                  "src": "825:17:10"
                 },
                 {
                   "expression": {
-                    "id": 5489,
+                    "id": 4388,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
                     "lValueRequested": false,
                     "leftHandSide": {
                       "expression": {
-                        "id": 5485,
+                        "id": 4384,
                         "name": "space",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 5444,
-                        "src": "852:5:18",
+                        "referencedDeclaration": 4343,
+                        "src": "852:5:10",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_struct$_Data_$5422_storage_ptr",
+                          "typeIdentifier": "t_struct$_Data_$4321_storage_ptr",
                           "typeString": "struct Space.Data storage pointer"
                         }
                       },
-                      "id": 5487,
+                      "id": 4386,
                       "isConstant": false,
                       "isLValue": true,
                       "isPure": false,
                       "lValueRequested": true,
                       "memberName": "infos",
                       "nodeType": "MemberAccess",
-                      "referencedDeclaration": 5415,
-                      "src": "852:11:18",
+                      "referencedDeclaration": 4314,
+                      "src": "852:11:10",
                       "typeDescriptions": {
                         "typeIdentifier": "t_uint32",
                         "typeString": "uint32"
@@ -807,59 +807,59 @@
                     "operator": "=",
                     "rightHandSide": {
                       "hexValue": "30",
-                      "id": 5488,
+                      "id": 4387,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": true,
                       "kind": "number",
                       "lValueRequested": false,
                       "nodeType": "Literal",
-                      "src": "866:1:18",
+                      "src": "866:1:10",
                       "typeDescriptions": {
                         "typeIdentifier": "t_rational_0_by_1",
                         "typeString": "int_const 0"
                       },
                       "value": "0"
                     },
-                    "src": "852:15:18",
+                    "src": "852:15:10",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint32",
                       "typeString": "uint32"
                     }
                   },
-                  "id": 5490,
+                  "id": 4389,
                   "nodeType": "ExpressionStatement",
-                  "src": "852:15:18"
+                  "src": "852:15:10"
                 },
                 {
                   "expression": {
-                    "id": 5495,
+                    "id": 4394,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
                     "lValueRequested": false,
                     "leftHandSide": {
                       "expression": {
-                        "id": 5491,
+                        "id": 4390,
                         "name": "space",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 5444,
-                        "src": "877:5:18",
+                        "referencedDeclaration": 4343,
+                        "src": "877:5:10",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_struct$_Data_$5422_storage_ptr",
+                          "typeIdentifier": "t_struct$_Data_$4321_storage_ptr",
                           "typeString": "struct Space.Data storage pointer"
                         }
                       },
-                      "id": 5493,
+                      "id": 4392,
                       "isConstant": false,
                       "isLValue": true,
                       "isPure": false,
                       "lValueRequested": true,
                       "memberName": "deals",
                       "nodeType": "MemberAccess",
-                      "referencedDeclaration": 5417,
-                      "src": "877:11:18",
+                      "referencedDeclaration": 4316,
+                      "src": "877:11:10",
                       "typeDescriptions": {
                         "typeIdentifier": "t_uint32",
                         "typeString": "uint32"
@@ -869,59 +869,59 @@
                     "operator": "=",
                     "rightHandSide": {
                       "hexValue": "30",
-                      "id": 5494,
+                      "id": 4393,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": true,
                       "kind": "number",
                       "lValueRequested": false,
                       "nodeType": "Literal",
-                      "src": "891:1:18",
+                      "src": "891:1:10",
                       "typeDescriptions": {
                         "typeIdentifier": "t_rational_0_by_1",
                         "typeString": "int_const 0"
                       },
                       "value": "0"
                     },
-                    "src": "877:15:18",
+                    "src": "877:15:10",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint32",
                       "typeString": "uint32"
                     }
                   },
-                  "id": 5496,
+                  "id": 4395,
                   "nodeType": "ExpressionStatement",
-                  "src": "877:15:18"
+                  "src": "877:15:10"
                 },
                 {
                   "expression": {
-                    "id": 5502,
+                    "id": 4401,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
                     "lValueRequested": false,
                     "leftHandSide": {
                       "expression": {
-                        "id": 5497,
+                        "id": 4396,
                         "name": "space",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 5444,
-                        "src": "902:5:18",
+                        "referencedDeclaration": 4343,
+                        "src": "902:5:10",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_struct$_Data_$5422_storage_ptr",
+                          "typeIdentifier": "t_struct$_Data_$4321_storage_ptr",
                           "typeString": "struct Space.Data storage pointer"
                         }
                       },
-                      "id": 5499,
+                      "id": 4398,
                       "isConstant": false,
                       "isLValue": true,
                       "isPure": false,
                       "lValueRequested": true,
                       "memberName": "timestamp",
                       "nodeType": "MemberAccess",
-                      "referencedDeclaration": 5419,
-                      "src": "902:15:18",
+                      "referencedDeclaration": 4318,
+                      "src": "902:15:10",
                       "typeDescriptions": {
                         "typeIdentifier": "t_uint256",
                         "typeString": "uint256"
@@ -931,69 +931,69 @@
                     "operator": "=",
                     "rightHandSide": {
                       "expression": {
-                        "id": 5500,
+                        "id": 4399,
                         "name": "block",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
                         "referencedDeclaration": 4294967292,
-                        "src": "920:5:18",
+                        "src": "920:5:10",
                         "typeDescriptions": {
                           "typeIdentifier": "t_magic_block",
                           "typeString": "block"
                         }
                       },
-                      "id": 5501,
+                      "id": 4400,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": false,
                       "lValueRequested": false,
                       "memberName": "timestamp",
                       "nodeType": "MemberAccess",
-                      "src": "920:15:18",
+                      "src": "920:15:10",
                       "typeDescriptions": {
                         "typeIdentifier": "t_uint256",
                         "typeString": "uint256"
                       }
                     },
-                    "src": "902:33:18",
+                    "src": "902:33:10",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
                     }
                   },
-                  "id": 5503,
+                  "id": 4402,
                   "nodeType": "ExpressionStatement",
-                  "src": "902:33:18"
+                  "src": "902:33:10"
                 },
                 {
                   "expression": {
-                    "id": 5508,
+                    "id": 4407,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
                     "lValueRequested": false,
                     "leftHandSide": {
                       "expression": {
-                        "id": 5504,
+                        "id": 4403,
                         "name": "space",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 5444,
-                        "src": "945:5:18",
+                        "referencedDeclaration": 4343,
+                        "src": "945:5:10",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_struct$_Data_$5422_storage_ptr",
+                          "typeIdentifier": "t_struct$_Data_$4321_storage_ptr",
                           "typeString": "struct Space.Data storage pointer"
                         }
                       },
-                      "id": 5506,
+                      "id": 4405,
                       "isConstant": false,
                       "isLValue": true,
                       "isPure": false,
                       "lValueRequested": true,
                       "memberName": "status",
                       "nodeType": "MemberAccess",
-                      "referencedDeclaration": 5421,
-                      "src": "945:12:18",
+                      "referencedDeclaration": 4320,
+                      "src": "945:12:10",
                       "typeDescriptions": {
                         "typeIdentifier": "t_uint8",
                         "typeString": "uint8"
@@ -1003,90 +1003,90 @@
                     "operator": "=",
                     "rightHandSide": {
                       "hexValue": "31",
-                      "id": 5507,
+                      "id": 4406,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": true,
                       "kind": "number",
                       "lValueRequested": false,
                       "nodeType": "Literal",
-                      "src": "960:1:18",
+                      "src": "960:1:10",
                       "typeDescriptions": {
                         "typeIdentifier": "t_rational_1_by_1",
                         "typeString": "int_const 1"
                       },
                       "value": "1"
                     },
-                    "src": "945:16:18",
+                    "src": "945:16:10",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint8",
                       "typeString": "uint8"
                     }
                   },
-                  "id": 5509,
+                  "id": 4408,
                   "nodeType": "ExpressionStatement",
-                  "src": "945:16:18"
+                  "src": "945:16:10"
                 }
               ]
             },
-            "id": 5511,
+            "id": 4410,
             "implemented": true,
             "kind": "function",
             "modifiers": [],
             "name": "add",
-            "nameLocation": "411:3:18",
+            "nameLocation": "411:3:10",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 5438,
+              "id": 4337,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 5427,
+                  "id": 4326,
                   "mutability": "mutable",
                   "name": "self",
-                  "nameLocation": "462:4:18",
+                  "nameLocation": "462:4:10",
                   "nodeType": "VariableDeclaration",
-                  "scope": 5511,
-                  "src": "424:42:18",
+                  "scope": 4410,
+                  "src": "424:42:10",
                   "stateVariable": false,
                   "storageLocation": "storage",
                   "typeDescriptions": {
-                    "typeIdentifier": "t_mapping$_t_uint32_$_t_struct$_Data_$5422_storage_$",
+                    "typeIdentifier": "t_mapping$_t_uint32_$_t_struct$_Data_$4321_storage_$",
                     "typeString": "mapping(uint32 => struct Space.Data)"
                   },
                   "typeName": {
-                    "id": 5426,
+                    "id": 4325,
                     "keyType": {
-                      "id": 5423,
+                      "id": 4322,
                       "name": "uint32",
                       "nodeType": "ElementaryTypeName",
-                      "src": "432:6:18",
+                      "src": "432:6:10",
                       "typeDescriptions": {
                         "typeIdentifier": "t_uint32",
                         "typeString": "uint32"
                       }
                     },
                     "nodeType": "Mapping",
-                    "src": "424:29:18",
+                    "src": "424:29:10",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_mapping$_t_uint32_$_t_struct$_Data_$5422_storage_$",
+                      "typeIdentifier": "t_mapping$_t_uint32_$_t_struct$_Data_$4321_storage_$",
                       "typeString": "mapping(uint32 => struct Space.Data)"
                     },
                     "valueType": {
-                      "id": 5425,
+                      "id": 4324,
                       "nodeType": "UserDefinedTypeName",
                       "pathNode": {
-                        "id": 5424,
+                        "id": 4323,
                         "name": "Space.Data",
                         "nodeType": "IdentifierPath",
-                        "referencedDeclaration": 5422,
-                        "src": "442:10:18"
+                        "referencedDeclaration": 4321,
+                        "src": "442:10:10"
                       },
-                      "referencedDeclaration": 5422,
-                      "src": "442:10:18",
+                      "referencedDeclaration": 4321,
+                      "src": "442:10:10",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_struct$_Data_$5422_storage_ptr",
+                        "typeIdentifier": "t_struct$_Data_$4321_storage_ptr",
                         "typeString": "struct Space.Data"
                       }
                     }
@@ -1095,13 +1095,13 @@
                 },
                 {
                   "constant": false,
-                  "id": 5429,
+                  "id": 4328,
                   "mutability": "mutable",
                   "name": "id",
-                  "nameLocation": "483:2:18",
+                  "nameLocation": "483:2:10",
                   "nodeType": "VariableDeclaration",
-                  "scope": 5511,
-                  "src": "476:9:18",
+                  "scope": 4410,
+                  "src": "476:9:10",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -1109,10 +1109,10 @@
                     "typeString": "uint32"
                   },
                   "typeName": {
-                    "id": 5428,
+                    "id": 4327,
                     "name": "uint32",
                     "nodeType": "ElementaryTypeName",
-                    "src": "476:6:18",
+                    "src": "476:6:10",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint32",
                       "typeString": "uint32"
@@ -1122,13 +1122,13 @@
                 },
                 {
                   "constant": false,
-                  "id": 5431,
+                  "id": 4330,
                   "mutability": "mutable",
                   "name": "name",
-                  "nameLocation": "509:4:18",
+                  "nameLocation": "509:4:10",
                   "nodeType": "VariableDeclaration",
-                  "scope": 5511,
-                  "src": "495:18:18",
+                  "scope": 4410,
+                  "src": "495:18:10",
                   "stateVariable": false,
                   "storageLocation": "memory",
                   "typeDescriptions": {
@@ -1136,10 +1136,10 @@
                     "typeString": "string"
                   },
                   "typeName": {
-                    "id": 5430,
+                    "id": 4329,
                     "name": "string",
                     "nodeType": "ElementaryTypeName",
-                    "src": "495:6:18",
+                    "src": "495:6:10",
                     "typeDescriptions": {
                       "typeIdentifier": "t_string_storage_ptr",
                       "typeString": "string"
@@ -1149,13 +1149,13 @@
                 },
                 {
                   "constant": false,
-                  "id": 5433,
+                  "id": 4332,
                   "mutability": "mutable",
                   "name": "description",
-                  "nameLocation": "537:11:18",
+                  "nameLocation": "537:11:10",
                   "nodeType": "VariableDeclaration",
-                  "scope": 5511,
-                  "src": "523:25:18",
+                  "scope": 4410,
+                  "src": "523:25:10",
                   "stateVariable": false,
                   "storageLocation": "memory",
                   "typeDescriptions": {
@@ -1163,10 +1163,10 @@
                     "typeString": "string"
                   },
                   "typeName": {
-                    "id": 5432,
+                    "id": 4331,
                     "name": "string",
                     "nodeType": "ElementaryTypeName",
-                    "src": "523:6:18",
+                    "src": "523:6:10",
                     "typeDescriptions": {
                       "typeIdentifier": "t_string_storage_ptr",
                       "typeString": "string"
@@ -1176,13 +1176,13 @@
                 },
                 {
                   "constant": false,
-                  "id": 5435,
+                  "id": 4334,
                   "mutability": "mutable",
                   "name": "creator",
-                  "nameLocation": "566:7:18",
+                  "nameLocation": "566:7:10",
                   "nodeType": "VariableDeclaration",
-                  "scope": 5511,
-                  "src": "558:15:18",
+                  "scope": 4410,
+                  "src": "558:15:10",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -1190,10 +1190,10 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 5434,
+                    "id": 4333,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "558:7:18",
+                    "src": "558:7:10",
                     "stateMutability": "nonpayable",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
@@ -1204,13 +1204,13 @@
                 },
                 {
                   "constant": false,
-                  "id": 5437,
+                  "id": 4336,
                   "mutability": "mutable",
                   "name": "feeRate",
-                  "nameLocation": "590:7:18",
+                  "nameLocation": "590:7:10",
                   "nodeType": "VariableDeclaration",
-                  "scope": 5511,
-                  "src": "583:14:18",
+                  "scope": 4410,
+                  "src": "583:14:10",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -1218,10 +1218,10 @@
                     "typeString": "uint32"
                   },
                   "typeName": {
-                    "id": 5436,
+                    "id": 4335,
                     "name": "uint32",
                     "nodeType": "ElementaryTypeName",
-                    "src": "583:6:18",
+                    "src": "583:6:10",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint32",
                       "typeString": "uint32"
@@ -1230,42 +1230,42 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "414:189:18"
+              "src": "414:189:10"
             },
             "returnParameters": {
-              "id": 5439,
+              "id": 4338,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "613:0:18"
+              "src": "613:0:10"
             },
-            "scope": 5561,
-            "src": "402:566:18",
+            "scope": 4460,
+            "src": "402:566:10",
             "stateMutability": "nonpayable",
             "virtual": false,
             "visibility": "internal"
           },
           {
             "body": {
-              "id": 5530,
+              "id": 4429,
               "nodeType": "Block",
-              "src": "1113:33:18",
+              "src": "1113:33:10",
               "statements": [
                 {
                   "expression": {
-                    "id": 5528,
+                    "id": 4427,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
                     "lValueRequested": false,
                     "leftHandSide": {
-                      "id": 5524,
+                      "id": 4423,
                       "name": "space",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 5522,
-                      "src": "1123:5:18",
+                      "referencedDeclaration": 4421,
+                      "src": "1123:5:10",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_struct$_Data_$5422_storage_ptr",
+                        "typeIdentifier": "t_struct$_Data_$4321_storage_ptr",
                         "typeString": "struct Space.Data storage pointer"
                       }
                     },
@@ -1273,25 +1273,25 @@
                     "operator": "=",
                     "rightHandSide": {
                       "baseExpression": {
-                        "id": 5525,
+                        "id": 4424,
                         "name": "self",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 5516,
-                        "src": "1131:4:18",
+                        "referencedDeclaration": 4415,
+                        "src": "1131:4:10",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_mapping$_t_uint32_$_t_struct$_Data_$5422_storage_$",
+                          "typeIdentifier": "t_mapping$_t_uint32_$_t_struct$_Data_$4321_storage_$",
                           "typeString": "mapping(uint32 => struct Space.Data storage ref)"
                         }
                       },
-                      "id": 5527,
+                      "id": 4426,
                       "indexExpression": {
-                        "id": 5526,
+                        "id": 4425,
                         "name": "id",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 5518,
-                        "src": "1136:2:18",
+                        "referencedDeclaration": 4417,
+                        "src": "1136:2:10",
                         "typeDescriptions": {
                           "typeIdentifier": "t_uint32",
                           "typeString": "uint32"
@@ -1302,82 +1302,82 @@
                       "isPure": false,
                       "lValueRequested": false,
                       "nodeType": "IndexAccess",
-                      "src": "1131:8:18",
+                      "src": "1131:8:10",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_struct$_Data_$5422_storage",
+                        "typeIdentifier": "t_struct$_Data_$4321_storage",
                         "typeString": "struct Space.Data storage ref"
                       }
                     },
-                    "src": "1123:16:18",
+                    "src": "1123:16:10",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_struct$_Data_$5422_storage_ptr",
+                      "typeIdentifier": "t_struct$_Data_$4321_storage_ptr",
                       "typeString": "struct Space.Data storage pointer"
                     }
                   },
-                  "id": 5529,
+                  "id": 4428,
                   "nodeType": "ExpressionStatement",
-                  "src": "1123:16:18"
+                  "src": "1123:16:10"
                 }
               ]
             },
-            "id": 5531,
+            "id": 4430,
             "implemented": true,
             "kind": "function",
             "modifiers": [],
             "name": "get",
-            "nameLocation": "983:3:18",
+            "nameLocation": "983:3:10",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 5519,
+              "id": 4418,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 5516,
+                  "id": 4415,
                   "mutability": "mutable",
                   "name": "self",
-                  "nameLocation": "1034:4:18",
+                  "nameLocation": "1034:4:10",
                   "nodeType": "VariableDeclaration",
-                  "scope": 5531,
-                  "src": "996:42:18",
+                  "scope": 4430,
+                  "src": "996:42:10",
                   "stateVariable": false,
                   "storageLocation": "storage",
                   "typeDescriptions": {
-                    "typeIdentifier": "t_mapping$_t_uint32_$_t_struct$_Data_$5422_storage_$",
+                    "typeIdentifier": "t_mapping$_t_uint32_$_t_struct$_Data_$4321_storage_$",
                     "typeString": "mapping(uint32 => struct Space.Data)"
                   },
                   "typeName": {
-                    "id": 5515,
+                    "id": 4414,
                     "keyType": {
-                      "id": 5512,
+                      "id": 4411,
                       "name": "uint32",
                       "nodeType": "ElementaryTypeName",
-                      "src": "1004:6:18",
+                      "src": "1004:6:10",
                       "typeDescriptions": {
                         "typeIdentifier": "t_uint32",
                         "typeString": "uint32"
                       }
                     },
                     "nodeType": "Mapping",
-                    "src": "996:29:18",
+                    "src": "996:29:10",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_mapping$_t_uint32_$_t_struct$_Data_$5422_storage_$",
+                      "typeIdentifier": "t_mapping$_t_uint32_$_t_struct$_Data_$4321_storage_$",
                       "typeString": "mapping(uint32 => struct Space.Data)"
                     },
                     "valueType": {
-                      "id": 5514,
+                      "id": 4413,
                       "nodeType": "UserDefinedTypeName",
                       "pathNode": {
-                        "id": 5513,
+                        "id": 4412,
                         "name": "Space.Data",
                         "nodeType": "IdentifierPath",
-                        "referencedDeclaration": 5422,
-                        "src": "1014:10:18"
+                        "referencedDeclaration": 4321,
+                        "src": "1014:10:10"
                       },
-                      "referencedDeclaration": 5422,
-                      "src": "1014:10:18",
+                      "referencedDeclaration": 4321,
+                      "src": "1014:10:10",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_struct$_Data_$5422_storage_ptr",
+                        "typeIdentifier": "t_struct$_Data_$4321_storage_ptr",
                         "typeString": "struct Space.Data"
                       }
                     }
@@ -1386,13 +1386,13 @@
                 },
                 {
                   "constant": false,
-                  "id": 5518,
+                  "id": 4417,
                   "mutability": "mutable",
                   "name": "id",
-                  "nameLocation": "1055:2:18",
+                  "nameLocation": "1055:2:10",
                   "nodeType": "VariableDeclaration",
-                  "scope": 5531,
-                  "src": "1048:9:18",
+                  "scope": 4430,
+                  "src": "1048:9:10",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -1400,10 +1400,10 @@
                     "typeString": "uint32"
                   },
                   "typeName": {
-                    "id": 5517,
+                    "id": 4416,
                     "name": "uint32",
                     "nodeType": "ElementaryTypeName",
-                    "src": "1048:6:18",
+                    "src": "1048:6:10",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint32",
                       "typeString": "uint32"
@@ -1412,60 +1412,60 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "986:77:18"
+              "src": "986:77:10"
             },
             "returnParameters": {
-              "id": 5523,
+              "id": 4422,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 5522,
+                  "id": 4421,
                   "mutability": "mutable",
                   "name": "space",
-                  "nameLocation": "1106:5:18",
+                  "nameLocation": "1106:5:10",
                   "nodeType": "VariableDeclaration",
-                  "scope": 5531,
-                  "src": "1087:24:18",
+                  "scope": 4430,
+                  "src": "1087:24:10",
                   "stateVariable": false,
                   "storageLocation": "storage",
                   "typeDescriptions": {
-                    "typeIdentifier": "t_struct$_Data_$5422_storage_ptr",
+                    "typeIdentifier": "t_struct$_Data_$4321_storage_ptr",
                     "typeString": "struct Space.Data"
                   },
                   "typeName": {
-                    "id": 5521,
+                    "id": 4420,
                     "nodeType": "UserDefinedTypeName",
                     "pathNode": {
-                      "id": 5520,
+                      "id": 4419,
                       "name": "Space.Data",
                       "nodeType": "IdentifierPath",
-                      "referencedDeclaration": 5422,
-                      "src": "1087:10:18"
+                      "referencedDeclaration": 4321,
+                      "src": "1087:10:10"
                     },
-                    "referencedDeclaration": 5422,
-                    "src": "1087:10:18",
+                    "referencedDeclaration": 4321,
+                    "src": "1087:10:10",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_struct$_Data_$5422_storage_ptr",
+                      "typeIdentifier": "t_struct$_Data_$4321_storage_ptr",
                       "typeString": "struct Space.Data"
                     }
                   },
                   "visibility": "internal"
                 }
               ],
-              "src": "1086:26:18"
+              "src": "1086:26:10"
             },
-            "scope": 5561,
-            "src": "974:172:18",
+            "scope": 4460,
+            "src": "974:172:10",
             "stateMutability": "view",
             "virtual": false,
             "visibility": "internal"
           },
           {
             "body": {
-              "id": 5559,
+              "id": 4458,
               "nodeType": "Block",
-              "src": "1252:107:18",
+              "src": "1252:107:10",
               "statements": [
                 {
                   "expression": {
@@ -1475,32 +1475,32 @@
                           "typeIdentifier": "t_address",
                           "typeString": "address"
                         },
-                        "id": 5548,
+                        "id": 4447,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": false,
                         "lValueRequested": false,
                         "leftExpression": {
                           "expression": {
-                            "id": 5542,
+                            "id": 4441,
                             "name": "tx",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
                             "referencedDeclaration": 4294967270,
-                            "src": "1270:2:18",
+                            "src": "1270:2:10",
                             "typeDescriptions": {
                               "typeIdentifier": "t_magic_transaction",
                               "typeString": "tx"
                             }
                           },
-                          "id": 5543,
+                          "id": 4442,
                           "isConstant": false,
                           "isLValue": false,
                           "isPure": false,
                           "lValueRequested": false,
                           "memberName": "origin",
                           "nodeType": "MemberAccess",
-                          "src": "1270:9:18",
+                          "src": "1270:9:10",
                           "typeDescriptions": {
                             "typeIdentifier": "t_address",
                             "typeString": "address"
@@ -1511,25 +1511,25 @@
                         "rightExpression": {
                           "expression": {
                             "baseExpression": {
-                              "id": 5544,
+                              "id": 4443,
                               "name": "self",
                               "nodeType": "Identifier",
                               "overloadedDeclarations": [],
-                              "referencedDeclaration": 5536,
-                              "src": "1283:4:18",
+                              "referencedDeclaration": 4435,
+                              "src": "1283:4:10",
                               "typeDescriptions": {
-                                "typeIdentifier": "t_mapping$_t_uint32_$_t_struct$_Data_$5422_storage_$",
+                                "typeIdentifier": "t_mapping$_t_uint32_$_t_struct$_Data_$4321_storage_$",
                                 "typeString": "mapping(uint32 => struct Space.Data storage ref)"
                               }
                             },
-                            "id": 5546,
+                            "id": 4445,
                             "indexExpression": {
-                              "id": 5545,
+                              "id": 4444,
                               "name": "id",
                               "nodeType": "Identifier",
                               "overloadedDeclarations": [],
-                              "referencedDeclaration": 5538,
-                              "src": "1288:2:18",
+                              "referencedDeclaration": 4437,
+                              "src": "1288:2:10",
                               "typeDescriptions": {
                                 "typeIdentifier": "t_uint32",
                                 "typeString": "uint32"
@@ -1540,27 +1540,27 @@
                             "isPure": false,
                             "lValueRequested": false,
                             "nodeType": "IndexAccess",
-                            "src": "1283:8:18",
+                            "src": "1283:8:10",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_struct$_Data_$5422_storage",
+                              "typeIdentifier": "t_struct$_Data_$4321_storage",
                               "typeString": "struct Space.Data storage ref"
                             }
                           },
-                          "id": 5547,
+                          "id": 4446,
                           "isConstant": false,
                           "isLValue": true,
                           "isPure": false,
                           "lValueRequested": false,
                           "memberName": "creator",
                           "nodeType": "MemberAccess",
-                          "referencedDeclaration": 5409,
-                          "src": "1283:16:18",
+                          "referencedDeclaration": 4308,
+                          "src": "1283:16:10",
                           "typeDescriptions": {
                             "typeIdentifier": "t_address",
                             "typeString": "address"
                           }
                         },
-                        "src": "1270:29:18",
+                        "src": "1270:29:10",
                         "typeDescriptions": {
                           "typeIdentifier": "t_bool",
                           "typeString": "bool"
@@ -1568,14 +1568,14 @@
                       },
                       {
                         "hexValue": "456173796465616c3a20464f5242494444454e",
-                        "id": 5549,
+                        "id": 4448,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": true,
                         "kind": "string",
                         "lValueRequested": false,
                         "nodeType": "Literal",
-                        "src": "1301:21:18",
+                        "src": "1301:21:10",
                         "typeDescriptions": {
                           "typeIdentifier": "t_stringliteral_7c02eb90dec17e78778a3c6940ee845ae616a680b5f42f250dcede8b02973691",
                           "typeString": "literal_string \"Easydeal: FORBIDDEN\""
@@ -1594,7 +1594,7 @@
                           "typeString": "literal_string \"Easydeal: FORBIDDEN\""
                         }
                       ],
-                      "id": 5541,
+                      "id": 4440,
                       "name": "require",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [
@@ -1602,13 +1602,13 @@
                         4294967278
                       ],
                       "referencedDeclaration": 4294967278,
-                      "src": "1262:7:18",
+                      "src": "1262:7:10",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_require_pure$_t_bool_$_t_string_memory_ptr_$returns$__$",
                         "typeString": "function (bool,string memory) pure"
                       }
                     },
-                    "id": 5550,
+                    "id": 4449,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -1616,20 +1616,20 @@
                     "lValueRequested": false,
                     "names": [],
                     "nodeType": "FunctionCall",
-                    "src": "1262:61:18",
+                    "src": "1262:61:10",
                     "tryCall": false,
                     "typeDescriptions": {
                       "typeIdentifier": "t_tuple$__$",
                       "typeString": "tuple()"
                     }
                   },
-                  "id": 5551,
+                  "id": 4450,
                   "nodeType": "ExpressionStatement",
-                  "src": "1262:61:18"
+                  "src": "1262:61:10"
                 },
                 {
                   "expression": {
-                    "id": 5557,
+                    "id": 4456,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -1637,25 +1637,25 @@
                     "leftHandSide": {
                       "expression": {
                         "baseExpression": {
-                          "id": 5552,
+                          "id": 4451,
                           "name": "self",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 5536,
-                          "src": "1333:4:18",
+                          "referencedDeclaration": 4435,
+                          "src": "1333:4:10",
                           "typeDescriptions": {
-                            "typeIdentifier": "t_mapping$_t_uint32_$_t_struct$_Data_$5422_storage_$",
+                            "typeIdentifier": "t_mapping$_t_uint32_$_t_struct$_Data_$4321_storage_$",
                             "typeString": "mapping(uint32 => struct Space.Data storage ref)"
                           }
                         },
-                        "id": 5554,
+                        "id": 4453,
                         "indexExpression": {
-                          "id": 5553,
+                          "id": 4452,
                           "name": "id",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 5538,
-                          "src": "1338:2:18",
+                          "referencedDeclaration": 4437,
+                          "src": "1338:2:10",
                           "typeDescriptions": {
                             "typeIdentifier": "t_uint32",
                             "typeString": "uint32"
@@ -1666,21 +1666,21 @@
                         "isPure": false,
                         "lValueRequested": false,
                         "nodeType": "IndexAccess",
-                        "src": "1333:8:18",
+                        "src": "1333:8:10",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_struct$_Data_$5422_storage",
+                          "typeIdentifier": "t_struct$_Data_$4321_storage",
                           "typeString": "struct Space.Data storage ref"
                         }
                       },
-                      "id": 5555,
+                      "id": 4454,
                       "isConstant": false,
                       "isLValue": true,
                       "isPure": false,
                       "lValueRequested": true,
                       "memberName": "status",
                       "nodeType": "MemberAccess",
-                      "referencedDeclaration": 5421,
-                      "src": "1333:15:18",
+                      "referencedDeclaration": 4320,
+                      "src": "1333:15:10",
                       "typeDescriptions": {
                         "typeIdentifier": "t_uint8",
                         "typeString": "uint8"
@@ -1690,90 +1690,90 @@
                     "operator": "=",
                     "rightHandSide": {
                       "hexValue": "30",
-                      "id": 5556,
+                      "id": 4455,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": true,
                       "kind": "number",
                       "lValueRequested": false,
                       "nodeType": "Literal",
-                      "src": "1351:1:18",
+                      "src": "1351:1:10",
                       "typeDescriptions": {
                         "typeIdentifier": "t_rational_0_by_1",
                         "typeString": "int_const 0"
                       },
                       "value": "0"
                     },
-                    "src": "1333:19:18",
+                    "src": "1333:19:10",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint8",
                       "typeString": "uint8"
                     }
                   },
-                  "id": 5558,
+                  "id": 4457,
                   "nodeType": "ExpressionStatement",
-                  "src": "1333:19:18"
+                  "src": "1333:19:10"
                 }
               ]
             },
-            "id": 5560,
+            "id": 4459,
             "implemented": true,
             "kind": "function",
             "modifiers": [],
             "name": "hide",
-            "nameLocation": "1161:4:18",
+            "nameLocation": "1161:4:10",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 5539,
+              "id": 4438,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 5536,
+                  "id": 4435,
                   "mutability": "mutable",
                   "name": "self",
-                  "nameLocation": "1213:4:18",
+                  "nameLocation": "1213:4:10",
                   "nodeType": "VariableDeclaration",
-                  "scope": 5560,
-                  "src": "1175:42:18",
+                  "scope": 4459,
+                  "src": "1175:42:10",
                   "stateVariable": false,
                   "storageLocation": "storage",
                   "typeDescriptions": {
-                    "typeIdentifier": "t_mapping$_t_uint32_$_t_struct$_Data_$5422_storage_$",
+                    "typeIdentifier": "t_mapping$_t_uint32_$_t_struct$_Data_$4321_storage_$",
                     "typeString": "mapping(uint32 => struct Space.Data)"
                   },
                   "typeName": {
-                    "id": 5535,
+                    "id": 4434,
                     "keyType": {
-                      "id": 5532,
+                      "id": 4431,
                       "name": "uint32",
                       "nodeType": "ElementaryTypeName",
-                      "src": "1183:6:18",
+                      "src": "1183:6:10",
                       "typeDescriptions": {
                         "typeIdentifier": "t_uint32",
                         "typeString": "uint32"
                       }
                     },
                     "nodeType": "Mapping",
-                    "src": "1175:29:18",
+                    "src": "1175:29:10",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_mapping$_t_uint32_$_t_struct$_Data_$5422_storage_$",
+                      "typeIdentifier": "t_mapping$_t_uint32_$_t_struct$_Data_$4321_storage_$",
                       "typeString": "mapping(uint32 => struct Space.Data)"
                     },
                     "valueType": {
-                      "id": 5534,
+                      "id": 4433,
                       "nodeType": "UserDefinedTypeName",
                       "pathNode": {
-                        "id": 5533,
+                        "id": 4432,
                         "name": "Space.Data",
                         "nodeType": "IdentifierPath",
-                        "referencedDeclaration": 5422,
-                        "src": "1193:10:18"
+                        "referencedDeclaration": 4321,
+                        "src": "1193:10:10"
                       },
-                      "referencedDeclaration": 5422,
-                      "src": "1193:10:18",
+                      "referencedDeclaration": 4321,
+                      "src": "1193:10:10",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_struct$_Data_$5422_storage_ptr",
+                        "typeIdentifier": "t_struct$_Data_$4321_storage_ptr",
                         "typeString": "struct Space.Data"
                       }
                     }
@@ -1782,13 +1782,13 @@
                 },
                 {
                   "constant": false,
-                  "id": 5538,
+                  "id": 4437,
                   "mutability": "mutable",
                   "name": "id",
-                  "nameLocation": "1234:2:18",
+                  "nameLocation": "1234:2:10",
                   "nodeType": "VariableDeclaration",
-                  "scope": 5560,
-                  "src": "1227:9:18",
+                  "scope": 4459,
+                  "src": "1227:9:10",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -1796,10 +1796,10 @@
                     "typeString": "uint32"
                   },
                   "typeName": {
-                    "id": 5537,
+                    "id": 4436,
                     "name": "uint32",
                     "nodeType": "ElementaryTypeName",
-                    "src": "1227:6:18",
+                    "src": "1227:6:10",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint32",
                       "typeString": "uint32"
@@ -1808,41 +1808,41 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "1165:77:18"
+              "src": "1165:77:10"
             },
             "returnParameters": {
-              "id": 5540,
+              "id": 4439,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "1252:0:18"
+              "src": "1252:0:10"
             },
-            "scope": 5561,
-            "src": "1152:207:18",
+            "scope": 4460,
+            "src": "1152:207:10",
             "stateMutability": "nonpayable",
             "virtual": false,
             "visibility": "internal"
           }
         ],
-        "scope": 5562,
-        "src": "59:1303:18",
+        "scope": 4461,
+        "src": "59:1303:10",
         "usedErrors": []
       }
     ],
-    "src": "33:1329:18"
+    "src": "33:1329:10"
   },
   "legacyAST": {
-    "absolutePath": "/Users/chenzhanglong/Work/truffle/easydeal-core/contracts/lib/Space.sol",
+    "absolutePath": "/Users/chenzhanglong/Work/truffle/easydeal-core/contracts/class/Space.sol",
     "exportedSymbols": {
       "Space": [
-        5561
+        4460
       ]
     },
-    "id": 5562,
+    "id": 4461,
     "license": "MIT",
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 5401,
+        "id": 4300,
         "literals": [
           "solidity",
           ">=",
@@ -1850,7 +1850,7 @@
           ".0"
         ],
         "nodeType": "PragmaDirective",
-        "src": "33:24:18"
+        "src": "33:24:10"
       },
       {
         "abstract": false,
@@ -1858,27 +1858,27 @@
         "contractDependencies": [],
         "contractKind": "library",
         "fullyImplemented": true,
-        "id": 5561,
+        "id": 4460,
         "linearizedBaseContracts": [
-          5561
+          4460
         ],
         "name": "Space",
-        "nameLocation": "67:5:18",
+        "nameLocation": "67:5:10",
         "nodeType": "ContractDefinition",
         "nodes": [
           {
             "canonicalName": "Space.Data",
-            "id": 5422,
+            "id": 4321,
             "members": [
               {
                 "constant": false,
-                "id": 5403,
+                "id": 4302,
                 "mutability": "mutable",
                 "name": "id",
-                "nameLocation": "108:2:18",
+                "nameLocation": "108:2:10",
                 "nodeType": "VariableDeclaration",
-                "scope": 5422,
-                "src": "101:9:18",
+                "scope": 4321,
+                "src": "101:9:10",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
@@ -1886,10 +1886,10 @@
                   "typeString": "uint32"
                 },
                 "typeName": {
-                  "id": 5402,
+                  "id": 4301,
                   "name": "uint32",
                   "nodeType": "ElementaryTypeName",
-                  "src": "101:6:18",
+                  "src": "101:6:10",
                   "typeDescriptions": {
                     "typeIdentifier": "t_uint32",
                     "typeString": "uint32"
@@ -1899,13 +1899,13 @@
               },
               {
                 "constant": false,
-                "id": 5405,
+                "id": 4304,
                 "mutability": "mutable",
                 "name": "name",
-                "nameLocation": "127:4:18",
+                "nameLocation": "127:4:10",
                 "nodeType": "VariableDeclaration",
-                "scope": 5422,
-                "src": "120:11:18",
+                "scope": 4321,
+                "src": "120:11:10",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
@@ -1913,10 +1913,10 @@
                   "typeString": "string"
                 },
                 "typeName": {
-                  "id": 5404,
+                  "id": 4303,
                   "name": "string",
                   "nodeType": "ElementaryTypeName",
-                  "src": "120:6:18",
+                  "src": "120:6:10",
                   "typeDescriptions": {
                     "typeIdentifier": "t_string_storage_ptr",
                     "typeString": "string"
@@ -1926,13 +1926,13 @@
               },
               {
                 "constant": false,
-                "id": 5407,
+                "id": 4306,
                 "mutability": "mutable",
                 "name": "description",
-                "nameLocation": "148:11:18",
+                "nameLocation": "148:11:10",
                 "nodeType": "VariableDeclaration",
-                "scope": 5422,
-                "src": "141:18:18",
+                "scope": 4321,
+                "src": "141:18:10",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
@@ -1940,10 +1940,10 @@
                   "typeString": "string"
                 },
                 "typeName": {
-                  "id": 5406,
+                  "id": 4305,
                   "name": "string",
                   "nodeType": "ElementaryTypeName",
-                  "src": "141:6:18",
+                  "src": "141:6:10",
                   "typeDescriptions": {
                     "typeIdentifier": "t_string_storage_ptr",
                     "typeString": "string"
@@ -1953,13 +1953,13 @@
               },
               {
                 "constant": false,
-                "id": 5409,
+                "id": 4308,
                 "mutability": "mutable",
                 "name": "creator",
-                "nameLocation": "177:7:18",
+                "nameLocation": "177:7:10",
                 "nodeType": "VariableDeclaration",
-                "scope": 5422,
-                "src": "169:15:18",
+                "scope": 4321,
+                "src": "169:15:10",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
@@ -1967,10 +1967,10 @@
                   "typeString": "address"
                 },
                 "typeName": {
-                  "id": 5408,
+                  "id": 4307,
                   "name": "address",
                   "nodeType": "ElementaryTypeName",
-                  "src": "169:7:18",
+                  "src": "169:7:10",
                   "stateMutability": "nonpayable",
                   "typeDescriptions": {
                     "typeIdentifier": "t_address",
@@ -1981,13 +1981,13 @@
               },
               {
                 "constant": false,
-                "id": 5411,
+                "id": 4310,
                 "mutability": "mutable",
                 "name": "feeRate",
-                "nameLocation": "244:7:18",
+                "nameLocation": "244:7:10",
                 "nodeType": "VariableDeclaration",
-                "scope": 5422,
-                "src": "237:14:18",
+                "scope": 4321,
+                "src": "237:14:10",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
@@ -1995,10 +1995,10 @@
                   "typeString": "uint32"
                 },
                 "typeName": {
-                  "id": 5410,
+                  "id": 4309,
                   "name": "uint32",
                   "nodeType": "ElementaryTypeName",
-                  "src": "237:6:18",
+                  "src": "237:6:10",
                   "typeDescriptions": {
                     "typeIdentifier": "t_uint32",
                     "typeString": "uint32"
@@ -2008,13 +2008,13 @@
               },
               {
                 "constant": false,
-                "id": 5413,
+                "id": 4312,
                 "mutability": "mutable",
                 "name": "follows",
-                "nameLocation": "268:7:18",
+                "nameLocation": "268:7:10",
                 "nodeType": "VariableDeclaration",
-                "scope": 5422,
-                "src": "261:14:18",
+                "scope": 4321,
+                "src": "261:14:10",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
@@ -2022,10 +2022,10 @@
                   "typeString": "uint32"
                 },
                 "typeName": {
-                  "id": 5412,
+                  "id": 4311,
                   "name": "uint32",
                   "nodeType": "ElementaryTypeName",
-                  "src": "261:6:18",
+                  "src": "261:6:10",
                   "typeDescriptions": {
                     "typeIdentifier": "t_uint32",
                     "typeString": "uint32"
@@ -2035,13 +2035,13 @@
               },
               {
                 "constant": false,
-                "id": 5415,
+                "id": 4314,
                 "mutability": "mutable",
                 "name": "infos",
-                "nameLocation": "292:5:18",
+                "nameLocation": "292:5:10",
                 "nodeType": "VariableDeclaration",
-                "scope": 5422,
-                "src": "285:12:18",
+                "scope": 4321,
+                "src": "285:12:10",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
@@ -2049,10 +2049,10 @@
                   "typeString": "uint32"
                 },
                 "typeName": {
-                  "id": 5414,
+                  "id": 4313,
                   "name": "uint32",
                   "nodeType": "ElementaryTypeName",
-                  "src": "285:6:18",
+                  "src": "285:6:10",
                   "typeDescriptions": {
                     "typeIdentifier": "t_uint32",
                     "typeString": "uint32"
@@ -2062,13 +2062,13 @@
               },
               {
                 "constant": false,
-                "id": 5417,
+                "id": 4316,
                 "mutability": "mutable",
                 "name": "deals",
-                "nameLocation": "314:5:18",
+                "nameLocation": "314:5:10",
                 "nodeType": "VariableDeclaration",
-                "scope": 5422,
-                "src": "307:12:18",
+                "scope": 4321,
+                "src": "307:12:10",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
@@ -2076,10 +2076,10 @@
                   "typeString": "uint32"
                 },
                 "typeName": {
-                  "id": 5416,
+                  "id": 4315,
                   "name": "uint32",
                   "nodeType": "ElementaryTypeName",
-                  "src": "307:6:18",
+                  "src": "307:6:10",
                   "typeDescriptions": {
                     "typeIdentifier": "t_uint32",
                     "typeString": "uint32"
@@ -2089,13 +2089,13 @@
               },
               {
                 "constant": false,
-                "id": 5419,
+                "id": 4318,
                 "mutability": "mutable",
                 "name": "timestamp",
-                "nameLocation": "337:9:18",
+                "nameLocation": "337:9:10",
                 "nodeType": "VariableDeclaration",
-                "scope": 5422,
-                "src": "329:17:18",
+                "scope": 4321,
+                "src": "329:17:10",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
@@ -2103,10 +2103,10 @@
                   "typeString": "uint256"
                 },
                 "typeName": {
-                  "id": 5418,
+                  "id": 4317,
                   "name": "uint256",
                   "nodeType": "ElementaryTypeName",
-                  "src": "329:7:18",
+                  "src": "329:7:10",
                   "typeDescriptions": {
                     "typeIdentifier": "t_uint256",
                     "typeString": "uint256"
@@ -2116,13 +2116,13 @@
               },
               {
                 "constant": false,
-                "id": 5421,
+                "id": 4320,
                 "mutability": "mutable",
                 "name": "status",
-                "nameLocation": "362:6:18",
+                "nameLocation": "362:6:10",
                 "nodeType": "VariableDeclaration",
-                "scope": 5422,
-                "src": "356:12:18",
+                "scope": 4321,
+                "src": "356:12:10",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
@@ -2130,10 +2130,10 @@
                   "typeString": "uint8"
                 },
                 "typeName": {
-                  "id": 5420,
+                  "id": 4319,
                   "name": "uint8",
                   "nodeType": "ElementaryTypeName",
-                  "src": "356:5:18",
+                  "src": "356:5:10",
                   "typeDescriptions": {
                     "typeIdentifier": "t_uint8",
                     "typeString": "uint8"
@@ -2143,80 +2143,80 @@
               }
             ],
             "name": "Data",
-            "nameLocation": "86:4:18",
+            "nameLocation": "86:4:10",
             "nodeType": "StructDefinition",
-            "scope": 5561,
-            "src": "79:317:18",
+            "scope": 4460,
+            "src": "79:317:10",
             "visibility": "public"
           },
           {
             "body": {
-              "id": 5510,
+              "id": 4409,
               "nodeType": "Block",
-              "src": "613:355:18",
+              "src": "613:355:10",
               "statements": [
                 {
                   "assignments": [
-                    5444
+                    4343
                   ],
                   "declarations": [
                     {
                       "constant": false,
-                      "id": 5444,
+                      "id": 4343,
                       "mutability": "mutable",
                       "name": "space",
-                      "nameLocation": "642:5:18",
+                      "nameLocation": "642:5:10",
                       "nodeType": "VariableDeclaration",
-                      "scope": 5510,
-                      "src": "623:24:18",
+                      "scope": 4409,
+                      "src": "623:24:10",
                       "stateVariable": false,
                       "storageLocation": "storage",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_struct$_Data_$5422_storage_ptr",
+                        "typeIdentifier": "t_struct$_Data_$4321_storage_ptr",
                         "typeString": "struct Space.Data"
                       },
                       "typeName": {
-                        "id": 5443,
+                        "id": 4342,
                         "nodeType": "UserDefinedTypeName",
                         "pathNode": {
-                          "id": 5442,
+                          "id": 4341,
                           "name": "Space.Data",
                           "nodeType": "IdentifierPath",
-                          "referencedDeclaration": 5422,
-                          "src": "623:10:18"
+                          "referencedDeclaration": 4321,
+                          "src": "623:10:10"
                         },
-                        "referencedDeclaration": 5422,
-                        "src": "623:10:18",
+                        "referencedDeclaration": 4321,
+                        "src": "623:10:10",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_struct$_Data_$5422_storage_ptr",
+                          "typeIdentifier": "t_struct$_Data_$4321_storage_ptr",
                           "typeString": "struct Space.Data"
                         }
                       },
                       "visibility": "internal"
                     }
                   ],
-                  "id": 5448,
+                  "id": 4347,
                   "initialValue": {
                     "baseExpression": {
-                      "id": 5445,
+                      "id": 4344,
                       "name": "self",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 5427,
-                      "src": "650:4:18",
+                      "referencedDeclaration": 4326,
+                      "src": "650:4:10",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_mapping$_t_uint32_$_t_struct$_Data_$5422_storage_$",
+                        "typeIdentifier": "t_mapping$_t_uint32_$_t_struct$_Data_$4321_storage_$",
                         "typeString": "mapping(uint32 => struct Space.Data storage ref)"
                       }
                     },
-                    "id": 5447,
+                    "id": 4346,
                     "indexExpression": {
-                      "id": 5446,
+                      "id": 4345,
                       "name": "id",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 5429,
-                      "src": "655:2:18",
+                      "referencedDeclaration": 4328,
+                      "src": "655:2:10",
                       "typeDescriptions": {
                         "typeIdentifier": "t_uint32",
                         "typeString": "uint32"
@@ -2227,44 +2227,44 @@
                     "isPure": false,
                     "lValueRequested": false,
                     "nodeType": "IndexAccess",
-                    "src": "650:8:18",
+                    "src": "650:8:10",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_struct$_Data_$5422_storage",
+                      "typeIdentifier": "t_struct$_Data_$4321_storage",
                       "typeString": "struct Space.Data storage ref"
                     }
                   },
                   "nodeType": "VariableDeclarationStatement",
-                  "src": "623:35:18"
+                  "src": "623:35:10"
                 },
                 {
                   "expression": {
-                    "id": 5453,
+                    "id": 4352,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
                     "lValueRequested": false,
                     "leftHandSide": {
                       "expression": {
-                        "id": 5449,
+                        "id": 4348,
                         "name": "space",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 5444,
-                        "src": "668:5:18",
+                        "referencedDeclaration": 4343,
+                        "src": "668:5:10",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_struct$_Data_$5422_storage_ptr",
+                          "typeIdentifier": "t_struct$_Data_$4321_storage_ptr",
                           "typeString": "struct Space.Data storage pointer"
                         }
                       },
-                      "id": 5451,
+                      "id": 4350,
                       "isConstant": false,
                       "isLValue": true,
                       "isPure": false,
                       "lValueRequested": true,
                       "memberName": "id",
                       "nodeType": "MemberAccess",
-                      "referencedDeclaration": 5403,
-                      "src": "668:8:18",
+                      "referencedDeclaration": 4302,
+                      "src": "668:8:10",
                       "typeDescriptions": {
                         "typeIdentifier": "t_uint32",
                         "typeString": "uint32"
@@ -2273,56 +2273,56 @@
                     "nodeType": "Assignment",
                     "operator": "=",
                     "rightHandSide": {
-                      "id": 5452,
+                      "id": 4351,
                       "name": "id",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 5429,
-                      "src": "679:2:18",
+                      "referencedDeclaration": 4328,
+                      "src": "679:2:10",
                       "typeDescriptions": {
                         "typeIdentifier": "t_uint32",
                         "typeString": "uint32"
                       }
                     },
-                    "src": "668:13:18",
+                    "src": "668:13:10",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint32",
                       "typeString": "uint32"
                     }
                   },
-                  "id": 5454,
+                  "id": 4353,
                   "nodeType": "ExpressionStatement",
-                  "src": "668:13:18"
+                  "src": "668:13:10"
                 },
                 {
                   "expression": {
-                    "id": 5459,
+                    "id": 4358,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
                     "lValueRequested": false,
                     "leftHandSide": {
                       "expression": {
-                        "id": 5455,
+                        "id": 4354,
                         "name": "space",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 5444,
-                        "src": "691:5:18",
+                        "referencedDeclaration": 4343,
+                        "src": "691:5:10",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_struct$_Data_$5422_storage_ptr",
+                          "typeIdentifier": "t_struct$_Data_$4321_storage_ptr",
                           "typeString": "struct Space.Data storage pointer"
                         }
                       },
-                      "id": 5457,
+                      "id": 4356,
                       "isConstant": false,
                       "isLValue": true,
                       "isPure": false,
                       "lValueRequested": true,
                       "memberName": "name",
                       "nodeType": "MemberAccess",
-                      "referencedDeclaration": 5405,
-                      "src": "691:10:18",
+                      "referencedDeclaration": 4304,
+                      "src": "691:10:10",
                       "typeDescriptions": {
                         "typeIdentifier": "t_string_storage",
                         "typeString": "string storage ref"
@@ -2331,56 +2331,56 @@
                     "nodeType": "Assignment",
                     "operator": "=",
                     "rightHandSide": {
-                      "id": 5458,
+                      "id": 4357,
                       "name": "name",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 5431,
-                      "src": "704:4:18",
+                      "referencedDeclaration": 4330,
+                      "src": "704:4:10",
                       "typeDescriptions": {
                         "typeIdentifier": "t_string_memory_ptr",
                         "typeString": "string memory"
                       }
                     },
-                    "src": "691:17:18",
+                    "src": "691:17:10",
                     "typeDescriptions": {
                       "typeIdentifier": "t_string_storage",
                       "typeString": "string storage ref"
                     }
                   },
-                  "id": 5460,
+                  "id": 4359,
                   "nodeType": "ExpressionStatement",
-                  "src": "691:17:18"
+                  "src": "691:17:10"
                 },
                 {
                   "expression": {
-                    "id": 5465,
+                    "id": 4364,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
                     "lValueRequested": false,
                     "leftHandSide": {
                       "expression": {
-                        "id": 5461,
+                        "id": 4360,
                         "name": "space",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 5444,
-                        "src": "718:5:18",
+                        "referencedDeclaration": 4343,
+                        "src": "718:5:10",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_struct$_Data_$5422_storage_ptr",
+                          "typeIdentifier": "t_struct$_Data_$4321_storage_ptr",
                           "typeString": "struct Space.Data storage pointer"
                         }
                       },
-                      "id": 5463,
+                      "id": 4362,
                       "isConstant": false,
                       "isLValue": true,
                       "isPure": false,
                       "lValueRequested": true,
                       "memberName": "description",
                       "nodeType": "MemberAccess",
-                      "referencedDeclaration": 5407,
-                      "src": "718:17:18",
+                      "referencedDeclaration": 4306,
+                      "src": "718:17:10",
                       "typeDescriptions": {
                         "typeIdentifier": "t_string_storage",
                         "typeString": "string storage ref"
@@ -2389,56 +2389,56 @@
                     "nodeType": "Assignment",
                     "operator": "=",
                     "rightHandSide": {
-                      "id": 5464,
+                      "id": 4363,
                       "name": "description",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 5433,
-                      "src": "738:11:18",
+                      "referencedDeclaration": 4332,
+                      "src": "738:11:10",
                       "typeDescriptions": {
                         "typeIdentifier": "t_string_memory_ptr",
                         "typeString": "string memory"
                       }
                     },
-                    "src": "718:31:18",
+                    "src": "718:31:10",
                     "typeDescriptions": {
                       "typeIdentifier": "t_string_storage",
                       "typeString": "string storage ref"
                     }
                   },
-                  "id": 5466,
+                  "id": 4365,
                   "nodeType": "ExpressionStatement",
-                  "src": "718:31:18"
+                  "src": "718:31:10"
                 },
                 {
                   "expression": {
-                    "id": 5471,
+                    "id": 4370,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
                     "lValueRequested": false,
                     "leftHandSide": {
                       "expression": {
-                        "id": 5467,
+                        "id": 4366,
                         "name": "space",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 5444,
-                        "src": "759:5:18",
+                        "referencedDeclaration": 4343,
+                        "src": "759:5:10",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_struct$_Data_$5422_storage_ptr",
+                          "typeIdentifier": "t_struct$_Data_$4321_storage_ptr",
                           "typeString": "struct Space.Data storage pointer"
                         }
                       },
-                      "id": 5469,
+                      "id": 4368,
                       "isConstant": false,
                       "isLValue": true,
                       "isPure": false,
                       "lValueRequested": true,
                       "memberName": "creator",
                       "nodeType": "MemberAccess",
-                      "referencedDeclaration": 5409,
-                      "src": "759:13:18",
+                      "referencedDeclaration": 4308,
+                      "src": "759:13:10",
                       "typeDescriptions": {
                         "typeIdentifier": "t_address",
                         "typeString": "address"
@@ -2447,56 +2447,56 @@
                     "nodeType": "Assignment",
                     "operator": "=",
                     "rightHandSide": {
-                      "id": 5470,
+                      "id": 4369,
                       "name": "creator",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 5435,
-                      "src": "775:7:18",
+                      "referencedDeclaration": 4334,
+                      "src": "775:7:10",
                       "typeDescriptions": {
                         "typeIdentifier": "t_address",
                         "typeString": "address"
                       }
                     },
-                    "src": "759:23:18",
+                    "src": "759:23:10",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
                       "typeString": "address"
                     }
                   },
-                  "id": 5472,
+                  "id": 4371,
                   "nodeType": "ExpressionStatement",
-                  "src": "759:23:18"
+                  "src": "759:23:10"
                 },
                 {
                   "expression": {
-                    "id": 5477,
+                    "id": 4376,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
                     "lValueRequested": false,
                     "leftHandSide": {
                       "expression": {
-                        "id": 5473,
+                        "id": 4372,
                         "name": "space",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 5444,
-                        "src": "792:5:18",
+                        "referencedDeclaration": 4343,
+                        "src": "792:5:10",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_struct$_Data_$5422_storage_ptr",
+                          "typeIdentifier": "t_struct$_Data_$4321_storage_ptr",
                           "typeString": "struct Space.Data storage pointer"
                         }
                       },
-                      "id": 5475,
+                      "id": 4374,
                       "isConstant": false,
                       "isLValue": true,
                       "isPure": false,
                       "lValueRequested": true,
                       "memberName": "feeRate",
                       "nodeType": "MemberAccess",
-                      "referencedDeclaration": 5411,
-                      "src": "792:13:18",
+                      "referencedDeclaration": 4310,
+                      "src": "792:13:10",
                       "typeDescriptions": {
                         "typeIdentifier": "t_uint32",
                         "typeString": "uint32"
@@ -2505,56 +2505,56 @@
                     "nodeType": "Assignment",
                     "operator": "=",
                     "rightHandSide": {
-                      "id": 5476,
+                      "id": 4375,
                       "name": "feeRate",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 5437,
-                      "src": "808:7:18",
+                      "referencedDeclaration": 4336,
+                      "src": "808:7:10",
                       "typeDescriptions": {
                         "typeIdentifier": "t_uint32",
                         "typeString": "uint32"
                       }
                     },
-                    "src": "792:23:18",
+                    "src": "792:23:10",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint32",
                       "typeString": "uint32"
                     }
                   },
-                  "id": 5478,
+                  "id": 4377,
                   "nodeType": "ExpressionStatement",
-                  "src": "792:23:18"
+                  "src": "792:23:10"
                 },
                 {
                   "expression": {
-                    "id": 5483,
+                    "id": 4382,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
                     "lValueRequested": false,
                     "leftHandSide": {
                       "expression": {
-                        "id": 5479,
+                        "id": 4378,
                         "name": "space",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 5444,
-                        "src": "825:5:18",
+                        "referencedDeclaration": 4343,
+                        "src": "825:5:10",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_struct$_Data_$5422_storage_ptr",
+                          "typeIdentifier": "t_struct$_Data_$4321_storage_ptr",
                           "typeString": "struct Space.Data storage pointer"
                         }
                       },
-                      "id": 5481,
+                      "id": 4380,
                       "isConstant": false,
                       "isLValue": true,
                       "isPure": false,
                       "lValueRequested": true,
                       "memberName": "follows",
                       "nodeType": "MemberAccess",
-                      "referencedDeclaration": 5413,
-                      "src": "825:13:18",
+                      "referencedDeclaration": 4312,
+                      "src": "825:13:10",
                       "typeDescriptions": {
                         "typeIdentifier": "t_uint32",
                         "typeString": "uint32"
@@ -2564,59 +2564,59 @@
                     "operator": "=",
                     "rightHandSide": {
                       "hexValue": "30",
-                      "id": 5482,
+                      "id": 4381,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": true,
                       "kind": "number",
                       "lValueRequested": false,
                       "nodeType": "Literal",
-                      "src": "841:1:18",
+                      "src": "841:1:10",
                       "typeDescriptions": {
                         "typeIdentifier": "t_rational_0_by_1",
                         "typeString": "int_const 0"
                       },
                       "value": "0"
                     },
-                    "src": "825:17:18",
+                    "src": "825:17:10",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint32",
                       "typeString": "uint32"
                     }
                   },
-                  "id": 5484,
+                  "id": 4383,
                   "nodeType": "ExpressionStatement",
-                  "src": "825:17:18"
+                  "src": "825:17:10"
                 },
                 {
                   "expression": {
-                    "id": 5489,
+                    "id": 4388,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
                     "lValueRequested": false,
                     "leftHandSide": {
                       "expression": {
-                        "id": 5485,
+                        "id": 4384,
                         "name": "space",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 5444,
-                        "src": "852:5:18",
+                        "referencedDeclaration": 4343,
+                        "src": "852:5:10",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_struct$_Data_$5422_storage_ptr",
+                          "typeIdentifier": "t_struct$_Data_$4321_storage_ptr",
                           "typeString": "struct Space.Data storage pointer"
                         }
                       },
-                      "id": 5487,
+                      "id": 4386,
                       "isConstant": false,
                       "isLValue": true,
                       "isPure": false,
                       "lValueRequested": true,
                       "memberName": "infos",
                       "nodeType": "MemberAccess",
-                      "referencedDeclaration": 5415,
-                      "src": "852:11:18",
+                      "referencedDeclaration": 4314,
+                      "src": "852:11:10",
                       "typeDescriptions": {
                         "typeIdentifier": "t_uint32",
                         "typeString": "uint32"
@@ -2626,59 +2626,59 @@
                     "operator": "=",
                     "rightHandSide": {
                       "hexValue": "30",
-                      "id": 5488,
+                      "id": 4387,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": true,
                       "kind": "number",
                       "lValueRequested": false,
                       "nodeType": "Literal",
-                      "src": "866:1:18",
+                      "src": "866:1:10",
                       "typeDescriptions": {
                         "typeIdentifier": "t_rational_0_by_1",
                         "typeString": "int_const 0"
                       },
                       "value": "0"
                     },
-                    "src": "852:15:18",
+                    "src": "852:15:10",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint32",
                       "typeString": "uint32"
                     }
                   },
-                  "id": 5490,
+                  "id": 4389,
                   "nodeType": "ExpressionStatement",
-                  "src": "852:15:18"
+                  "src": "852:15:10"
                 },
                 {
                   "expression": {
-                    "id": 5495,
+                    "id": 4394,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
                     "lValueRequested": false,
                     "leftHandSide": {
                       "expression": {
-                        "id": 5491,
+                        "id": 4390,
                         "name": "space",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 5444,
-                        "src": "877:5:18",
+                        "referencedDeclaration": 4343,
+                        "src": "877:5:10",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_struct$_Data_$5422_storage_ptr",
+                          "typeIdentifier": "t_struct$_Data_$4321_storage_ptr",
                           "typeString": "struct Space.Data storage pointer"
                         }
                       },
-                      "id": 5493,
+                      "id": 4392,
                       "isConstant": false,
                       "isLValue": true,
                       "isPure": false,
                       "lValueRequested": true,
                       "memberName": "deals",
                       "nodeType": "MemberAccess",
-                      "referencedDeclaration": 5417,
-                      "src": "877:11:18",
+                      "referencedDeclaration": 4316,
+                      "src": "877:11:10",
                       "typeDescriptions": {
                         "typeIdentifier": "t_uint32",
                         "typeString": "uint32"
@@ -2688,59 +2688,59 @@
                     "operator": "=",
                     "rightHandSide": {
                       "hexValue": "30",
-                      "id": 5494,
+                      "id": 4393,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": true,
                       "kind": "number",
                       "lValueRequested": false,
                       "nodeType": "Literal",
-                      "src": "891:1:18",
+                      "src": "891:1:10",
                       "typeDescriptions": {
                         "typeIdentifier": "t_rational_0_by_1",
                         "typeString": "int_const 0"
                       },
                       "value": "0"
                     },
-                    "src": "877:15:18",
+                    "src": "877:15:10",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint32",
                       "typeString": "uint32"
                     }
                   },
-                  "id": 5496,
+                  "id": 4395,
                   "nodeType": "ExpressionStatement",
-                  "src": "877:15:18"
+                  "src": "877:15:10"
                 },
                 {
                   "expression": {
-                    "id": 5502,
+                    "id": 4401,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
                     "lValueRequested": false,
                     "leftHandSide": {
                       "expression": {
-                        "id": 5497,
+                        "id": 4396,
                         "name": "space",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 5444,
-                        "src": "902:5:18",
+                        "referencedDeclaration": 4343,
+                        "src": "902:5:10",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_struct$_Data_$5422_storage_ptr",
+                          "typeIdentifier": "t_struct$_Data_$4321_storage_ptr",
                           "typeString": "struct Space.Data storage pointer"
                         }
                       },
-                      "id": 5499,
+                      "id": 4398,
                       "isConstant": false,
                       "isLValue": true,
                       "isPure": false,
                       "lValueRequested": true,
                       "memberName": "timestamp",
                       "nodeType": "MemberAccess",
-                      "referencedDeclaration": 5419,
-                      "src": "902:15:18",
+                      "referencedDeclaration": 4318,
+                      "src": "902:15:10",
                       "typeDescriptions": {
                         "typeIdentifier": "t_uint256",
                         "typeString": "uint256"
@@ -2750,69 +2750,69 @@
                     "operator": "=",
                     "rightHandSide": {
                       "expression": {
-                        "id": 5500,
+                        "id": 4399,
                         "name": "block",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
                         "referencedDeclaration": 4294967292,
-                        "src": "920:5:18",
+                        "src": "920:5:10",
                         "typeDescriptions": {
                           "typeIdentifier": "t_magic_block",
                           "typeString": "block"
                         }
                       },
-                      "id": 5501,
+                      "id": 4400,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": false,
                       "lValueRequested": false,
                       "memberName": "timestamp",
                       "nodeType": "MemberAccess",
-                      "src": "920:15:18",
+                      "src": "920:15:10",
                       "typeDescriptions": {
                         "typeIdentifier": "t_uint256",
                         "typeString": "uint256"
                       }
                     },
-                    "src": "902:33:18",
+                    "src": "902:33:10",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
                     }
                   },
-                  "id": 5503,
+                  "id": 4402,
                   "nodeType": "ExpressionStatement",
-                  "src": "902:33:18"
+                  "src": "902:33:10"
                 },
                 {
                   "expression": {
-                    "id": 5508,
+                    "id": 4407,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
                     "lValueRequested": false,
                     "leftHandSide": {
                       "expression": {
-                        "id": 5504,
+                        "id": 4403,
                         "name": "space",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 5444,
-                        "src": "945:5:18",
+                        "referencedDeclaration": 4343,
+                        "src": "945:5:10",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_struct$_Data_$5422_storage_ptr",
+                          "typeIdentifier": "t_struct$_Data_$4321_storage_ptr",
                           "typeString": "struct Space.Data storage pointer"
                         }
                       },
-                      "id": 5506,
+                      "id": 4405,
                       "isConstant": false,
                       "isLValue": true,
                       "isPure": false,
                       "lValueRequested": true,
                       "memberName": "status",
                       "nodeType": "MemberAccess",
-                      "referencedDeclaration": 5421,
-                      "src": "945:12:18",
+                      "referencedDeclaration": 4320,
+                      "src": "945:12:10",
                       "typeDescriptions": {
                         "typeIdentifier": "t_uint8",
                         "typeString": "uint8"
@@ -2822,90 +2822,90 @@
                     "operator": "=",
                     "rightHandSide": {
                       "hexValue": "31",
-                      "id": 5507,
+                      "id": 4406,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": true,
                       "kind": "number",
                       "lValueRequested": false,
                       "nodeType": "Literal",
-                      "src": "960:1:18",
+                      "src": "960:1:10",
                       "typeDescriptions": {
                         "typeIdentifier": "t_rational_1_by_1",
                         "typeString": "int_const 1"
                       },
                       "value": "1"
                     },
-                    "src": "945:16:18",
+                    "src": "945:16:10",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint8",
                       "typeString": "uint8"
                     }
                   },
-                  "id": 5509,
+                  "id": 4408,
                   "nodeType": "ExpressionStatement",
-                  "src": "945:16:18"
+                  "src": "945:16:10"
                 }
               ]
             },
-            "id": 5511,
+            "id": 4410,
             "implemented": true,
             "kind": "function",
             "modifiers": [],
             "name": "add",
-            "nameLocation": "411:3:18",
+            "nameLocation": "411:3:10",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 5438,
+              "id": 4337,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 5427,
+                  "id": 4326,
                   "mutability": "mutable",
                   "name": "self",
-                  "nameLocation": "462:4:18",
+                  "nameLocation": "462:4:10",
                   "nodeType": "VariableDeclaration",
-                  "scope": 5511,
-                  "src": "424:42:18",
+                  "scope": 4410,
+                  "src": "424:42:10",
                   "stateVariable": false,
                   "storageLocation": "storage",
                   "typeDescriptions": {
-                    "typeIdentifier": "t_mapping$_t_uint32_$_t_struct$_Data_$5422_storage_$",
+                    "typeIdentifier": "t_mapping$_t_uint32_$_t_struct$_Data_$4321_storage_$",
                     "typeString": "mapping(uint32 => struct Space.Data)"
                   },
                   "typeName": {
-                    "id": 5426,
+                    "id": 4325,
                     "keyType": {
-                      "id": 5423,
+                      "id": 4322,
                       "name": "uint32",
                       "nodeType": "ElementaryTypeName",
-                      "src": "432:6:18",
+                      "src": "432:6:10",
                       "typeDescriptions": {
                         "typeIdentifier": "t_uint32",
                         "typeString": "uint32"
                       }
                     },
                     "nodeType": "Mapping",
-                    "src": "424:29:18",
+                    "src": "424:29:10",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_mapping$_t_uint32_$_t_struct$_Data_$5422_storage_$",
+                      "typeIdentifier": "t_mapping$_t_uint32_$_t_struct$_Data_$4321_storage_$",
                       "typeString": "mapping(uint32 => struct Space.Data)"
                     },
                     "valueType": {
-                      "id": 5425,
+                      "id": 4324,
                       "nodeType": "UserDefinedTypeName",
                       "pathNode": {
-                        "id": 5424,
+                        "id": 4323,
                         "name": "Space.Data",
                         "nodeType": "IdentifierPath",
-                        "referencedDeclaration": 5422,
-                        "src": "442:10:18"
+                        "referencedDeclaration": 4321,
+                        "src": "442:10:10"
                       },
-                      "referencedDeclaration": 5422,
-                      "src": "442:10:18",
+                      "referencedDeclaration": 4321,
+                      "src": "442:10:10",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_struct$_Data_$5422_storage_ptr",
+                        "typeIdentifier": "t_struct$_Data_$4321_storage_ptr",
                         "typeString": "struct Space.Data"
                       }
                     }
@@ -2914,13 +2914,13 @@
                 },
                 {
                   "constant": false,
-                  "id": 5429,
+                  "id": 4328,
                   "mutability": "mutable",
                   "name": "id",
-                  "nameLocation": "483:2:18",
+                  "nameLocation": "483:2:10",
                   "nodeType": "VariableDeclaration",
-                  "scope": 5511,
-                  "src": "476:9:18",
+                  "scope": 4410,
+                  "src": "476:9:10",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -2928,10 +2928,10 @@
                     "typeString": "uint32"
                   },
                   "typeName": {
-                    "id": 5428,
+                    "id": 4327,
                     "name": "uint32",
                     "nodeType": "ElementaryTypeName",
-                    "src": "476:6:18",
+                    "src": "476:6:10",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint32",
                       "typeString": "uint32"
@@ -2941,13 +2941,13 @@
                 },
                 {
                   "constant": false,
-                  "id": 5431,
+                  "id": 4330,
                   "mutability": "mutable",
                   "name": "name",
-                  "nameLocation": "509:4:18",
+                  "nameLocation": "509:4:10",
                   "nodeType": "VariableDeclaration",
-                  "scope": 5511,
-                  "src": "495:18:18",
+                  "scope": 4410,
+                  "src": "495:18:10",
                   "stateVariable": false,
                   "storageLocation": "memory",
                   "typeDescriptions": {
@@ -2955,10 +2955,10 @@
                     "typeString": "string"
                   },
                   "typeName": {
-                    "id": 5430,
+                    "id": 4329,
                     "name": "string",
                     "nodeType": "ElementaryTypeName",
-                    "src": "495:6:18",
+                    "src": "495:6:10",
                     "typeDescriptions": {
                       "typeIdentifier": "t_string_storage_ptr",
                       "typeString": "string"
@@ -2968,13 +2968,13 @@
                 },
                 {
                   "constant": false,
-                  "id": 5433,
+                  "id": 4332,
                   "mutability": "mutable",
                   "name": "description",
-                  "nameLocation": "537:11:18",
+                  "nameLocation": "537:11:10",
                   "nodeType": "VariableDeclaration",
-                  "scope": 5511,
-                  "src": "523:25:18",
+                  "scope": 4410,
+                  "src": "523:25:10",
                   "stateVariable": false,
                   "storageLocation": "memory",
                   "typeDescriptions": {
@@ -2982,10 +2982,10 @@
                     "typeString": "string"
                   },
                   "typeName": {
-                    "id": 5432,
+                    "id": 4331,
                     "name": "string",
                     "nodeType": "ElementaryTypeName",
-                    "src": "523:6:18",
+                    "src": "523:6:10",
                     "typeDescriptions": {
                       "typeIdentifier": "t_string_storage_ptr",
                       "typeString": "string"
@@ -2995,13 +2995,13 @@
                 },
                 {
                   "constant": false,
-                  "id": 5435,
+                  "id": 4334,
                   "mutability": "mutable",
                   "name": "creator",
-                  "nameLocation": "566:7:18",
+                  "nameLocation": "566:7:10",
                   "nodeType": "VariableDeclaration",
-                  "scope": 5511,
-                  "src": "558:15:18",
+                  "scope": 4410,
+                  "src": "558:15:10",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -3009,10 +3009,10 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 5434,
+                    "id": 4333,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "558:7:18",
+                    "src": "558:7:10",
                     "stateMutability": "nonpayable",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
@@ -3023,13 +3023,13 @@
                 },
                 {
                   "constant": false,
-                  "id": 5437,
+                  "id": 4336,
                   "mutability": "mutable",
                   "name": "feeRate",
-                  "nameLocation": "590:7:18",
+                  "nameLocation": "590:7:10",
                   "nodeType": "VariableDeclaration",
-                  "scope": 5511,
-                  "src": "583:14:18",
+                  "scope": 4410,
+                  "src": "583:14:10",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -3037,10 +3037,10 @@
                     "typeString": "uint32"
                   },
                   "typeName": {
-                    "id": 5436,
+                    "id": 4335,
                     "name": "uint32",
                     "nodeType": "ElementaryTypeName",
-                    "src": "583:6:18",
+                    "src": "583:6:10",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint32",
                       "typeString": "uint32"
@@ -3049,42 +3049,42 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "414:189:18"
+              "src": "414:189:10"
             },
             "returnParameters": {
-              "id": 5439,
+              "id": 4338,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "613:0:18"
+              "src": "613:0:10"
             },
-            "scope": 5561,
-            "src": "402:566:18",
+            "scope": 4460,
+            "src": "402:566:10",
             "stateMutability": "nonpayable",
             "virtual": false,
             "visibility": "internal"
           },
           {
             "body": {
-              "id": 5530,
+              "id": 4429,
               "nodeType": "Block",
-              "src": "1113:33:18",
+              "src": "1113:33:10",
               "statements": [
                 {
                   "expression": {
-                    "id": 5528,
+                    "id": 4427,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
                     "lValueRequested": false,
                     "leftHandSide": {
-                      "id": 5524,
+                      "id": 4423,
                       "name": "space",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 5522,
-                      "src": "1123:5:18",
+                      "referencedDeclaration": 4421,
+                      "src": "1123:5:10",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_struct$_Data_$5422_storage_ptr",
+                        "typeIdentifier": "t_struct$_Data_$4321_storage_ptr",
                         "typeString": "struct Space.Data storage pointer"
                       }
                     },
@@ -3092,25 +3092,25 @@
                     "operator": "=",
                     "rightHandSide": {
                       "baseExpression": {
-                        "id": 5525,
+                        "id": 4424,
                         "name": "self",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 5516,
-                        "src": "1131:4:18",
+                        "referencedDeclaration": 4415,
+                        "src": "1131:4:10",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_mapping$_t_uint32_$_t_struct$_Data_$5422_storage_$",
+                          "typeIdentifier": "t_mapping$_t_uint32_$_t_struct$_Data_$4321_storage_$",
                           "typeString": "mapping(uint32 => struct Space.Data storage ref)"
                         }
                       },
-                      "id": 5527,
+                      "id": 4426,
                       "indexExpression": {
-                        "id": 5526,
+                        "id": 4425,
                         "name": "id",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 5518,
-                        "src": "1136:2:18",
+                        "referencedDeclaration": 4417,
+                        "src": "1136:2:10",
                         "typeDescriptions": {
                           "typeIdentifier": "t_uint32",
                           "typeString": "uint32"
@@ -3121,82 +3121,82 @@
                       "isPure": false,
                       "lValueRequested": false,
                       "nodeType": "IndexAccess",
-                      "src": "1131:8:18",
+                      "src": "1131:8:10",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_struct$_Data_$5422_storage",
+                        "typeIdentifier": "t_struct$_Data_$4321_storage",
                         "typeString": "struct Space.Data storage ref"
                       }
                     },
-                    "src": "1123:16:18",
+                    "src": "1123:16:10",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_struct$_Data_$5422_storage_ptr",
+                      "typeIdentifier": "t_struct$_Data_$4321_storage_ptr",
                       "typeString": "struct Space.Data storage pointer"
                     }
                   },
-                  "id": 5529,
+                  "id": 4428,
                   "nodeType": "ExpressionStatement",
-                  "src": "1123:16:18"
+                  "src": "1123:16:10"
                 }
               ]
             },
-            "id": 5531,
+            "id": 4430,
             "implemented": true,
             "kind": "function",
             "modifiers": [],
             "name": "get",
-            "nameLocation": "983:3:18",
+            "nameLocation": "983:3:10",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 5519,
+              "id": 4418,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 5516,
+                  "id": 4415,
                   "mutability": "mutable",
                   "name": "self",
-                  "nameLocation": "1034:4:18",
+                  "nameLocation": "1034:4:10",
                   "nodeType": "VariableDeclaration",
-                  "scope": 5531,
-                  "src": "996:42:18",
+                  "scope": 4430,
+                  "src": "996:42:10",
                   "stateVariable": false,
                   "storageLocation": "storage",
                   "typeDescriptions": {
-                    "typeIdentifier": "t_mapping$_t_uint32_$_t_struct$_Data_$5422_storage_$",
+                    "typeIdentifier": "t_mapping$_t_uint32_$_t_struct$_Data_$4321_storage_$",
                     "typeString": "mapping(uint32 => struct Space.Data)"
                   },
                   "typeName": {
-                    "id": 5515,
+                    "id": 4414,
                     "keyType": {
-                      "id": 5512,
+                      "id": 4411,
                       "name": "uint32",
                       "nodeType": "ElementaryTypeName",
-                      "src": "1004:6:18",
+                      "src": "1004:6:10",
                       "typeDescriptions": {
                         "typeIdentifier": "t_uint32",
                         "typeString": "uint32"
                       }
                     },
                     "nodeType": "Mapping",
-                    "src": "996:29:18",
+                    "src": "996:29:10",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_mapping$_t_uint32_$_t_struct$_Data_$5422_storage_$",
+                      "typeIdentifier": "t_mapping$_t_uint32_$_t_struct$_Data_$4321_storage_$",
                       "typeString": "mapping(uint32 => struct Space.Data)"
                     },
                     "valueType": {
-                      "id": 5514,
+                      "id": 4413,
                       "nodeType": "UserDefinedTypeName",
                       "pathNode": {
-                        "id": 5513,
+                        "id": 4412,
                         "name": "Space.Data",
                         "nodeType": "IdentifierPath",
-                        "referencedDeclaration": 5422,
-                        "src": "1014:10:18"
+                        "referencedDeclaration": 4321,
+                        "src": "1014:10:10"
                       },
-                      "referencedDeclaration": 5422,
-                      "src": "1014:10:18",
+                      "referencedDeclaration": 4321,
+                      "src": "1014:10:10",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_struct$_Data_$5422_storage_ptr",
+                        "typeIdentifier": "t_struct$_Data_$4321_storage_ptr",
                         "typeString": "struct Space.Data"
                       }
                     }
@@ -3205,13 +3205,13 @@
                 },
                 {
                   "constant": false,
-                  "id": 5518,
+                  "id": 4417,
                   "mutability": "mutable",
                   "name": "id",
-                  "nameLocation": "1055:2:18",
+                  "nameLocation": "1055:2:10",
                   "nodeType": "VariableDeclaration",
-                  "scope": 5531,
-                  "src": "1048:9:18",
+                  "scope": 4430,
+                  "src": "1048:9:10",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -3219,10 +3219,10 @@
                     "typeString": "uint32"
                   },
                   "typeName": {
-                    "id": 5517,
+                    "id": 4416,
                     "name": "uint32",
                     "nodeType": "ElementaryTypeName",
-                    "src": "1048:6:18",
+                    "src": "1048:6:10",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint32",
                       "typeString": "uint32"
@@ -3231,60 +3231,60 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "986:77:18"
+              "src": "986:77:10"
             },
             "returnParameters": {
-              "id": 5523,
+              "id": 4422,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 5522,
+                  "id": 4421,
                   "mutability": "mutable",
                   "name": "space",
-                  "nameLocation": "1106:5:18",
+                  "nameLocation": "1106:5:10",
                   "nodeType": "VariableDeclaration",
-                  "scope": 5531,
-                  "src": "1087:24:18",
+                  "scope": 4430,
+                  "src": "1087:24:10",
                   "stateVariable": false,
                   "storageLocation": "storage",
                   "typeDescriptions": {
-                    "typeIdentifier": "t_struct$_Data_$5422_storage_ptr",
+                    "typeIdentifier": "t_struct$_Data_$4321_storage_ptr",
                     "typeString": "struct Space.Data"
                   },
                   "typeName": {
-                    "id": 5521,
+                    "id": 4420,
                     "nodeType": "UserDefinedTypeName",
                     "pathNode": {
-                      "id": 5520,
+                      "id": 4419,
                       "name": "Space.Data",
                       "nodeType": "IdentifierPath",
-                      "referencedDeclaration": 5422,
-                      "src": "1087:10:18"
+                      "referencedDeclaration": 4321,
+                      "src": "1087:10:10"
                     },
-                    "referencedDeclaration": 5422,
-                    "src": "1087:10:18",
+                    "referencedDeclaration": 4321,
+                    "src": "1087:10:10",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_struct$_Data_$5422_storage_ptr",
+                      "typeIdentifier": "t_struct$_Data_$4321_storage_ptr",
                       "typeString": "struct Space.Data"
                     }
                   },
                   "visibility": "internal"
                 }
               ],
-              "src": "1086:26:18"
+              "src": "1086:26:10"
             },
-            "scope": 5561,
-            "src": "974:172:18",
+            "scope": 4460,
+            "src": "974:172:10",
             "stateMutability": "view",
             "virtual": false,
             "visibility": "internal"
           },
           {
             "body": {
-              "id": 5559,
+              "id": 4458,
               "nodeType": "Block",
-              "src": "1252:107:18",
+              "src": "1252:107:10",
               "statements": [
                 {
                   "expression": {
@@ -3294,32 +3294,32 @@
                           "typeIdentifier": "t_address",
                           "typeString": "address"
                         },
-                        "id": 5548,
+                        "id": 4447,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": false,
                         "lValueRequested": false,
                         "leftExpression": {
                           "expression": {
-                            "id": 5542,
+                            "id": 4441,
                             "name": "tx",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
                             "referencedDeclaration": 4294967270,
-                            "src": "1270:2:18",
+                            "src": "1270:2:10",
                             "typeDescriptions": {
                               "typeIdentifier": "t_magic_transaction",
                               "typeString": "tx"
                             }
                           },
-                          "id": 5543,
+                          "id": 4442,
                           "isConstant": false,
                           "isLValue": false,
                           "isPure": false,
                           "lValueRequested": false,
                           "memberName": "origin",
                           "nodeType": "MemberAccess",
-                          "src": "1270:9:18",
+                          "src": "1270:9:10",
                           "typeDescriptions": {
                             "typeIdentifier": "t_address",
                             "typeString": "address"
@@ -3330,25 +3330,25 @@
                         "rightExpression": {
                           "expression": {
                             "baseExpression": {
-                              "id": 5544,
+                              "id": 4443,
                               "name": "self",
                               "nodeType": "Identifier",
                               "overloadedDeclarations": [],
-                              "referencedDeclaration": 5536,
-                              "src": "1283:4:18",
+                              "referencedDeclaration": 4435,
+                              "src": "1283:4:10",
                               "typeDescriptions": {
-                                "typeIdentifier": "t_mapping$_t_uint32_$_t_struct$_Data_$5422_storage_$",
+                                "typeIdentifier": "t_mapping$_t_uint32_$_t_struct$_Data_$4321_storage_$",
                                 "typeString": "mapping(uint32 => struct Space.Data storage ref)"
                               }
                             },
-                            "id": 5546,
+                            "id": 4445,
                             "indexExpression": {
-                              "id": 5545,
+                              "id": 4444,
                               "name": "id",
                               "nodeType": "Identifier",
                               "overloadedDeclarations": [],
-                              "referencedDeclaration": 5538,
-                              "src": "1288:2:18",
+                              "referencedDeclaration": 4437,
+                              "src": "1288:2:10",
                               "typeDescriptions": {
                                 "typeIdentifier": "t_uint32",
                                 "typeString": "uint32"
@@ -3359,27 +3359,27 @@
                             "isPure": false,
                             "lValueRequested": false,
                             "nodeType": "IndexAccess",
-                            "src": "1283:8:18",
+                            "src": "1283:8:10",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_struct$_Data_$5422_storage",
+                              "typeIdentifier": "t_struct$_Data_$4321_storage",
                               "typeString": "struct Space.Data storage ref"
                             }
                           },
-                          "id": 5547,
+                          "id": 4446,
                           "isConstant": false,
                           "isLValue": true,
                           "isPure": false,
                           "lValueRequested": false,
                           "memberName": "creator",
                           "nodeType": "MemberAccess",
-                          "referencedDeclaration": 5409,
-                          "src": "1283:16:18",
+                          "referencedDeclaration": 4308,
+                          "src": "1283:16:10",
                           "typeDescriptions": {
                             "typeIdentifier": "t_address",
                             "typeString": "address"
                           }
                         },
-                        "src": "1270:29:18",
+                        "src": "1270:29:10",
                         "typeDescriptions": {
                           "typeIdentifier": "t_bool",
                           "typeString": "bool"
@@ -3387,14 +3387,14 @@
                       },
                       {
                         "hexValue": "456173796465616c3a20464f5242494444454e",
-                        "id": 5549,
+                        "id": 4448,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": true,
                         "kind": "string",
                         "lValueRequested": false,
                         "nodeType": "Literal",
-                        "src": "1301:21:18",
+                        "src": "1301:21:10",
                         "typeDescriptions": {
                           "typeIdentifier": "t_stringliteral_7c02eb90dec17e78778a3c6940ee845ae616a680b5f42f250dcede8b02973691",
                           "typeString": "literal_string \"Easydeal: FORBIDDEN\""
@@ -3413,7 +3413,7 @@
                           "typeString": "literal_string \"Easydeal: FORBIDDEN\""
                         }
                       ],
-                      "id": 5541,
+                      "id": 4440,
                       "name": "require",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [
@@ -3421,13 +3421,13 @@
                         4294967278
                       ],
                       "referencedDeclaration": 4294967278,
-                      "src": "1262:7:18",
+                      "src": "1262:7:10",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_require_pure$_t_bool_$_t_string_memory_ptr_$returns$__$",
                         "typeString": "function (bool,string memory) pure"
                       }
                     },
-                    "id": 5550,
+                    "id": 4449,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -3435,20 +3435,20 @@
                     "lValueRequested": false,
                     "names": [],
                     "nodeType": "FunctionCall",
-                    "src": "1262:61:18",
+                    "src": "1262:61:10",
                     "tryCall": false,
                     "typeDescriptions": {
                       "typeIdentifier": "t_tuple$__$",
                       "typeString": "tuple()"
                     }
                   },
-                  "id": 5551,
+                  "id": 4450,
                   "nodeType": "ExpressionStatement",
-                  "src": "1262:61:18"
+                  "src": "1262:61:10"
                 },
                 {
                   "expression": {
-                    "id": 5557,
+                    "id": 4456,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -3456,25 +3456,25 @@
                     "leftHandSide": {
                       "expression": {
                         "baseExpression": {
-                          "id": 5552,
+                          "id": 4451,
                           "name": "self",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 5536,
-                          "src": "1333:4:18",
+                          "referencedDeclaration": 4435,
+                          "src": "1333:4:10",
                           "typeDescriptions": {
-                            "typeIdentifier": "t_mapping$_t_uint32_$_t_struct$_Data_$5422_storage_$",
+                            "typeIdentifier": "t_mapping$_t_uint32_$_t_struct$_Data_$4321_storage_$",
                             "typeString": "mapping(uint32 => struct Space.Data storage ref)"
                           }
                         },
-                        "id": 5554,
+                        "id": 4453,
                         "indexExpression": {
-                          "id": 5553,
+                          "id": 4452,
                           "name": "id",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 5538,
-                          "src": "1338:2:18",
+                          "referencedDeclaration": 4437,
+                          "src": "1338:2:10",
                           "typeDescriptions": {
                             "typeIdentifier": "t_uint32",
                             "typeString": "uint32"
@@ -3485,21 +3485,21 @@
                         "isPure": false,
                         "lValueRequested": false,
                         "nodeType": "IndexAccess",
-                        "src": "1333:8:18",
+                        "src": "1333:8:10",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_struct$_Data_$5422_storage",
+                          "typeIdentifier": "t_struct$_Data_$4321_storage",
                           "typeString": "struct Space.Data storage ref"
                         }
                       },
-                      "id": 5555,
+                      "id": 4454,
                       "isConstant": false,
                       "isLValue": true,
                       "isPure": false,
                       "lValueRequested": true,
                       "memberName": "status",
                       "nodeType": "MemberAccess",
-                      "referencedDeclaration": 5421,
-                      "src": "1333:15:18",
+                      "referencedDeclaration": 4320,
+                      "src": "1333:15:10",
                       "typeDescriptions": {
                         "typeIdentifier": "t_uint8",
                         "typeString": "uint8"
@@ -3509,90 +3509,90 @@
                     "operator": "=",
                     "rightHandSide": {
                       "hexValue": "30",
-                      "id": 5556,
+                      "id": 4455,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": true,
                       "kind": "number",
                       "lValueRequested": false,
                       "nodeType": "Literal",
-                      "src": "1351:1:18",
+                      "src": "1351:1:10",
                       "typeDescriptions": {
                         "typeIdentifier": "t_rational_0_by_1",
                         "typeString": "int_const 0"
                       },
                       "value": "0"
                     },
-                    "src": "1333:19:18",
+                    "src": "1333:19:10",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint8",
                       "typeString": "uint8"
                     }
                   },
-                  "id": 5558,
+                  "id": 4457,
                   "nodeType": "ExpressionStatement",
-                  "src": "1333:19:18"
+                  "src": "1333:19:10"
                 }
               ]
             },
-            "id": 5560,
+            "id": 4459,
             "implemented": true,
             "kind": "function",
             "modifiers": [],
             "name": "hide",
-            "nameLocation": "1161:4:18",
+            "nameLocation": "1161:4:10",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 5539,
+              "id": 4438,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 5536,
+                  "id": 4435,
                   "mutability": "mutable",
                   "name": "self",
-                  "nameLocation": "1213:4:18",
+                  "nameLocation": "1213:4:10",
                   "nodeType": "VariableDeclaration",
-                  "scope": 5560,
-                  "src": "1175:42:18",
+                  "scope": 4459,
+                  "src": "1175:42:10",
                   "stateVariable": false,
                   "storageLocation": "storage",
                   "typeDescriptions": {
-                    "typeIdentifier": "t_mapping$_t_uint32_$_t_struct$_Data_$5422_storage_$",
+                    "typeIdentifier": "t_mapping$_t_uint32_$_t_struct$_Data_$4321_storage_$",
                     "typeString": "mapping(uint32 => struct Space.Data)"
                   },
                   "typeName": {
-                    "id": 5535,
+                    "id": 4434,
                     "keyType": {
-                      "id": 5532,
+                      "id": 4431,
                       "name": "uint32",
                       "nodeType": "ElementaryTypeName",
-                      "src": "1183:6:18",
+                      "src": "1183:6:10",
                       "typeDescriptions": {
                         "typeIdentifier": "t_uint32",
                         "typeString": "uint32"
                       }
                     },
                     "nodeType": "Mapping",
-                    "src": "1175:29:18",
+                    "src": "1175:29:10",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_mapping$_t_uint32_$_t_struct$_Data_$5422_storage_$",
+                      "typeIdentifier": "t_mapping$_t_uint32_$_t_struct$_Data_$4321_storage_$",
                       "typeString": "mapping(uint32 => struct Space.Data)"
                     },
                     "valueType": {
-                      "id": 5534,
+                      "id": 4433,
                       "nodeType": "UserDefinedTypeName",
                       "pathNode": {
-                        "id": 5533,
+                        "id": 4432,
                         "name": "Space.Data",
                         "nodeType": "IdentifierPath",
-                        "referencedDeclaration": 5422,
-                        "src": "1193:10:18"
+                        "referencedDeclaration": 4321,
+                        "src": "1193:10:10"
                       },
-                      "referencedDeclaration": 5422,
-                      "src": "1193:10:18",
+                      "referencedDeclaration": 4321,
+                      "src": "1193:10:10",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_struct$_Data_$5422_storage_ptr",
+                        "typeIdentifier": "t_struct$_Data_$4321_storage_ptr",
                         "typeString": "struct Space.Data"
                       }
                     }
@@ -3601,13 +3601,13 @@
                 },
                 {
                   "constant": false,
-                  "id": 5538,
+                  "id": 4437,
                   "mutability": "mutable",
                   "name": "id",
-                  "nameLocation": "1234:2:18",
+                  "nameLocation": "1234:2:10",
                   "nodeType": "VariableDeclaration",
-                  "scope": 5560,
-                  "src": "1227:9:18",
+                  "scope": 4459,
+                  "src": "1227:9:10",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -3615,10 +3615,10 @@
                     "typeString": "uint32"
                   },
                   "typeName": {
-                    "id": 5537,
+                    "id": 4436,
                     "name": "uint32",
                     "nodeType": "ElementaryTypeName",
-                    "src": "1227:6:18",
+                    "src": "1227:6:10",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint32",
                       "typeString": "uint32"
@@ -3627,27 +3627,27 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "1165:77:18"
+              "src": "1165:77:10"
             },
             "returnParameters": {
-              "id": 5540,
+              "id": 4439,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "1252:0:18"
+              "src": "1252:0:10"
             },
-            "scope": 5561,
-            "src": "1152:207:18",
+            "scope": 4460,
+            "src": "1152:207:10",
             "stateMutability": "nonpayable",
             "virtual": false,
             "visibility": "internal"
           }
         ],
-        "scope": 5562,
-        "src": "59:1303:18",
+        "scope": 4461,
+        "src": "59:1303:10",
         "usedErrors": []
       }
     ],
-    "src": "33:1329:18"
+    "src": "33:1329:10"
   },
   "compiler": {
     "name": "solc",
@@ -3655,7 +3655,7 @@
   },
   "networks": {},
   "schemaVersion": "3.3.4",
-  "updatedAt": "2021-06-11T07:49:57.545Z",
+  "updatedAt": "2021-06-11T08:06:31.663Z",
   "devdoc": {
     "kind": "dev",
     "methods": {},

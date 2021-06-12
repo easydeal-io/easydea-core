@@ -2,6 +2,7 @@
 pragma solidity >=0.7.0;
 
 import {IESDUser} from "./itf/IESDUser.sol";
+import {IESDInfo} from "./itf/IESDInfo.sol";
 
 /**
  * @title Easydeal Context
@@ -62,12 +63,12 @@ contract ESDContext {
         return userActiveDealIds[user];
     }
 
-    function userFollowSpace(uint32 id) external onlyInfoContract {
-        IESDUser(ESDUserAddress).userFollowSpace(id);
+    function followSpace(uint32 id) external onlyUserContract {
+        IESDInfo(ESDInfoAddress).followSpace(id);
     }
 
-    function userUnfollowSpace(uint32 id) external onlyInfoContract {
-        IESDUser(ESDUserAddress).userUnfollowSpace(id);
+    function unfollowSpace(uint32 id) external onlyUserContract {
+        IESDInfo(ESDInfoAddress).unfollowSpace(id);
     }
 
     function addActiveInfoId(address user, uint32 id) external onlyInfoContract {

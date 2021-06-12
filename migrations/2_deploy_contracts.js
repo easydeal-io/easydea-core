@@ -17,8 +17,8 @@ module.exports = async function(deployer, network, accounts) {
     console.log('Deploy type: ESDToken');
 
     await deployer.deploy(ESDToken);
-    console.log('ESDToken Address: ', ESDToken.address);
   }
+  console.log('ESDToken Address: ', ESDToken.address);
 
   if (deploySwitch.ESDUser) {
     console.log('====================================================');
@@ -66,5 +66,23 @@ module.exports = async function(deployer, network, accounts) {
   console.log('Deploy type: ESDContext');
 
   await deployer.deploy(ESDContext, ESDUser.address, ESDInfo.address);
-  console.log('ESDContext Address:', SignReward.address);
+  console.log('ESDContext Address:', ESDContext.address);
+
+  // console.log('====================================================');
+  // console.log('network type: ' + network);
+  // console.log('Time: ' + new Date().toLocaleString());
+  // console.log('Submit tx to update ESDUser context...');
+  // const ESDUserInstance = await ESDUser.at(ESDUser.address);
+  // let tx = await ESDUserInstance.updateContext(ESDContext.address);
+  // console.log(`tx: ${tx}`);
+  // console.log('====================================================');
+  // console.log('Submit tx to update ESDInfo context...');
+  // const ESDInfoInstance = await ESDInfo.at(ESDInfo.address);
+  // tx = await ESDUserInstance.updateContext(ESDInfoInstance.address);
+  // console.log(`tx: ${tx}`);
+  // console.log('====================================================');
+  // console.log('Submit tx to update SignReward context...');
+  // const SignRewardInstance = await SignReward.at(SignReward.address);
+  // tx = await SignRewardInstance.updateContext(SignRewardInstance.address);
+  // console.log(`tx: ${tx}`);
 };

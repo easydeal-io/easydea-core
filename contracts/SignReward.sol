@@ -19,17 +19,17 @@ contract SignReward is Context {
         uint256 totalRewards;
     }
 
-    uint256 public signInterval = 10 minutes;
+    uint256 public signInterval = 10 seconds;
     uint256 public signRewardBaseAmount = 1 * 10 ** 18;
 
     mapping(address => SignRecord) public signRecords;
-    address public easydealAddress;
+    address[] totalRewardsRanking;
 
     constructor (address _tokenAddress) {
         ESDToken = IBEP20(_tokenAddress);
     }
 
-    function sign() public returns (bool) {
+    function sign() public {
         require(ESDContext.isValidUser(msg.sender), "FORBIDDEN");
         
         uint32 lockedWeight = ESDContext.computeLockedWeights(msg.sender);
@@ -53,8 +53,41 @@ contract SignReward is Context {
         record.continuousNumber = continuousNumber;
         record.lastSignedTimestamp = block.timestamp;
         record.totalRewards += rewardAmount;
-       
-        return true;
+        updateTotalRewardsRanking(msg.sender);
+    }
+
+    function updateTotalRewardsRanking(address addr) internal {
+        // check if exist
+        bool inArr = false;
+        for (uint i = 0; i < totalRewardsRanking.length; i++) {
+            if (totalRewardsRanking[i] == addr) {
+                inArr = true;
+            }
+        }
+        if (!inArr) {
+            totalRewardsRanking.push(addr);
+        }
+        uint256 llen = totalRewardsRanking.length;
+        if (llen == 1) {
+            return;
+        }
+        // sort
+        address[] memory tmpArr = totalRewardsRanking;
+        for (uint256 i = 0; i < llen - 1; i++) {
+            for (uint256 j = 0; j < llen - 1 - i; j++) {
+                address aa = tmpArr[j];
+                address ab = tmpArr[j+1];
+                if (signRecords[aa].totalRewards > signRecords[ab].totalRewards) {
+                    tmpArr[j+1] = tmpArr[j];
+                    tmpArr[j] = ab;
+                }
+            }
+        }
+        totalRewardsRanking = tmpArr;
+        // slice
+        if (llen > 10) {
+            totalRewardsRanking.pop();
+        }
     }
 
     // ============ Proposal execute functions ============

@@ -6,8 +6,23 @@ import {IESDContext} from "../itf/IESDContext.sol";
 contract Context {
     IESDContext ESDContext;
 
-    function updateContext(address _contextAddress) external {
-        require(ESDContext.isViaUserContract(msg.sender), "FORBIDDEN");
+    address owner;
+    
+    constructor() {
+        owner = msg.sender;
+    }
+
+    modifier viaContext() {
+        require(msg.sender == address(ESDContext), "FORBIDDEN");
+        _;
+    }
+
+    modifier onlyOwner() {
+        require(msg.sender == owner, "FORBIDDEN");
+        _;
+    }
+
+    function updateContext(address _contextAddress) public onlyOwner {
         ESDContext = IESDContext(_contextAddress);
     }
 

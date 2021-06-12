@@ -36,10 +36,10 @@ module.exports = {
    */
 
   deploySwitch: {
-    ESDToken: true,
+    ESDToken: false,
     ESDUser: true,
     ESDInfo: true,
-    SignReward: true,
+    SignReward: false,
     Multicall: false
   },
 
@@ -50,7 +50,7 @@ module.exports = {
       network_id: "*",       // Any network (default: none)
     },
     testnet: {
-      provider: () => new HDWalletProvider(mnemonic, `https://data-seed-prebsc-1-s3.binance.org:8545/`),
+      provider: () => new HDWalletProvider(mnemonic, `https://data-seed-prebsc-1-s1.binance.org:8545`),
       network_id: 97,       // Ropsten's id
       gas: 25000000,
       skipDryRun: true     // Skip dry run before migrations? (default: false for public nets )

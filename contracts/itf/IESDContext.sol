@@ -6,8 +6,8 @@ interface IESDContext {
     function isValidUser(address _address) external view returns(bool);
     function isMerchant(address _address) external view returns(bool);
     function isCouncilMember(address _address) external view returns(bool);
-    function userFollowSpace(uint32 id) external;
-    function userUnfollowSpace(uint32 id) external;
+    function followSpace(uint32 id) external;
+    function unfollowSpace(uint32 id) external;
 
     function computeLockedWeights(address _address) external view returns (uint32);
 

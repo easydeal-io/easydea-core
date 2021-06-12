@@ -8898,7 +8898,8 @@
   },
   "networks": {},
   "schemaVersion": "3.3.4",
-  "updatedAt": "2021-06-11T07:49:57.517Z",
+  "updatedAt": "2021-06-12T03:45:22.037Z",
+  "networkType": "ethereum",
   "devdoc": {
     "author": "Michael Elliot <mike@makerdao.com>Joshua Levine <joshua@makerdao.com>Nick Johnson <arachnid@notdot.net>",
     "kind": "dev",
