@@ -11397,12 +11397,12 @@
     "97": {
       "events": {},
       "links": {},
-      "address": "0xef4e2fEA7F07a883210ac9DDf3a797C0a99bbAb6",
-      "transactionHash": "0x24011363d882dd623879de28869d6c8134e7cf1c50d9b05baab073c6a1fe6fdc"
+      "address": "0x4998347EDcf36C85aba0fb6Ce6d44beB7471e744",
+      "transactionHash": "0x2e16244bd43cd2ba1b4f2f4b82ec94b4ed7face8ab8dc5cc20796bf0c2bbf7d1"
     }
   },
   "schemaVersion": "3.3.4",
-  "updatedAt": "2021-06-12T03:45:21.974Z",
+  "updatedAt": "2021-06-12T05:33:14.757Z",
   "networkType": "ethereum",
   "devdoc": {
     "author": "flex@easydeal.io",

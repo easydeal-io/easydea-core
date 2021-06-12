@@ -37,7 +37,7 @@ module.exports = {
 
   deploySwitch: {
     ESDToken: false,
-    ESDUser: true,
+    ESDUser: false,
     ESDInfo: true,
     SignReward: false,
     Multicall: false

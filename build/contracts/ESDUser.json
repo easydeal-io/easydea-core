@@ -62672,12 +62672,12 @@
     "97": {
       "events": {},
       "links": {},
-      "address": "0x20AB69231D5Be826F1B66d8F783Cf96eECA4A991",
-      "transactionHash": "0x543ad166f0574442c783511a02ca1e43cecceaff4a01d1d089bdacaa9ed2d6c5"
+      "address": "0xd64F04002A91B4A81351E464Cdf314e3F4a453E7",
+      "transactionHash": "0x234ff73f7b8c5ffb3411dfbddbabd3346d846d3a093884925748a4aa695da006"
     }
   },
   "schemaVersion": "3.3.4",
-  "updatedAt": "2021-06-12T03:45:21.989Z",
+  "updatedAt": "2021-06-12T05:33:14.773Z",
   "networkType": "ethereum",
   "devdoc": {
     "author": "flex@easydeal.io",

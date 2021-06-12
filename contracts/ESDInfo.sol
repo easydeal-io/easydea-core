@@ -281,39 +281,35 @@ contract ESDInfo is Context {
 
     function filterInfo(
         uint32[] memory spaceIds, 
-        uint8[] memory status,
         address[] memory owners,
         uint32 page, 
         uint32 pageSize,
-        bool desc
-    ) internal view returns(uint32[] memory, uint32) {
+        bool onlyVisible,
+        bool orderDesc
+    ) public view returns(uint32[] memory, uint32) {
        
         uint32[] memory ids = new uint32[](infoCount);
         uint32 idx = 0;
         
         for (
-            uint32 i = (desc ? infoCount : 0); 
-            (desc ? i > 0 : i < infoCount); 
-            (desc ? i-- : i++)
+            uint32 i = (orderDesc ? infoCount : 0); 
+            (orderDesc ? i > 0 : i < infoCount); 
+            (orderDesc ? i-- : i++)
         ) {
-            Info memory info = infos[desc ? i : i+1];
-
+            Info memory info = infos[orderDesc ? i : i+1];
+            if (onlyVisible && info.status == 0) {
+                break;
+            }
             if (spaceIds.length > 0) {
                 for (uint32 j = 0; j < spaceIds.length; j++) {
                     if (info.spaceId == spaceIds[j]) {
-                        ids[idx++] = desc ? i : i+1;
-                    }
-                }
-            } else if (status.length > 0) {
-                for (uint32 j = 0; j < status.length; j++) {
-                    if (info.status == status[j]) {
-                        ids[idx++] = desc ? i : i+1;
+                        ids[idx++] = orderDesc ? i : i+1;
                     }
                 }
             } else if (owners.length > 0) {
                 for (uint32 j = 0; j < owners.length; j++) {
                     if (info.owner == owners[j]) {
-                        ids[idx++] = desc ? i : i+1;
+                        ids[idx++] = orderDesc ? i : i+1;
                     }
                 }
             }
