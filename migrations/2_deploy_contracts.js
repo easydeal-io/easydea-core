@@ -47,7 +47,6 @@ module.exports = async function(deployer, network, accounts) {
     console.log('Deploy type: SignReward');
 
     await deployer.deploy(SignReward, ESDToken.address);
-    console.log('SignReward Address:', SignReward.address);
   }
   console.log('SignReward Address: ', SignReward.address);
 

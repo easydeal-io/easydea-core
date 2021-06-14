@@ -90,6 +90,10 @@ contract SignReward is Context {
         }
     }
 
+    function getTotalRewardsRanking() public view returns (address[] memory) {
+        return totalRewardsRanking;
+    }
+
     // ============ Proposal execute functions ============
     
     function updateSignInterval(uint32 interval) external {
