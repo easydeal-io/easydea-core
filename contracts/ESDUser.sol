@@ -108,7 +108,7 @@ contract ESDUser is Context {
 
     modifier notCouncilMember() {
         require(
-            users[msg.sender].status == 1 && !users[msg.sender].isMerchant, 
+            users[msg.sender].status == 1 && !users[msg.sender].isCouncilMember, 
             "FORBIDDEN"
         );
         _;
@@ -202,7 +202,12 @@ contract ESDUser is Context {
     /**
         Ban an user register by council member
      */
-    function banUser(address addr) public onlyCouncilMember {
+    function banUser(address addr) public {
+        require(
+            users[msg.sender].isCouncilMember ||
+            msg.sender == address(this), 
+            "FORBIDDEN"
+        );
         users[addr].status = 2;
 
         emit UserUpdated(msg.sender);

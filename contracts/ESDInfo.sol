@@ -53,7 +53,8 @@ contract ESDInfo is Context {
         uint32 id;
         uint32 infoId;
         uint256 qty;
-        address maker;
+        address buyer;
+        address seller;
         uint256 timestamp;
         uint8 status; // 0 canceled, 1 normal, 2 transferred 3 confirmed
     }
@@ -127,13 +128,18 @@ contract ESDInfo is Context {
         space.infos++;
     }
 
-    function hideInfo(uint32 id) public {
+    function hideInfo(uint32 id) external {
         Info storage info = infos[id];
-        if (msg.sender != info.owner || ESDContext.isCouncilMember(msg.sender)) {
+        if (
+            msg.sender == info.owner || 
+            ESDContext.isCouncilMember(msg.sender) ||
+            ESDContext.isViaUserContract(msg.sender)
+        ) {
+            info.status = 0;
+            emit InfoUpdated(id);
+        } else {
             revert("FORBIDDEN");
         }
-        info.status = 0;
-        emit InfoUpdated(id);
     }
 
     function makeDeal(uint32 infoId, uint qty) public payable {
@@ -165,7 +171,8 @@ contract ESDInfo is Context {
             id: dealCount,
             infoId: infoId,
             qty: qty,
-            maker: msg.sender,
+            buyer: info.iType == 0 ? msg.sender : info.owner,
+            seller: info.iType == 0 ? info.owner : msg.sender,
             timestamp: block.timestamp,
             status: 1
         });
@@ -200,21 +207,18 @@ contract ESDInfo is Context {
         );
         Info memory info = infos[deal.infoId];
 
-        address buyer = info.iType == 0 ? deal.maker : info.owner;
-        address seller = info.iType == 0 ? info.owner : deal.maker;
-
         if (!viaProposal) {
-            require(msg.sender == buyer, "FORBIDDEN");
+            require(msg.sender == deal.buyer, "FORBIDDEN");
         }
 
         if (info.acceptToken == address(0)) {
-            payable(seller).transfer(info.price.mul(deal.qty));
+            payable(deal.seller).transfer(info.price.mul(deal.qty));
         } else {
             IBEP20 token = IBEP20(info.acceptToken);
-            token.transfer(seller, info.price.mul(deal.qty));
+            token.transfer(deal.seller, info.price.mul(deal.qty));
         }
         deal.status = 3;
-        _removeActiveDeal(deal.maker, info.owner, id);
+        _removeActiveDeal(deal.buyer, deal.seller, id);
 
         emit DealUpdated(id);
     }
@@ -228,21 +232,21 @@ contract ESDInfo is Context {
         );
         Info memory info = infos[deal.infoId];
 
-        address buyer = info.iType == 0 ? deal.maker : info.owner;
-        address seller = info.iType == 0 ? info.owner : deal.maker;
-
         if (!viaProposal) {
-            require(msg.sender == buyer || msg.sender == seller, "FORBIDDEN");
+            require(
+                msg.sender == deal.buyer || msg.sender == deal.seller, 
+                "FORBIDDEN"
+            );
         }
         // refunds
         if (info.acceptToken == address(0)) {
-            payable(buyer).transfer(info.price.mul(deal.qty));
+            payable(deal.buyer).transfer(info.price.mul(deal.qty));
         } else {
             IBEP20 token = IBEP20(info.acceptToken);
-            token.transfer(buyer, info.price.mul(deal.qty));
+            token.transfer(deal.buyer, info.price.mul(deal.qty));
         }
         deal.status = 0;
-        _removeActiveDeal(deal.maker, info.owner, id);
+        _removeActiveDeal(deal.buyer, deal.seller, id);
 
         emit DealUpdated(id);
     }
@@ -257,8 +261,9 @@ contract ESDInfo is Context {
 
     function unfollowSpace(uint32 id) public viaContext {
         Space storage space = spaces[id]; 
-        space.follows--;
-
+        if (space.follows > 0) {
+            space.follows--;
+        }
         emit SpaceUpdated(id);
     }
 
