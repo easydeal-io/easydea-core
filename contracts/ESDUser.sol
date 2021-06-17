@@ -29,6 +29,8 @@ contract ESDUser is Context {
         bool isMerchant;
         bool isCouncilMember;
         address guarantor;
+        // use for encrypt message
+        string encryptPubkey;
         uint256 timestamp;
         uint8 status; // 0 wait for guarantee, 1 normal, 2 banned
     }
@@ -148,7 +150,8 @@ contract ESDUser is Context {
     function registerUser(
         string memory nickName, 
         string memory socialLink, 
-        string memory bio
+        string memory bio,
+        string memory pubkey
     ) public {
         require(registerQueue.length < registerQueueSize, "queue size limit");
         require(users[msg.sender].timestamp == 0, "exist");
@@ -161,18 +164,32 @@ contract ESDUser is Context {
             isMerchant: false,
             isCouncilMember: false,
             guarantor: address(0),
+            encryptPubkey: pubkey,
             timestamp: block.timestamp,
             status: 0
         });
         registerQueue.push(msg.sender);
     }
 
+    function updateUserInfo(
+        string memory bio,
+        string memory socialLink,
+        string memory pubkey
+    ) public {
+        User storage user = users[msg.sender];
+        require(user.timestamp > 0, "NOT_FOUND");
+        user.bio = bio;
+        user.socialLink = socialLink;
+        user.encryptPubkey = pubkey;
+        emit UserUpdated(msg.sender);
+    }
+
     function applyMerchant() public onlyRegistered {
         User storage user = users[msg.sender];
         require(user.lockedTokenAmount >= merchantMinimumLockAmount, "NOT_ENOUGH_LOCKED_AMOUNT");
         require(!user.isCouncilMember, "FORBIDDEN");
+        require(!user.isMerchant, "ALREAY_MERCHANT");
         user.isMerchant = true;
-
         emit UserUpdated(msg.sender);
     }
 
@@ -507,6 +524,10 @@ contract ESDUser is Context {
 
     function getCouncilMemberAddresses() public view returns (address[] memory) {
         return councilMemberAddresses;
+    }
+
+    function getActiveDealIds(address addr) public view returns (uint32[] memory) {
+        return ESDContext.getActiveDealIds(addr);
     }
 
     function getRegisterQueue() public view returns (address[] memory) {

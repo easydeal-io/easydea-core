@@ -26,7 +26,6 @@ contract ESDInfo is Context {
         uint8 iType; // 0 sell, 1 buy
         string title;
         string content;
-        string memo;
         address owner;
         uint256 price;
         uint256 qty;
@@ -55,14 +54,17 @@ contract ESDInfo is Context {
         uint256 qty;
         address buyer;
         address seller;
+        string memo;
+        string transferInfo;
         uint256 timestamp;
-        uint8 status; // 0 canceled, 1 normal, 2 transferred 3 confirmed
+        uint8 status; // 0 canceled, 1 placed, 2 transferred 3 confirmed
     }
 
     // ============ Events ===========
     event InfoUpdated(uint32 id);
     event SpaceUpdated(uint32 id);
     event DealUpdated(uint32 id);
+    event Notify(address indexed to, string message, uint maybeId);
 
     // ============ States ============
     
@@ -87,7 +89,6 @@ contract ESDInfo is Context {
         uint8 iType,
         string memory title, 
         string memory content, 
-        string memory memo,
         address acceptToken,
         uint256 qty,
         uint256 price
@@ -105,8 +106,9 @@ contract ESDInfo is Context {
                 require(msg.value == price * qty, "VALUE_IS_NOT_ENOUGH");
             } else {
                 IBEP20 acceptTokenContract = IBEP20(acceptToken);
-                require(acceptTokenContract.balanceOf(msg.sender) > price, "INSUFFICIENT_BALANCE");
-                acceptTokenContract.safeTransferFrom(msg.sender, address(this), price * qty);
+                uint256 amount = price.mul(qty);
+                require(acceptTokenContract.balanceOf(msg.sender) >= amount, "INSUFFICIENT_BALANCE");
+                acceptTokenContract.safeTransferFrom(msg.sender, address(this), amount);
             }
         }
         infoCount++;
@@ -116,7 +118,6 @@ contract ESDInfo is Context {
             iType: iType,
             title: title,
             content: content,
-            memo: memo,
             owner: msg.sender,
             price: price,
             qty: qty,
@@ -126,6 +127,18 @@ contract ESDInfo is Context {
         });
 
         space.infos++;
+    }
+
+    function showInfo(uint32 id) public {
+        Info storage info = infos[id];
+        require(
+            ESDContext.isValidUser(msg.sender) &&
+            msg.sender == info.owner, 
+            "FORBIDDEN"
+        );
+        require(info.qty > 0, "QTY IS ZERO");
+        info.status = 1;
+        emit InfoUpdated(id);
     }
 
     function hideInfo(uint32 id) external {
@@ -142,7 +155,7 @@ contract ESDInfo is Context {
         }
     }
 
-    function makeDeal(uint32 infoId, uint qty) public payable {
+    function makeDeal(uint32 infoId, uint qty, string memory memo) public payable {
         require(
             ESDContext.isValidUser(msg.sender) &&
             !ESDContext.isCouncilMember(msg.sender), 
@@ -150,20 +163,22 @@ contract ESDInfo is Context {
         );
         
         Info storage info = infos[infoId];
-        require(info.status == 1, "info status incorrect");
-        require(ESDContext.isValidUser(info.owner), "info owner status incorrect");
-        require(info.qty >= qty, "insufficient qty");
+        require(msg.sender != info.owner, "CAN_NOT_BUY_YOURSELF");
+        require(info.status == 1, "INFO_STATUS_INCORRECT");
+        require(ESDContext.isValidUser(info.owner), "OWNER_INVALID");
+        require(info.qty >= qty, "INSUFFICIENT QTY");
 
         Space storage space = spaces[info.spaceId];
-        require(space.status == 1, "space status is incorrect");
+        require(space.status == 1, "SPACE_STATUS_INCORRECT");
 
         if (info.iType == 0) {
             if (info.acceptToken == address(0)) {
-                require(msg.value == info.price * qty, "value is not enough");
+                require(msg.value == info.price.mul(qty), "VALUE_NOT_ENOUGH");
             } else {
-                uint tokenBalance = ESDToken.balanceOf(msg.sender);
-                require(tokenBalance >= info.price * qty, "insufficient balance");
-                ESDToken.safeTransferFrom(msg.sender, address(this), info.price * qty);
+                IBEP20 acceptTokenContract = IBEP20(info.acceptToken);
+                uint256 amount = info.price.mul(qty);
+                require(acceptTokenContract.balanceOf(msg.sender) >= amount, "INSUFFICIENT_BALANCE");
+                acceptTokenContract.safeTransferFrom(msg.sender, address(this), amount);
             }
         }
         dealCount++;
@@ -173,11 +188,13 @@ contract ESDInfo is Context {
             qty: qty,
             buyer: info.iType == 0 ? msg.sender : info.owner,
             seller: info.iType == 0 ? info.owner : msg.sender,
+            memo: memo,
+            transferInfo: "",
             timestamp: block.timestamp,
             status: 1
         });
 
-        info.qty--;
+        info.qty -= qty;
         space.deals++;
         
         if (info.qty == 0) {
@@ -186,6 +203,25 @@ contract ESDInfo is Context {
         _addActiveDeal(msg.sender, info.owner, dealCount);
 
         emit InfoUpdated(infoId);
+        emit Notify(info.owner, "DEAL_NEW", dealCount);
+    }
+
+    function updateDealMemo(uint32 id, string memory memo) public {
+        Deal storage deal = deals[id];
+        require(msg.sender == deal.buyer, "FORBIDDEN");
+        require(deal.status == 1, "STATUS_INCORRECT");
+        deal.memo = memo;
+        emit DealUpdated(id);
+        emit Notify(deal.seller, "DEAL_MEMO", id);
+    }
+
+    function transferDeal(uint32 id, string memory transferInfo) public {
+        Deal storage deal = deals[id];
+        require(msg.sender == deal.seller, "FORBIDDEN");
+        deal.transferInfo = transferInfo;
+        deal.status = 2;
+        emit DealUpdated(id);
+        emit Notify(deal.buyer, "DEAL_TRANSFER", id);
     }
 
     function _addActiveDeal(address user1, address user2, uint32 dealId) private {
@@ -221,6 +257,7 @@ contract ESDInfo is Context {
         _removeActiveDeal(deal.buyer, deal.seller, id);
 
         emit DealUpdated(id);
+        emit Notify(deal.seller, "DEAL_CONFIRM", id);
     }
 
     function cancelDeal(uint32 id) public {
@@ -230,7 +267,7 @@ contract ESDInfo is Context {
             deal.status == 1 || (viaProposal && deal.status == 2),
             "deal status incorrect"
         );
-        Info memory info = infos[deal.infoId];
+        Info storage info = infos[deal.infoId];
 
         if (!viaProposal) {
             require(
@@ -246,9 +283,12 @@ contract ESDInfo is Context {
             token.transfer(deal.buyer, info.price.mul(deal.qty));
         }
         deal.status = 0;
+        info.qty += deal.qty;
+        info.status = 1;
         _removeActiveDeal(deal.buyer, deal.seller, id);
-
         emit DealUpdated(id);
+        emit InfoUpdated(info.id);
+        emit Notify(msg.sender == deal.buyer ? deal.seller : deal.buyer, "DEAL_CANCEL", id);
     }
 
     function followSpace(uint32 id) external viaContext {

@@ -17,7 +17,6 @@ contract ESDContext {
     address public ESDUserAddress;
     address public ESDInfoAddress;
 
-    mapping(address => uint32[]) public userActiveInfoIds;
     mapping(address => uint32[]) public userActiveDealIds;
 
     modifier onlyUserContract() {
@@ -55,10 +54,6 @@ contract ESDContext {
         return IESDUser(ESDUserAddress).computeLockedWeights(user);
     }
 
-    function getActiveInfoIds(address user) external view returns (uint32[] memory) {
-        return userActiveInfoIds[user];
-    }
-
     function getActiveDealIds(address user) external view returns (uint32[] memory) {
         return userActiveDealIds[user];
     }
@@ -71,22 +66,8 @@ contract ESDContext {
         IESDInfo(ESDInfoAddress).unfollowSpace(id);
     }
 
-    function addActiveInfoId(address user, uint32 id) external onlyInfoContract {
-        return userActiveInfoIds[user].push(id);
-    }
-
     function addActiveDealId(address user, uint32 id) external onlyInfoContract {
         return userActiveDealIds[user].push(id);
-    }
-
-    function removeActiveInfoId(address user, uint32 id) external onlyInfoContract {
-        uint32[] storage activeInfoIds = userActiveInfoIds[user];
-        for (uint i = 0; i < activeInfoIds.length; i++) {
-            if (activeInfoIds[i] == id) {
-                activeInfoIds[i] = activeInfoIds[activeInfoIds.length - 1];
-                activeInfoIds.pop();
-            }
-        } 
     }
 
     function removeActiveDealId(address user, uint32 id) external onlyInfoContract {
