@@ -1,1 +1,1 @@
-# Easydea core contracts
+# Easydeal core contracts
