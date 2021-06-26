@@ -8904,15 +8904,21 @@
     "version": "0.8.4+commit.c7e474f2.Emscripten.clang"
   },
   "networks": {
+    "56": {
+      "events": {},
+      "links": {},
+      "address": "0x32aCED5181bFe15654a46371916d6bFc8374d65E",
+      "transactionHash": "0x42462568f4854a82b7f26c3f8562ea1dc1a99f8a22f3e001a5a079e7af375f2b"
+    },
     "97": {
       "events": {},
       "links": {},
-      "address": "0x336aA92681391c847605AFd7dfCb2fC2782b5421",
-      "transactionHash": "0x7fc276a5c3f70b6bf53bb999e79b39984f3f7b2d00c4c93582288f7bb5767078"
+      "address": "0xAd2D6199F4b6C69fEF146eC7f3a4816D7B95a561",
+      "transactionHash": "0x25a8fcc05f31af52ae4838c47797be857bb29493255bef4f1a827009a80b4110"
     }
   },
   "schemaVersion": "3.3.4",
-  "updatedAt": "2021-06-17T05:49:37.798Z",
+  "updatedAt": "2021-06-25T03:28:27.901Z",
   "networkType": "ethereum",
   "devdoc": {
     "author": "Michael Elliot <mike@makerdao.com>Joshua Levine <joshua@makerdao.com>Nick Johnson <arachnid@notdot.net>",

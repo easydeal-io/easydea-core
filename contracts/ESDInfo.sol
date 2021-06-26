@@ -28,7 +28,8 @@ contract ESDInfo is Context {
         string content;
         address owner;
         uint256 price;
-        uint256 qty;
+        uint32 qty;
+        uint32 pendingDeals;
         address acceptToken;
         uint256 timestamp;
         uint8 status; // 0 hide, 1 normal
@@ -51,7 +52,7 @@ contract ESDInfo is Context {
     struct Deal {
         uint32 id;
         uint32 infoId;
-        uint256 qty;
+        uint32 qty;
         address buyer;
         address seller;
         string memo;
@@ -64,6 +65,7 @@ contract ESDInfo is Context {
     event InfoUpdated(uint32 id);
     event SpaceUpdated(uint32 id);
     event DealUpdated(uint32 id);
+    event UserUpdated(address addr);
     event Notify(address indexed to, string message, uint maybeId);
 
     // ============ States ============
@@ -73,12 +75,22 @@ contract ESDInfo is Context {
     IBEP20 ESDToken;
 
     uint32 public spaceCount = 0;
+    uint32 private _infoId = 1;
     uint32 public infoCount = 0;
     uint32 public dealCount = 0;
 
     mapping(uint32 => Info) public infos;
     mapping(uint32 => Space) public spaces;
     mapping(uint32 => Deal) public deals;
+
+    /// deal fee rate per thousand
+    uint32 public dealFeeRate = 2;
+
+
+    modifier onlyProposal() {
+        require(ESDContext.isViaUserContract(msg.sender), "FORBIDDEN");
+        _;
+    }
 
     constructor (address _tokenAddress) {
         ESDToken = IBEP20(_tokenAddress);
@@ -90,7 +102,7 @@ contract ESDInfo is Context {
         string memory title, 
         string memory content, 
         address acceptToken,
-        uint256 qty,
+        uint32 qty,
         uint256 price
     ) public payable {
         require(ESDContext.isMerchant(msg.sender), "FORBIDDEN");
@@ -103,7 +115,7 @@ contract ESDInfo is Context {
 
         if (iType == 1) {
             if (acceptToken == address(0)) {
-                require(msg.value == price * qty, "VALUE_IS_NOT_ENOUGH");
+                require(msg.value == price.mul(qty), "VALUE_IS_NOT_ENOUGH");
             } else {
                 IBEP20 acceptTokenContract = IBEP20(acceptToken);
                 uint256 amount = price.mul(qty);
@@ -111,9 +123,9 @@ contract ESDInfo is Context {
                 acceptTokenContract.safeTransferFrom(msg.sender, address(this), amount);
             }
         }
-        infoCount++;
-        infos[infoCount] = Info({
-            id: infoCount,
+        
+        infos[_infoId] = Info({
+            id: _infoId,
             spaceId: spaceId,
             iType: iType,
             title: title,
@@ -121,41 +133,68 @@ contract ESDInfo is Context {
             owner: msg.sender,
             price: price,
             qty: qty,
+            pendingDeals: 0,
             acceptToken: acceptToken,
             timestamp: block.timestamp,
             status: 1
         });
+        
+        emit InfoUpdated(_infoId);
+        emit SpaceUpdated(spaceId);
 
+        _infoId++;
+        infoCount++;
         space.infos++;
     }
 
-    function showInfo(uint32 id) public {
+    /**
+        Remove info by owner
+     */
+    function removeInfo(uint32 id) public {
+        Info storage info = infos[id];
+        require(msg.sender == info.owner, "FORBIDDEN");
+        require(info.status == 0, "STATUS_INCORRECT");
+        require(info.pendingDeals == 0, "HAVE_PENDING_DEALS");
+
+        Space storage space = spaces[info.spaceId];
+
+        // refund
+        if (info.iType == 1 && info.qty > 0) {
+            uint256 totalAmount = info.price.mul(info.qty);
+            if (info.acceptToken == address(0)) {
+                payable(info.owner).transfer(totalAmount);
+            } else {
+                IBEP20 token = IBEP20(info.acceptToken);
+                token.transfer(info.owner, totalAmount);
+                emit UserUpdated(info.owner);
+            }
+        }
+        
+        delete infos[id];
+
+        emit InfoUpdated(id);
+        emit SpaceUpdated(space.id);
+
+        infoCount--;
+        space.infos--;
+    }
+
+    /**
+        Hide info by owner or proposal
+     */
+    function hideInfo(uint32 id) external {
         Info storage info = infos[id];
         require(
-            ESDContext.isValidUser(msg.sender) &&
-            msg.sender == info.owner, 
+            msg.sender == info.owner || 
+            ESDContext.isViaUserContract(msg.sender),
             "FORBIDDEN"
         );
-        require(info.qty > 0, "QTY IS ZERO");
-        info.status = 1;
+
+        info.status = 0;
         emit InfoUpdated(id);
     }
 
-    function hideInfo(uint32 id) external {
-        Info storage info = infos[id];
-        if (
-            msg.sender == info.owner || 
-            ESDContext.isCouncilMember(msg.sender) ||
-            ESDContext.isViaUserContract(msg.sender)
-        ) {
-            info.status = 0;
-            emit InfoUpdated(id);
-        } else {
-            revert("FORBIDDEN");
-        }
-    }
-
-    function makeDeal(uint32 infoId, uint qty, string memory memo) public payable {
+    function makeDeal(uint32 infoId, uint32 qty, string memory memo) public payable {
         require(
             ESDContext.isValidUser(msg.sender) &&
             !ESDContext.isCouncilMember(msg.sender), 
@@ -179,6 +218,7 @@ contract ESDInfo is Context {
                 uint256 amount = info.price.mul(qty);
                 require(acceptTokenContract.balanceOf(msg.sender) >= amount, "INSUFFICIENT_BALANCE");
                 acceptTokenContract.safeTransferFrom(msg.sender, address(this), amount);
+                emit UserUpdated(msg.sender);
             }
         }
         dealCount++;
@@ -195,14 +235,14 @@ contract ESDInfo is Context {
         });
 
         info.qty -= qty;
+        info.pendingDeals += 1;
         space.deals++;
-        
-        if (info.qty == 0) {
-            info.status = 0;
-        }
+       
         _addActiveDeal(msg.sender, info.owner, dealCount);
 
         emit InfoUpdated(infoId);
+        emit DealUpdated(dealCount);
+        emit SpaceUpdated(info.spaceId);
         emit Notify(info.owner, "DEAL_NEW", dealCount);
     }
 
@@ -236,33 +276,50 @@ contract ESDInfo is Context {
 
     function confirmDeal(uint32 id) public {
         Deal storage deal = deals[id];
-        bool viaProposal = msg.sender == address(this);
+        bool viaProposal = ESDContext.isViaUserContract(msg.sender);
         require(
             deal.status == 2 || (viaProposal && deal.status == 1),
             "deal status incorrect"
         );
-        Info memory info = infos[deal.infoId];
+        Info storage info = infos[deal.infoId];
+        Space memory space = spaces[info.spaceId];
 
         if (!viaProposal) {
             require(msg.sender == deal.buyer, "FORBIDDEN");
         }
-
+        uint totalAmount = info.price.mul(deal.qty);
         if (info.acceptToken == address(0)) {
-            payable(deal.seller).transfer(info.price.mul(deal.qty));
+            // transfer to space creator
+            if (space.feeRate > 0) {
+                payable(space.creator).transfer(totalAmount.mul(space.feeRate).div(1000));
+            }
+            // transfer to seller
+            payable(deal.seller).transfer(totalAmount.mul(1000 - dealFeeRate - space.feeRate).div(1000));
         } else {
             IBEP20 token = IBEP20(info.acceptToken);
-            token.transfer(deal.seller, info.price.mul(deal.qty));
+            // transfer to space creator
+            if (space.feeRate > 0) {
+                token.transfer(space.creator, totalAmount.mul(space.feeRate).div(1000));
+            }
+            // transfer to seller
+            token.transfer(deal.seller, totalAmount.mul(1000 - dealFeeRate - space.feeRate).div(1000));
+            emit UserUpdated(deal.seller);
+            emit UserUpdated(space.creator);
         }
+
+        info.pendingDeals -= 1;
+
         deal.status = 3;
         _removeActiveDeal(deal.buyer, deal.seller, id);
 
         emit DealUpdated(id);
+        emit InfoUpdated(info.id);
         emit Notify(deal.seller, "DEAL_CONFIRM", id);
     }
 
     function cancelDeal(uint32 id) public {
         Deal storage deal = deals[id];
-        bool viaProposal = msg.sender == address(this);
+        bool viaProposal = ESDContext.isViaUserContract(msg.sender);
         require(
             deal.status == 1 || (viaProposal && deal.status == 2),
             "deal status incorrect"
@@ -281,10 +338,13 @@ contract ESDInfo is Context {
         } else {
             IBEP20 token = IBEP20(info.acceptToken);
             token.transfer(deal.buyer, info.price.mul(deal.qty));
+            emit UserUpdated(deal.buyer);
         }
+
         deal.status = 0;
         info.qty += deal.qty;
-        info.status = 1;
+        info.pendingDeals -= 1;
+
         _removeActiveDeal(deal.buyer, deal.seller, id);
         emit DealUpdated(id);
         emit InfoUpdated(info.id);
@@ -330,6 +390,7 @@ contract ESDInfo is Context {
             timestamp: block.timestamp,
             status: 1
         });
+        emit SpaceUpdated(spaceCount);
     }
 
     /**
@@ -347,4 +408,50 @@ contract ESDInfo is Context {
         emit SpaceUpdated(id);
     }
 
+    /**
+        Show space by creator
+     */
+    function showSpace(uint32 id) public {
+        Space storage space = spaces[id];
+        require(
+            ESDContext.isCouncilMember(msg.sender) &&
+            space.creator == msg.sender, 
+            "FORBIDDEN"
+        );
+        space.status = 1;
+
+        emit SpaceUpdated(id);
+    }
+
+    /**
+        Update space
+     */
+    function updateSpace(
+        uint32 id,
+        string memory name,
+        string memory description,
+        uint32 feeRate
+    ) public {
+        Space storage space = spaces[id];
+        require(
+            ESDContext.isCouncilMember(msg.sender) &&
+            space.creator == msg.sender, 
+            "FORBIDDEN"
+        );
+        require(feeRate <= 100, "FEE_RATE_TOO_HIGH");
+        
+        space.name = name;
+        space.description = description;
+        space.feeRate = feeRate;
+
+        emit SpaceUpdated(id);
+    }
+
+    /**
+        Configs
+     */
+
+    function updateDealFeeRate(uint32 feeRate) external onlyProposal{
+        dealFeeRate = feeRate;
+    }
 }

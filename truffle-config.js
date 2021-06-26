@@ -38,7 +38,7 @@ module.exports = {
   deploySwitch: {
     ESDToken: false,
     ESDUser: false,
-    ESDInfo: true,
+    ESDInfo: false,
     SignReward: false,
     Multicall: false
   },
@@ -50,18 +50,19 @@ module.exports = {
       network_id: "*",       // Any network (default: none)
     },
     testnet: {
-      provider: () => new HDWalletProvider(mnemonic, `https://data-seed-prebsc-1-s2.binance.org:8545`),
+      provider: () => new HDWalletProvider(mnemonic.testnet, `https://data-seed-prebsc-1-s2.binance.org:8545`),
       network_id: 97,       // Ropsten's id
+      confirmations: 2,
       gas: 25000000,
       skipDryRun: true     // Skip dry run before migrations? (default: false for public nets )
     },
     mainnet: {
-      provider: () => new HDWalletProvider(mnemonic, `https://bsc-dataseed1.binance.org`),
+      provider: () => new HDWalletProvider(mnemonic.mainnet, `https://bsc-dataseed1.binance.org`),
       network_id: 56,       // Ropsten's id
       gas: 25000000,           // Gas sent with each transaction (default: ~6700000)
-      gasPrice: 10000000000,  // 20 gwei (in wei) (default: 100 gwei)
+      gasPrice: 5000000000,  // 50 gwei (in wei)
       confirmations: 2,
-      skipDryRun: true     // Skip dry run before migrations? (default: false for public nets )
+      skipDryRun: false     // Skip dry run before migrations? (default: false for public nets )
     }
   },
 

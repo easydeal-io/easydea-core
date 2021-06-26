@@ -26,6 +26,7 @@ contract ESDUser is Context {
         string bio;
         uint256 lockedBeginTimestamp;
         uint256 lockedTokenAmount;
+        uint32 follows;
         bool isMerchant;
         bool isCouncilMember;
         address guarantor;
@@ -47,7 +48,7 @@ contract ESDUser is Context {
         uint256 naysAttachedTokenAmount;
         uint256 timestamp;
         uint256 votingDeadlineTimestamp;
-        // 1 referendum 2 defeated 3 second 4 executed
+        // 1 referendum 2 defeated 3 second 4 executed 5 expired
         uint8 status; 
     }
 
@@ -71,6 +72,7 @@ contract ESDUser is Context {
     uint32 public maximumCouncilMembers = 13;
     uint256 public proposalTipsMinAmount = 100 * 10 ** 18;
     uint256 public proposalVotingDuration = 10 seconds;
+    uint256 public proposalSecondingDuration = 10 * 60 seconds;
     uint256 public merchantMinimumLockAmount = 1000 * 10 ** 18;
     uint256 public councilMemberMinimumLockAmount = 10000 * 10 ** 18;
 
@@ -81,6 +83,7 @@ contract ESDUser is Context {
     uint32 public proposalCount = 0;
     mapping(uint32 => Proposal) public proposals;
     mapping(address => uint32[]) followedSpaceIds;
+    mapping(address => address[]) followedUserAddrs;
 
     mapping(uint32 => address[]) proposalAyes;
     mapping(uint32 => address[]) proposalNays;
@@ -121,7 +124,7 @@ contract ESDUser is Context {
             councilMemberAddresses.length == 0 || (
                 users[msg.sender].status == 1 && users[msg.sender].isCouncilMember
             ), 
-            "status incorrect"
+            "FORBIDDEN"
         );
         _;
     }
@@ -161,6 +164,7 @@ contract ESDUser is Context {
             bio: bio,
             lockedBeginTimestamp: 0,
             lockedTokenAmount: 0,
+            follows: 0,
             isMerchant: false,
             isCouncilMember: false,
             guarantor: address(0),
@@ -169,6 +173,7 @@ contract ESDUser is Context {
             status: 0
         });
         registerQueue.push(msg.sender);
+        emit UserUpdated(msg.sender);
     }
 
     function updateUserInfo(
@@ -213,7 +218,7 @@ contract ESDUser is Context {
         delete users[addr];
         _removeAddressFromReqisterQueue(addr);
 
-        emit UserUpdated(msg.sender);
+        emit UserUpdated(addr);
     }
 
     /**
@@ -234,7 +239,7 @@ contract ESDUser is Context {
         Submit a proposal
      */
     function submitProposal(
-        uint tipsAmount, 
+        uint256 tipsAmount, 
         string memory title,
         string memory description,
         address targetContract,
@@ -247,6 +252,7 @@ contract ESDUser is Context {
         uint tokenBalance = ESDToken.balanceOf(msg.sender);
         require(tokenBalance >= tipsAmount, "insufficient balance");
         ESDToken.safeTransferFrom(msg.sender, address(this), tipsAmount);
+
         proposalCount++;
         proposals[proposalCount] = Proposal({
             id: proposalCount,
@@ -262,14 +268,17 @@ contract ESDUser is Context {
             votingDeadlineTimestamp: block.timestamp.add(proposalVotingDuration),
             status: 1
         });
-
+        
         haveReferendum[msg.sender] = true;
+
+        emit UserUpdated(msg.sender);
+        emit ProposalUpdated(proposalCount);
     }
 
     function voteOnProposal(uint32 pid, bool aye) public notCouncilMember {
        
         Proposal storage proposal = proposals[pid];
-        require(proposal.status == 1, "proposal isn't exist");
+        require(proposal.status == 1, "STATUS_INCORRECT");
 
         uint attachedTokenAmount = proposal.tipsAmount.mul(votingAttachedTokenFactor).div(100);
         require(ESDToken.balanceOf(msg.sender) >= attachedTokenAmount, "insufficient balance");
@@ -328,7 +337,7 @@ contract ESDUser is Context {
             }
            
         }
-
+        emit UserUpdated(msg.sender);
         emit ProposalUpdated(pid);
     }
 
@@ -346,6 +355,14 @@ contract ESDUser is Context {
             require(_seconds[i] != msg.sender, "SECONDED");
         }
         _seconds.push(msg.sender);
+
+        // expired
+        if (block.timestamp > (proposal.votingDeadlineTimestamp.add(proposalSecondingDuration))) {
+            proposal.status = 5;
+            emit ProposalUpdated(pid);
+            return;
+        }
+
         uint32 halfOfMembers = uint32(councilMemberAddresses.length)/2;
         if (_seconds.length > halfOfMembers) {
             // execute
@@ -413,8 +430,7 @@ contract ESDUser is Context {
         User storage user = users[msg.sender];
         require(user.lockedTokenAmount >= amount, "NOT_ENOUGH_LOCED");
         require(
-            ESDContext.getActiveDealIds(msg.sender).length == 0 &&
-            ESDContext.getActiveInfoIds(msg.sender).length == 0,
+            ESDContext.getActiveDealIds(msg.sender).length == 0,
             "CAN_NOT_UNLOCK"
         );
         ESDToken.safeTransfer(msg.sender, amount);
@@ -439,8 +455,8 @@ contract ESDUser is Context {
             (user.lockedTokenAmount < councilMemberMinimumLockAmount)
         ) {
             user.isCouncilMember = false;
+            _removeCouncilMemberAddress(addr);
         }
-        
     }
 
     // ============ Helper functions ============
@@ -459,6 +475,10 @@ contract ESDUser is Context {
 
     function getFollowedSpaceIds(address addr) public view returns (uint32[] memory) {
         return followedSpaceIds[addr];
+    }
+
+    function getFollowedUserAddrs(address addr) public view returns (address[] memory) {
+        return followedUserAddrs[addr];
     }
 
     function getProposalAyes(uint32 pid) public view returns (address[] memory) {
@@ -482,6 +502,7 @@ contract ESDUser is Context {
         }
         ids.push(id);
         ESDContext.followSpace(id);
+        emit UserUpdated(msg.sender);
     }
 
     function unfollowSpace(uint32 id) public onlyRegistered {
@@ -494,6 +515,37 @@ contract ESDUser is Context {
             }
         }
         ESDContext.unfollowSpace(id);
+        emit UserUpdated(msg.sender);
+    }
+
+    function followUser(address addr) public onlyRegistered {
+        User storage user = users[addr];
+        require(user.status == 1, "INVALID_USER");
+        address[] storage addrs = followedUserAddrs[msg.sender];
+        for (uint i = 0; i < addrs.length; i++) {
+            if (addrs[i] == addr) {
+                revert("FOLLOWED");
+            }
+        }
+        user.follows += 1;
+        addrs.push(addr);
+        emit UserUpdated(addr);
+        emit UserUpdated(msg.sender);
+    }
+
+    function unfollowUser(address addr)  public onlyRegistered {
+        User storage user = users[addr];
+        address[] storage addrs = followedUserAddrs[msg.sender];
+        for (uint i = 0; i < addrs.length; i++) {
+            if (addrs[i] == addr) {
+                addrs[i] = addrs[addrs.length - 1];
+                addrs.pop();
+                break;
+            }
+        }
+        user.follows -= 1;
+        emit UserUpdated(addr);
+        emit UserUpdated(msg.sender);
     }
 
     function computeLockedWeights(address addr) public view returns (uint32) {
@@ -502,7 +554,7 @@ contract ESDUser is Context {
             return 0;
         }
         if (totalLockedTokenAmount == 0 || user.lockedTokenAmount == 0) {
-            return 0;
+            return 1;
         }
         uint256 lockedTokenWeights = user.lockedTokenAmount.mul(100).div(totalLockedTokenAmount);
         uint256 lockedTimeWeights = (
@@ -510,7 +562,7 @@ contract ESDUser is Context {
         ).mul(100).div(
             block.timestamp - genesisBlockTimestamp
         );
-        return uint32(lockedTokenWeights.mul(lockedTimeWeights));
+        return uint32(lockedTokenWeights.mul(lockedTimeWeights).add(1));
     }
 
     function _removeAddressFromReqisterQueue(address _address) internal {
@@ -554,6 +606,7 @@ contract ESDUser is Context {
         }
         user.isCouncilMember = true;
         councilMemberAddresses.push(addr);
+        emit UserUpdated(addr);
     }
 
     /**
@@ -562,10 +615,16 @@ contract ESDUser is Context {
     function removeCouncilMember(address addr) external onlyProposal {
         User storage user = users[addr];
         user.isCouncilMember = false;
+        _removeCouncilMemberAddress(addr);
+        emit UserUpdated(addr);
+    }
+
+    function _removeCouncilMemberAddress(address addr) private {
         for (uint i = 0; i < councilMemberAddresses.length; i++) {
             if (councilMemberAddresses[i] == addr) {
                 councilMemberAddresses[i] = councilMemberAddresses[councilMemberAddresses.length - 1];
-                councilMemberAddresses.pop();break;
+                councilMemberAddresses.pop();
+                break;
             }
         }
     }
@@ -573,22 +632,25 @@ contract ESDUser is Context {
     /**
         Proposal to penalise someone
      */
-    function penalise(address target, uint256 amount, address beneficiary) external onlyProposal {
+    function penalise(address target, uint32 esdAmount, address beneficiary) external onlyProposal {
         User storage user = users[target];
+        uint256 amount = uint256(esdAmount) * 10 ** 18;
         require(user.lockedTokenAmount >= amount, "NOT_ENOUGH_LOCKED_AMOUNT");
         ESDToken.safeTransfer(beneficiary, amount);
-        user.lockedTokenAmount -= amount;
+        user.lockedTokenAmount = user.lockedTokenAmount.sub(amount);
+        totalLockedTokenAmount = totalLockedTokenAmount.sub(amount);
         checkAndUpdateUserIdentity(target);
-
+        updateLockedWeightsRanking(target);
         emit UserUpdated(target);
     }
 
     /**
         Proposal to compense someone
      */
-    function compense(address target, uint256 amount) external onlyProposal {
-        User storage user = users[target];
+    function compense(address target, uint32 esdAmount) external onlyProposal {
+        User memory user = users[target];
         require(user.status == 1, "INVALID_USER");
+        uint256 amount = uint256(esdAmount) * 10 ** 18;
         require(ESDToken.balanceOf(address(this)) >= amount, "NOT_ENOUGH_BALANCE");
         ESDToken.transfer(target, amount);
     }
@@ -605,20 +667,28 @@ contract ESDUser is Context {
         maximumCouncilMembers = number;
     }
 
-    function updateProposalTipsMinAmount(uint256 amount) external onlyProposal{
-        proposalTipsMinAmount = amount;
+    function updateProposalTipsMinAmount(uint32 esdAmount) external onlyProposal{
+        proposalTipsMinAmount = uint256(esdAmount) * 10 ** 18;
     }
 
     function updateProposalVotingDuration(uint256 _seconds) external onlyProposal{
         proposalVotingDuration = _seconds;
     }
 
-    function updateMerchantMinimumLockAmount(uint256 amount) external onlyProposal{
-        merchantMinimumLockAmount = amount;
+    function updateProposalSecondingDuration(uint256 _seconds) external onlyProposal {
+        proposalSecondingDuration = _seconds;
     }
 
-    function updateCouncilMemberMinimumLockAmount(uint256 amount) external onlyProposal{
-        councilMemberMinimumLockAmount = amount;
+    function updateMerchantMinimumLockAmount(uint32 esdAmount) external onlyProposal{
+        merchantMinimumLockAmount = uint256(esdAmount) * 10 ** 18;
+    }
+
+    function updateCouncilMemberMinimumLockAmount(uint32 esdAmount) external onlyProposal{
+        councilMemberMinimumLockAmount = uint256(esdAmount) * 10 ** 18;
+    }
+
+    function updateVotingAttachedTokenFactor(uint8 factor) external onlyProposal {
+        votingAttachedTokenFactor = factor;
     }
 
 }

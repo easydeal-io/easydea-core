@@ -7,6 +7,12 @@ import {SafeMath} from "./lib/SafeMath.sol";
 import {Context} from "./lib/Context.sol";
 import {IBEP20} from "./itf/IBEP20.sol";
 
+/**
+ * @title Easydeal SignReward
+ * @author flex@easydeal.io
+ *
+ */
+
 contract SignReward is Context {
     using SafeBEP20 for IBEP20;
     using SafeMath for uint256;
@@ -19,11 +25,15 @@ contract SignReward is Context {
         uint256 totalRewards;
     }
 
-    uint256 public signInterval = 10 seconds;
+    uint256 public signInterval = 1 days;
     uint256 public signRewardBaseAmount = 1 * 10 ** 18;
+
+    uint32 public continuousBaseDays = 30;
 
     mapping(address => SignRecord) public signRecords;
     address[] totalRewardsRanking;
+
+    event Signed(address addr);
 
     constructor (address _tokenAddress) {
         ESDToken = IBEP20(_tokenAddress);
@@ -37,8 +47,8 @@ contract SignReward is Context {
         require(block.timestamp > record.lastSignedTimestamp.add(signInterval), "ALREADY SIGNED");
 
         uint32 continuousNumber = record.continuousNumber;
-        uint32 additionalTimes = continuousNumber / 30 + 1;
-        uint256 rewardAmount = signRewardBaseAmount.mul(additionalTimes).mul(lockedWeight+1);
+        uint32 additionalTimes = continuousNumber / continuousBaseDays + 1;
+        uint256 rewardAmount = signRewardBaseAmount.mul(additionalTimes).mul(lockedWeight);
 
         // Reward token
         ESDToken.safeTransfer(msg.sender, rewardAmount);
@@ -54,6 +64,7 @@ contract SignReward is Context {
         record.lastSignedTimestamp = block.timestamp;
         record.totalRewards += rewardAmount;
         updateTotalRewardsRanking(msg.sender);
+        emit Signed(msg.sender);
     }
 
     function updateTotalRewardsRanking(address addr) internal {
@@ -95,15 +106,20 @@ contract SignReward is Context {
     }
 
     // ============ Proposal execute functions ============
-    
-    function updateSignInterval(uint32 interval) external {
+
+    function updateSignInterval(uint32 _seconds) external {
         require(ESDContext.isViaUserContract(msg.sender), "FORBIDDEN");
-        signInterval = interval;
+        signInterval = _seconds;
+    }
+    
+    function updateContinuousBaseDays(uint32 _days) external {
+        require(ESDContext.isViaUserContract(msg.sender), "FORBIDDEN");
+        continuousBaseDays = _days;
     }
 
-    function updateSignRewardBaseAmount(uint256 amount) external {
+    function updateSignRewardBaseAmount(uint32 esdAmount) external {
         require(ESDContext.isViaUserContract(msg.sender), "FORBIDDEN");
-        signRewardBaseAmount = amount;
+        signRewardBaseAmount = uint256(esdAmount) * 10 ** 18;
     }
 
 }

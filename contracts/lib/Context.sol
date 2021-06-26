@@ -8,11 +8,13 @@ import {SafeBEP20} from "./SafeBEP20.sol";
 contract Context {
     using SafeBEP20 for IBEP20;
 
+    uint256 public genesisBlock;
     IESDContext ESDContext;
 
     address owner;
     constructor() {
         owner = msg.sender;
+        genesisBlock = block.number;
     }
 
     modifier viaContext() {
