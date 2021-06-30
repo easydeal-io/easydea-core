@@ -9306,18 +9306,18 @@
     "56": {
       "events": {},
       "links": {},
-      "address": "0x887c41924eABa4A8B713Be43b94A84cdC1684868",
-      "transactionHash": "0x18e95de2557394417242e821a1812af8a6f012b93fc760bed5cd72288891bef9"
+      "address": "0xE48fAD1052fCc1676f171F9A336b485D9Cf2e7C9",
+      "transactionHash": "0x52a9fcf3f1890325cfcd709c9ae3725ff72439877f803a23d4355597b12d6c53"
     },
     "97": {
       "events": {},
       "links": {},
-      "address": "0xeA66ff8990DBcA7B5ae3C014050E058C473e0A22",
-      "transactionHash": "0x2a6d11cd42549b06ce5f25ec690bc5707ab0d5b923d13905c6472a2171f1c11a"
+      "address": "0xf66787625611158d807010A8eFC68255B1EE7264",
+      "transactionHash": "0x9441b4d42becda9cb3a0ca6269b0a6afb5dca747f2d54eb79f0639fb7f8f5e87"
     }
   },
   "schemaVersion": "3.3.4",
-  "updatedAt": "2021-06-25T03:28:27.831Z",
+  "updatedAt": "2021-06-28T13:40:56.607Z",
   "networkType": "ethereum",
   "devdoc": {
     "author": "flex@easydeal.io",

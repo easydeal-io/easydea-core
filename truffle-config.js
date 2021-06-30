@@ -37,7 +37,7 @@ module.exports = {
 
   deploySwitch: {
     ESDToken: false,
-    ESDUser: false,
+    ESDUser: true,
     ESDInfo: false,
     SignReward: false,
     Multicall: false
@@ -57,7 +57,7 @@ module.exports = {
       skipDryRun: true     // Skip dry run before migrations? (default: false for public nets )
     },
     mainnet: {
-      provider: () => new HDWalletProvider(mnemonic.mainnet, `https://bsc-dataseed1.binance.org`),
+      provider: () => new HDWalletProvider(mnemonic.mainnet, `https://bsc-dataseed2.binance.org`),
       network_id: 56,       // Ropsten's id
       gas: 25000000,           // Gas sent with each transaction (default: ~6700000)
       gasPrice: 5000000000,  // 50 gwei (in wei)

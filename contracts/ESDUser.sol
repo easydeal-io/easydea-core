@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: MIT
 
 pragma solidity >=0.7.0;
+pragma experimental ABIEncoderV2;
 
 import {IBEP20} from "./itf/IBEP20.sol";
 
@@ -26,11 +27,10 @@ contract ESDUser is Context {
         string bio;
         uint256 lockedBeginTimestamp;
         uint256 lockedTokenAmount;
+        uint64 lockedScore;
         uint32 follows;
         bool isMerchant;
-        bool isCouncilMember;
         address guarantor;
-        // use for encrypt message
         string encryptPubkey;
         uint256 timestamp;
         uint8 status; // 0 wait for guarantee, 1 normal, 2 banned
@@ -63,6 +63,7 @@ contract ESDUser is Context {
     
     uint256 public immutable genesisBlockTimestamp;
     uint256 public totalLockedTokenAmount;
+    uint256 public totalLockedScore;
 
     address[] registerQueue;
     uint32 public registerQueueSize = 100;
@@ -89,8 +90,6 @@ contract ESDUser is Context {
     mapping(uint32 => address[]) proposalNays;
     mapping(uint32 => address[]) proposalSeconds;
 
-    address[] lockedWeightsRanking;
-
     // ============ Events ============
 
     receive() external payable {
@@ -113,7 +112,7 @@ contract ESDUser is Context {
 
     modifier notCouncilMember() {
         require(
-            users[msg.sender].status == 1 && !users[msg.sender].isCouncilMember, 
+            users[msg.sender].status == 1 && !isCouncilMember(msg.sender), 
             "FORBIDDEN"
         );
         _;
@@ -122,7 +121,7 @@ contract ESDUser is Context {
     modifier onlyCouncilMember() {
         require(
             councilMemberAddresses.length == 0 || (
-                users[msg.sender].status == 1 && users[msg.sender].isCouncilMember
+                users[msg.sender].status == 1 && isCouncilMember(msg.sender)
             ), 
             "FORBIDDEN"
         );
@@ -158,15 +157,16 @@ contract ESDUser is Context {
     ) public {
         require(registerQueue.length < registerQueueSize, "queue size limit");
         require(users[msg.sender].timestamp == 0, "exist");
+       
         users[msg.sender] = User({
             nickName: nickName,
             socialLink: socialLink,
             bio: bio,
             lockedBeginTimestamp: 0,
             lockedTokenAmount: 0,
+            lockedScore: 0,
             follows: 0,
             isMerchant: false,
-            isCouncilMember: false,
             guarantor: address(0),
             encryptPubkey: pubkey,
             timestamp: block.timestamp,
@@ -192,7 +192,7 @@ contract ESDUser is Context {
     function applyMerchant() public onlyRegistered {
         User storage user = users[msg.sender];
         require(user.lockedTokenAmount >= merchantMinimumLockAmount, "NOT_ENOUGH_LOCKED_AMOUNT");
-        require(!user.isCouncilMember, "FORBIDDEN");
+        require(!isCouncilMember(msg.sender), "FORBIDDEN");
         require(!user.isMerchant, "ALREAY_MERCHANT");
         user.isMerchant = true;
         emit UserUpdated(msg.sender);
@@ -226,12 +226,12 @@ contract ESDUser is Context {
      */
     function banUser(address addr) public {
         require(
-            users[msg.sender].isCouncilMember ||
+            isCouncilMember(msg.sender) ||
             msg.sender == address(this), 
             "FORBIDDEN"
         );
         users[addr].status = 2;
-
+        
         emit UserUpdated(msg.sender);
     }
 
@@ -279,6 +279,13 @@ contract ESDUser is Context {
        
         Proposal storage proposal = proposals[pid];
         require(proposal.status == 1, "STATUS_INCORRECT");
+
+        // expired
+        if (block.timestamp > (proposal.votingDeadlineTimestamp.add(proposalSecondingDuration))) {
+            proposal.status = 5;
+            emit ProposalUpdated(pid);
+            return;
+        }
 
         uint attachedTokenAmount = proposal.tipsAmount.mul(votingAttachedTokenFactor).div(100);
         require(ESDToken.balanceOf(msg.sender) >= attachedTokenAmount, "insufficient balance");
@@ -386,49 +393,14 @@ contract ESDUser is Context {
             user.lockedBeginTimestamp = block.timestamp;
         }
 
-        updateLockedWeightsRanking(msg.sender);
+        updateLockedScore(msg.sender);
 
-        emit UserUpdated(msg.sender);
-    }
-
-    function updateLockedWeightsRanking(address addr) internal {
-        // check if exist
-        bool inArr = false;
-        for (uint i = 0; i < lockedWeightsRanking.length; i++) {
-            if (lockedWeightsRanking[i] == addr) {
-                inArr = true;
-            }
-        }
-        if (!inArr) {
-            lockedWeightsRanking.push(addr);
-        }
-        uint256 llen = lockedWeightsRanking.length;
-        if (llen == 1) {
-            return;
-        }
-        // sort
-        address[] memory tmpArr = lockedWeightsRanking;
-        for (uint256 i = 0; i < llen - 1; i++) {
-            for (uint256 j = 0; j < llen - 1 - i; j++) {
-                address aa = tmpArr[j];
-                address ab = tmpArr[j+1];
-                if (computeLockedWeights(aa) > computeLockedWeights(ab)) {
-                    tmpArr[j+1] = tmpArr[j];
-                    tmpArr[j] = ab;
-                }
-            }
-        }
-        lockedWeightsRanking = tmpArr;
-        // slice
-        if (llen > 10) {
-            lockedWeightsRanking.pop();
-        }
     }
 
     function unlockToken(uint256 amount) public onlyRegistered {
         require(amount > 0, "amount is zero");
         User storage user = users[msg.sender];
-        require(user.lockedTokenAmount >= amount, "NOT_ENOUGH_LOCED");
+        require(user.lockedTokenAmount >= amount, "NOT_ENOUGH_LOCKED");
         require(
             ESDContext.getActiveDealIds(msg.sender).length == 0,
             "CAN_NOT_UNLOCK"
@@ -438,9 +410,29 @@ contract ESDUser is Context {
         totalLockedTokenAmount = totalLockedTokenAmount.sub(amount);
         user.lockedBeginTimestamp = block.timestamp - 1;
         checkAndUpdateUserIdentity(msg.sender);
-        updateLockedWeightsRanking(msg.sender);
+        
+        updateLockedScore(msg.sender);
 
-        emit UserUpdated(msg.sender);
+    }
+
+    function updateLockedScore(address addr) internal {
+        User storage user = users[addr];
+
+        if (user.lockedScore > 0) {
+            totalLockedScore = totalLockedScore.sub(user.lockedScore);
+        }
+
+        // locked score
+        uint64 score = user.lockedTokenAmount > 0 ? uint64(
+            genesisBlockTimestamp.sub(
+                user.lockedBeginTimestamp.sub(genesisBlockTimestamp)
+            ).mul(user.lockedTokenAmount).div(10**29)
+        ) : 0;
+
+        user.lockedScore = score;
+        totalLockedScore = totalLockedScore.add(score);
+
+        emit UserUpdated(addr);
     }
 
     function checkAndUpdateUserIdentity(address addr) internal {
@@ -451,10 +443,9 @@ contract ESDUser is Context {
         ) {
             user.isMerchant = false;
         } else if (
-            user.isCouncilMember && 
+            isCouncilMember(addr) && 
             (user.lockedTokenAmount < councilMemberMinimumLockAmount)
         ) {
-            user.isCouncilMember = false;
             _removeCouncilMemberAddress(addr);
         }
     }
@@ -470,7 +461,12 @@ contract ESDUser is Context {
     }
 
     function isCouncilMember(address addr) public view returns (bool) {
-        return users[addr].status == 1 && users[addr].isCouncilMember;
+        for (uint i = 0; i < councilMemberAddresses.length; i++) {
+            if (councilMemberAddresses[i] == addr) {
+                return true;
+            }
+        }
+        return false;
     }
 
     function getFollowedSpaceIds(address addr) public view returns (uint32[] memory) {
@@ -585,10 +581,6 @@ contract ESDUser is Context {
     function getRegisterQueue() public view returns (address[] memory) {
         return registerQueue;
     }
-
-    function getLockedWeightsRanking() public view returns (address[] memory) {
-        return lockedWeightsRanking;
-    }
     
     // ============ Proposal execute functions ============
 
@@ -604,7 +596,6 @@ contract ESDUser is Context {
         for (uint i = 0; i < councilMemberAddresses.length; i++) {
             require(councilMemberAddresses[i] != addr, "already a council member");
         }
-        user.isCouncilMember = true;
         councilMemberAddresses.push(addr);
         emit UserUpdated(addr);
     }
@@ -613,10 +604,7 @@ contract ESDUser is Context {
         Proposal to remove council member
      */
     function removeCouncilMember(address addr) external onlyProposal {
-        User storage user = users[addr];
-        user.isCouncilMember = false;
         _removeCouncilMemberAddress(addr);
-        emit UserUpdated(addr);
     }
 
     function _removeCouncilMemberAddress(address addr) private {
@@ -640,8 +628,8 @@ contract ESDUser is Context {
         user.lockedTokenAmount = user.lockedTokenAmount.sub(amount);
         totalLockedTokenAmount = totalLockedTokenAmount.sub(amount);
         checkAndUpdateUserIdentity(target);
-        updateLockedWeightsRanking(target);
-        emit UserUpdated(target);
+
+        updateLockedScore(target);
     }
 
     /**
